@@ -27,6 +27,7 @@ import { getCardImageUrl } from "@/lib/getCardImage";
 import { getAllCards } from "@/lib/data";
 import { getEffectiveType, getOptionsFromCardTypes, getOptionsFromCardRarities } from "@/lib/filterOptions";
 import type { Lang } from "@/lib/i18n/lang";
+import type { Card } from "@/types/card";
 
 const TRADE_POSTS_COLLECTION = "tradePosts";
 const MAX_POSTS = 100;
@@ -45,6 +46,10 @@ export interface CardOption {
   rarity: string;
   /** 絞り込み用: 色違いかどうか(☆・☆☆のみ存在しうる) */
   shiny: boolean;
+  /** デッキの妥当性チェック(たねポケモン判定)用 */
+  category: Card["category"];
+  /** デッキの妥当性チェック(たねポケモン判定)用。トレーナーズには存在しない */
+  stage?: string;
 }
 
 export interface TradePost {
@@ -278,6 +283,8 @@ export function getTradableCardOptions(lang: Lang = "ja"): CardOption[] {
       type: getEffectiveType(card),
       rarity: card.rarity,
       shiny: card.shiny,
+      category: card.category,
+      stage: card.stage,
     }));
 }
 

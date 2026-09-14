@@ -273,6 +273,15 @@ export interface Dict {
     cancel: string;
     delete: string;
     limitMessage: string;
+    energyLabel: string;
+    invalidBadge: string;
+    validationTitle: string;
+    validationIntro: string;
+    issueExactSize: string;
+    issueBasicPokemon: string;
+    issueOwnedOnly: string;
+    issueEnergySet: string;
+    saveAnyway: string;
   };
   mypage: {
     title: string;
@@ -575,6 +584,15 @@ const ja: Dict = {
     cancel: "キャンセル",
     delete: "削除",
     limitMessage: "無料会員では3デッキまで保存できます",
+    energyLabel: "エネルギー",
+    invalidBadge: "使用不可",
+    validationTitle: "デッキ保存",
+    validationIntro: "以下の条件を満たしていないためこちらのデッキは使用できない状態です",
+    issueExactSize: "デッキ枚数を20枚ちょうどにする",
+    issueBasicPokemon: "たねポケモンを1枚以上入れる",
+    issueOwnedOnly: "持っているカードのみで編成する",
+    issueEnergySet: "エネルギーを設定している",
+    saveAnyway: "OK",
   },
   mypage: {
     title: "マイページ",
@@ -879,6 +897,15 @@ const en: Dict = {
     cancel: "Cancel",
     delete: "Delete",
     limitMessage: "Free accounts can save up to 3 decks",
+    energyLabel: "Energy",
+    invalidBadge: "Unusable",
+    validationTitle: "Save Deck",
+    validationIntro: "This deck can't be used yet because it doesn't meet the following conditions",
+    issueExactSize: "Deck must have exactly 20 cards",
+    issueBasicPokemon: "Deck must include at least 1 Basic Pokémon",
+    issueOwnedOnly: "Deck must only use cards you own",
+    issueEnergySet: "Deck must have energy types set",
+    saveAnyway: "OK",
   },
   mypage: {
     title: "My Page",

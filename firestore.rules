@@ -75,24 +75,31 @@ service cloud.firestore {
         allow create: if request.auth != null
           && request.auth.uid == userId
           && request.auth.token.firebase.sign_in_provider == 'google.com'
-          && request.resource.data.keys().hasOnly(['deckName', 'userId', 'cards', 'createdAt', 'updatedAt'])
+          && request.resource.data.keys().hasOnly(
+              ['deckName', 'userId', 'cards', 'energyTypes', 'createdAt', 'updatedAt']
+            )
           && request.resource.data.userId == userId
           && request.resource.data.deckName is string
           && request.resource.data.deckName.size() > 0
           && request.resource.data.deckName.size() <= 50
           && request.resource.data.cards is list
           && request.resource.data.cards.size() <= 20
+          && request.resource.data.energyTypes is list
+          && request.resource.data.energyTypes.size() <= 8
           && request.resource.data.createdAt == request.time
           && request.resource.data.updatedAt == request.time;
         allow update: if request.auth != null
           && request.auth.uid == userId
           && request.auth.token.firebase.sign_in_provider == 'google.com'
-          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deckName', 'cards', 'updatedAt'])
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['deckName', 'cards', 'energyTypes', 'updatedAt'])
           && request.resource.data.deckName is string
           && request.resource.data.deckName.size() > 0
           && request.resource.data.deckName.size() <= 50
           && request.resource.data.cards is list
           && request.resource.data.cards.size() <= 20
+          && request.resource.data.energyTypes is list
+          && request.resource.data.energyTypes.size() <= 8
           && request.resource.data.updatedAt == request.time;
         allow delete: if request.auth != null
           && request.auth.uid == userId

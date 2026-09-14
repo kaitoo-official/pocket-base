@@ -17,5 +17,7 @@ export function getAllCardOptions(lang: Lang = "ja"): CardOption[] {
     type: getEffectiveType(card),
     rarity: card.rarity,
     shiny: card.shiny,
+    category: card.category,
+    stage: card.stage,
   }));
 }

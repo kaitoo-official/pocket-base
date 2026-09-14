@@ -28,6 +28,8 @@ export interface Deck {
   id: string;
   deckName: string;
   cards: string[];
+  /** デッキに設定するエネルギータイプ(本家の「エネルギー設定」に相当) */
+  energyTypes: string[];
   createdAt: Date | null;
   updatedAt: Date | null;
 }
@@ -36,6 +38,7 @@ interface GuestDeck {
   id: string;
   deckName: string;
   cards: string[];
+  energyTypes: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -64,6 +67,7 @@ function toDeck(guestDeck: GuestDeck): Deck {
     id: guestDeck.id,
     deckName: guestDeck.deckName,
     cards: guestDeck.cards,
+    energyTypes: guestDeck.energyTypes ?? [],
     createdAt: new Date(guestDeck.createdAt),
     updatedAt: new Date(guestDeck.updatedAt),
   };
@@ -88,24 +92,42 @@ export async function getCloudDecks(uid: string): Promise<Deck[]> {
       id: d.id,
       deckName: (data.deckName as string) ?? "",
       cards: (data.cards as string[]) ?? [],
+      energyTypes: (data.energyTypes as string[]) ?? [],
       createdAt,
       updatedAt,
     };
   });
 }
 
-async function createCloudDeck(uid: string, deckName: string, cards: string[]): Promise<void> {
+async function createCloudDeck(
+  uid: string,
+  deckName: string,
+  cards: string[],
+  energyTypes: string[]
+): Promise<void> {
   await setDoc(doc(decksCollection(uid), generateId()), {
     deckName,
     userId: uid,
     cards,
+    energyTypes,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });
 }
 
-async function updateCloudDeck(uid: string, deckId: string, deckName: string, cards: string[]): Promise<void> {
-  await updateDoc(doc(decksCollection(uid), deckId), { deckName, cards, updatedAt: serverTimestamp() });
+async function updateCloudDeck(
+  uid: string,
+  deckId: string,
+  deckName: string,
+  cards: string[],
+  energyTypes: string[]
+): Promise<void> {
+  await updateDoc(doc(decksCollection(uid), deckId), {
+    deckName,
+    cards,
+    energyTypes,
+    updatedAt: serverTimestamp(),
+  });
 }
 
 async function deleteCloudDeck(uid: string, deckId: string): Promise<void> {
@@ -127,7 +149,9 @@ export async function mergeGuestDecksToCloud(uid: string): Promise<{ migrated: n
   const toMigrate = guestDecks.slice(0, remainingSlots);
   const toSkip = guestDecks.slice(remainingSlots);
 
-  await Promise.all(toMigrate.map((deck) => createCloudDeck(uid, deck.deckName, deck.cards)));
+  await Promise.all(
+    toMigrate.map((deck) => createCloudDeck(uid, deck.deckName, deck.cards, deck.energyTypes ?? []))
+  );
   // 移行できなかった分だけlocalStorageに残す
   writeGuestDecks(toSkip);
 
@@ -166,15 +190,19 @@ export function useDecks() {
   }, [isSignedIn, user, authLoading]);
 
   const createDeck = useCallback(
-    async (deckName: string, cards: string[]): Promise<{ ok: true } | { ok: false; reason: "limit" }> => {
+    async (
+      deckName: string,
+      cards: string[],
+      energyTypes: string[]
+    ): Promise<{ ok: true } | { ok: false; reason: "limit" }> => {
       if (decks.length >= MAX_FREE_DECKS) return { ok: false, reason: "limit" };
 
       if (isSignedIn && user) {
-        await createCloudDeck(user.uid, deckName, cards);
+        await createCloudDeck(user.uid, deckName, cards, energyTypes);
       } else {
         const now = new Date().toISOString();
         const guestDecks = readGuestDecks();
-        guestDecks.push({ id: generateId(), deckName, cards, createdAt: now, updatedAt: now });
+        guestDecks.push({ id: generateId(), deckName, cards, energyTypes, createdAt: now, updatedAt: now });
         writeGuestDecks(guestDecks);
       }
       await reload();
@@ -184,13 +212,13 @@ export function useDecks() {
   );
 
   const updateDeck = useCallback(
-    async (deckId: string, deckName: string, cards: string[]) => {
+    async (deckId: string, deckName: string, cards: string[], energyTypes: string[]) => {
       if (isSignedIn && user) {
-        await updateCloudDeck(user.uid, deckId, deckName, cards);
+        await updateCloudDeck(user.uid, deckId, deckName, cards, energyTypes);
       } else {
         const now = new Date().toISOString();
         const guestDecks = readGuestDecks().map((deck) =>
-          deck.id === deckId ? { ...deck, deckName, cards, updatedAt: now } : deck
+          deck.id === deckId ? { ...deck, deckName, cards, energyTypes, updatedAt: now } : deck
         );
         writeGuestDecks(guestDecks);
       }
