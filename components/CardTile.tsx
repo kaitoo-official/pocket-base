@@ -6,6 +6,7 @@ import { TypeBadge } from "@/components/TypeBadge";
 import { RarityBadge } from "@/components/RarityBadge";
 import { ImageWithFallback } from "@/components/ImageWithFallback";
 import { WishlistButton } from "@/components/WishlistButton";
+import { CollectionStepper } from "@/components/CollectionStepper";
 import type { Lang } from "@/lib/i18n/lang";
 
 /**
@@ -57,6 +58,9 @@ export function CardTile({
       </Link>
       <div className="absolute -top-2 -right-2">
         <WishlistButton cardId={card.id} />
+      </div>
+      <div className="mt-2 flex justify-center">
+        <CollectionStepper cardId={card.id} lang={lang} />
       </div>
     </div>
   );

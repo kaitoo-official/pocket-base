@@ -32,6 +32,9 @@ function QuantityBadge({ quantity }: { quantity: number }) {
   );
 }
 
+// このページは自分の所持カード一覧そのものが数量に依存しているため(0枚にしたら一覧から
+// 消える必要がある)、カード検索一覧のCollectionStepper(自前でuseCollection()を呼ぶ自己完結型)
+// ではなく、親から渡されたquantity/onChangeで動く「制御された」ステッパーをこの場所だけで使う。
 function CollectionCardTile({
   card,
   quantity,
