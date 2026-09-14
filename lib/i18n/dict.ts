@@ -247,6 +247,57 @@ export interface Dict {
     average: (n: string) => string;
     confidence90: (n: string) => string;
   };
+  wishlist: {
+    title: string;
+    description: string;
+    empty: string;
+    remove: string;
+  };
+  collection: {
+    title: string;
+    description: string;
+    empty: string;
+  };
+  decks: {
+    title: string;
+    description: string;
+    empty: string;
+    newDeck: string;
+    deckNamePlaceholder: string;
+    cardsCount: (n: string) => string;
+    save: string;
+    cancel: string;
+    delete: string;
+    limitMessage: string;
+  };
+  mypage: {
+    title: string;
+    favoritesCount: string;
+    wishlistCount: string;
+    collectionCount: string;
+    decksCount: string;
+    tradePostsCount: string;
+    shortcuts: string;
+  };
+  myTrades: {
+    title: string;
+    empty: string;
+    offering: string;
+    wanted: string;
+    comments: string;
+    close: string;
+    reopen: string;
+    closed: string;
+    delete: string;
+    deleteConfirm: string;
+  };
+  migrate: {
+    title: string;
+    description: string;
+    migrate: string;
+    skip: string;
+    success: string;
+  };
 }
 
 const ja: Dict = {
@@ -492,6 +543,57 @@ const ja: Dict = {
     probability: (pct) => `1パックあたり ${pct}%`,
     average: (n) => `平均 ${n}パック`,
     confidence90: (n) => `90%の確率で ${n}パック以内`,
+  },
+  wishlist: {
+    title: "Wishlist",
+    description: "「欲しい」に追加したカードの一覧です。",
+    empty: "まだ「欲しい」に追加したカードがありません。",
+    remove: "削除",
+  },
+  collection: {
+    title: "マイコレクション",
+    description: "所持しているカードの枚数を記録できます。",
+    empty: "まだコレクションに登録したカードがありません。",
+  },
+  decks: {
+    title: "マイデッキ",
+    description: "デッキを保存して管理できます。",
+    empty: "まだ保存したデッキがありません。",
+    newDeck: "デッキを作成",
+    deckNamePlaceholder: "デッキ名を入力",
+    cardsCount: (n) => `${n}枚`,
+    save: "保存",
+    cancel: "キャンセル",
+    delete: "削除",
+    limitMessage: "無料会員では3デッキまで保存できます",
+  },
+  mypage: {
+    title: "マイページ",
+    favoritesCount: "お気に入り",
+    wishlistCount: "Wishlist",
+    collectionCount: "コレクション登録数",
+    decksCount: "保存デッキ数",
+    tradePostsCount: "トレード投稿数",
+    shortcuts: "ショートカット",
+  },
+  myTrades: {
+    title: "トレード投稿管理",
+    empty: "まだ投稿がありません。",
+    offering: "譲れるカード",
+    wanted: "欲しいカード",
+    comments: "コメント",
+    close: "募集終了にする",
+    reopen: "募集を再開する",
+    closed: "募集終了",
+    delete: "削除",
+    deleteConfirm: "この投稿を削除しますか？",
+  },
+  migrate: {
+    title: "この端末のデータをアカウントに引き継ぎますか？",
+    description: "ログイン前にこの端末に保存されていたお気に入り・仮デッキを、このアカウントに引き継げます。",
+    migrate: "引き継ぐ",
+    skip: "今はしない",
+    success: "データを引き継ぎました。",
   },
 };
 
@@ -740,6 +842,57 @@ const en: Dict = {
     probability: (pct) => `${pct}% per pack`,
     average: (n) => `${n} packs on average`,
     confidence90: (n) => `90% chance within ${n} packs`,
+  },
+  wishlist: {
+    title: "Wishlist",
+    description: "Cards you've marked as wanted.",
+    empty: "You haven't added any cards to your wishlist yet.",
+    remove: "Remove",
+  },
+  collection: {
+    title: "My Collection",
+    description: "Track how many copies of each card you own.",
+    empty: "You haven't added any cards to your collection yet.",
+  },
+  decks: {
+    title: "My Decks",
+    description: "Save and manage your decks.",
+    empty: "You haven't saved any decks yet.",
+    newDeck: "Create Deck",
+    deckNamePlaceholder: "Enter a deck name",
+    cardsCount: (n) => `${n} cards`,
+    save: "Save",
+    cancel: "Cancel",
+    delete: "Delete",
+    limitMessage: "Free accounts can save up to 3 decks",
+  },
+  mypage: {
+    title: "My Page",
+    favoritesCount: "Favorites",
+    wishlistCount: "Wishlist",
+    collectionCount: "Collection entries",
+    decksCount: "Saved decks",
+    tradePostsCount: "Trade posts",
+    shortcuts: "Shortcuts",
+  },
+  myTrades: {
+    title: "My Trade Posts",
+    empty: "You haven't posted anything yet.",
+    offering: "Offering",
+    wanted: "Wanted",
+    comments: "Comments",
+    close: "Mark as closed",
+    reopen: "Reopen",
+    closed: "Closed",
+    delete: "Delete",
+    deleteConfirm: "Delete this post?",
+  },
+  migrate: {
+    title: "Transfer this device's data to your account?",
+    description: "You can transfer favorites and draft decks saved on this device before you signed in.",
+    migrate: "Transfer",
+    skip: "Not now",
+    success: "Your data has been transferred.",
   },
 };
 
