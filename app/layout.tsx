@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/lang";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { AuthProvider } from "@/lib/auth/AuthProvider";
+import { MigrationGate } from "@/components/MigrationGate";
 import "./globals.css";
 
 // 開発中に計測データが混ざらないよう、本番ビルドの時だけGA4を読み込む
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <LanguageProvider lang={lang}>
           <AuthProvider>
+            <MigrationGate />
             <SiteHeader />
             {/*
               bodyがflexコンテナのため、中身が「縮まない」CSSの癖を防ぐために
