@@ -63,6 +63,7 @@ function PostPreviewCard({ post, cardMap, lang }: { post: TradePost; cardMap: Ma
 function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   const t = getDict(lang).mypage;
   const authT = getDict(lang).auth;
+  const homeT = getDict(lang).home;
   const { user } = useAuth();
   const [counts, setCounts] = useState<Counts | null>(null);
   const [posts, setPosts] = useState<TradePost[] | null>(null);
@@ -121,11 +122,16 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
             <p className="truncate text-sm text-muted">{user?.email}</p>
           </div>
         </div>
-        <div className="rounded-xl border border-line bg-background/40 px-5 py-3 text-right">
-          <p className="text-sm font-semibold text-accent-strong">{getDict(lang).home.tagline}</p>
-          <p className="mt-1 text-[10px] font-semibold tracking-[0.2em] text-muted">
-            COLLECT / TRADE / PLAY TOGETHER
-          </p>
+        <div className="rounded-xl border border-line bg-background/40 px-5 py-4 text-right">
+          <h2 className="text-xl font-extrabold leading-tight tracking-tight text-foreground sm:text-2xl">
+            {homeT.heroLine1}
+            <br />
+            <span className="relative inline-block">
+              <span className="relative z-10">{homeT.heroLine2}</span>
+              <span className="absolute inset-x-0 bottom-0.5 -z-0 h-2 rounded bg-accent-strong/20 sm:h-2.5" />
+            </span>
+          </h2>
+          <p className="mt-2 text-xs font-medium text-accent-strong">{homeT.tagline}</p>
         </div>
       </div>
 
