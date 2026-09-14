@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Pencil, Trash2, RotateCcw, CheckCircle2 } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
+import { AccountShell } from "@/components/AccountShell";
 import { CardPicker } from "@/components/CardPicker";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import {
@@ -154,7 +155,7 @@ function MyTradesContent({
   }
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+    <AccountShell>
       <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
 
       {posts !== null && posts.length === 0 && <p className="mt-8 text-sm text-muted">{t.empty}</p>}
@@ -250,7 +251,7 @@ function MyTradesContent({
           );
         })}
       </div>
-    </main>
+    </AccountShell>
   );
 }
 

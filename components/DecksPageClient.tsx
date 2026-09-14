@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
 import { CardPicker } from "@/components/CardPicker";
+import { AccountShell } from "@/components/AccountShell";
 import { TypeIcon } from "@/components/TypeIcon";
 import { useDecks, type Deck } from "@/lib/decks";
 import { useAuth } from "@/lib/auth/AuthProvider";
@@ -235,7 +236,7 @@ export function DecksPageClient({
   const ownedQuantities = isSignedIn ? quantities : null;
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
+    <AccountShell>
       <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
       <p className="mt-1 text-sm text-muted">{t.description}</p>
 
@@ -344,6 +345,6 @@ export function DecksPageClient({
           />
         </div>
       )}
-    </main>
+    </AccountShell>
   );
 }

@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Layers, LayoutList, ArrowLeftRight } from "lucide-react";
+import { ArrowRight, Heart, Star, Layers, LayoutList, ArrowLeftRight, MessageCircle } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
+import { AccountShell } from "@/components/AccountShell";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { getCloudFavoriteIds } from "@/lib/favorites";
 import { getWishlistEntries } from "@/lib/wishlist";
 import { getCollectionEntries } from "@/lib/collection";
 import { getCloudDecks } from "@/lib/decks";
-import { getMyTradePosts } from "@/lib/trade";
+import { getMyTradePosts, formatTradeDate, type CardOption, type TradePost } from "@/lib/trade";
 import { getDict } from "@/lib/i18n/dict";
 import type { Lang } from "@/lib/i18n/lang";
 
@@ -19,14 +20,53 @@ interface Counts {
   wishlist: number;
   collection: number;
   decks: number;
-  trades: number;
 }
 
-function MyPageContent({ lang }: { lang: Lang }) {
+function PostPreviewCard({ post, cardMap, lang }: { post: TradePost; cardMap: Map<string, CardOption>; lang: Lang }) {
+  const closedT = getDict(lang).myTrades;
+  const primaryCardId = post.offerCardIds[0] ?? post.wantCardIds[0];
+  const primaryCard = primaryCardId ? cardMap.get(primaryCardId) : undefined;
+  const title = primaryCard?.name ?? closedT.noCardTitle;
+
+  return (
+    <Link
+      href="/mypage/trades"
+      className="flex flex-col rounded-xl border border-line bg-surface p-4 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+    >
+      <div className="flex items-start gap-3">
+        <div className="relative h-16 w-12 shrink-0 overflow-hidden rounded-lg bg-background">
+          {primaryCard && (
+            <Image src={primaryCard.image} alt={primaryCard.name} fill sizes="48px" className="object-contain" />
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <span
+            className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+              post.closed ? "bg-line text-muted" : "bg-accent/10 text-accent-strong"
+            }`}
+          >
+            {post.closed ? closedT.closed : closedT.open}
+          </span>
+          <p className="mt-1 truncate text-sm font-bold text-foreground">{title}</p>
+          <p className="text-xs text-muted">{formatTradeDate(post.createdAt, lang)}</p>
+        </div>
+      </div>
+      {post.memo && <p className="mt-2 line-clamp-2 text-xs text-muted">{post.memo}</p>}
+      <div className="mt-3 flex items-center gap-1.5 border-t border-line pt-2 text-xs text-muted">
+        <MessageCircle className="h-3.5 w-3.5" />
+        {post.commentCount}
+      </div>
+    </Link>
+  );
+}
+
+function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   const t = getDict(lang).mypage;
   const authT = getDict(lang).auth;
   const { user } = useAuth();
   const [counts, setCounts] = useState<Counts | null>(null);
+  const [posts, setPosts] = useState<TradePost[] | null>(null);
+  const cardMap = useMemo(() => new Map(cards.map((c) => [c.id, c])), [cards]);
 
   useEffect(() => {
     if (!user) return;
@@ -45,8 +85,8 @@ function MyPageContent({ lang }: { lang: Lang }) {
         wishlist: wishlist.length,
         collection: collection.length,
         decks: decks.length,
-        trades: trades.length,
       });
+      setPosts(trades);
     });
 
     return () => {
@@ -54,52 +94,79 @@ function MyPageContent({ lang }: { lang: Lang }) {
     };
   }, [user]);
 
-  const stats: { label: string; value: number | undefined }[] = [
-    { label: t.favoritesCount, value: counts?.favorites },
-    { label: t.wishlistCount, value: counts?.wishlist },
-    { label: t.collectionCount, value: counts?.collection },
-    { label: t.decksCount, value: counts?.decks },
-    { label: t.tradePostsCount, value: counts?.trades },
-  ];
-
-  const shortcuts = [
-    { href: "/wishlist", label: authT.wishlist, Icon: Star },
-    { href: "/collection", label: authT.collection, Icon: Layers },
-    { href: "/decks", label: authT.myDecks, Icon: LayoutList },
-    { href: "/mypage/trades", label: authT.tradeManagement, Icon: ArrowLeftRight },
+  const stats = [
+    { label: t.favoritesCount, value: counts?.favorites, Icon: Heart, color: "bg-rose-500" },
+    { label: t.wishlistCount, value: counts?.wishlist, Icon: Star, color: "bg-amber-500" },
+    { label: t.collectionCount, value: counts?.collection, Icon: Layers, color: "bg-accent" },
+    { label: t.decksCount, value: counts?.decks, Icon: LayoutList, color: "bg-indigo-500" },
+    { label: t.tradePostsCount, value: posts?.length, Icon: ArrowLeftRight, color: "bg-teal-500" },
   ];
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
-      <div className="flex items-center gap-4">
-        {user?.photoURL && (
-          <Image
-            src={user.photoURL}
-            alt=""
-            width={56}
-            height={56}
-            className="rounded-full"
-            referrerPolicy="no-referrer"
-          />
-        )}
-        <div className="min-w-0">
-          <h1 className="truncate text-xl font-bold text-foreground">{user?.displayName}</h1>
-          <p className="truncate text-sm text-muted">{user?.email}</p>
+    <AccountShell>
+      <div className="hero-dark flex flex-col gap-4 rounded-2xl border border-line bg-hero-gradient-dark p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-4">
+          {user?.photoURL && (
+            <Image
+              src={user.photoURL}
+              alt=""
+              width={64}
+              height={64}
+              className="rounded-full"
+              referrerPolicy="no-referrer"
+            />
+          )}
+          <div className="min-w-0">
+            <h1 className="truncate text-xl font-bold text-foreground">{user?.displayName}</h1>
+            <p className="truncate text-sm text-muted">{user?.email}</p>
+          </div>
+        </div>
+        <div className="rounded-xl border border-line bg-background/40 px-5 py-3 text-right">
+          <p className="text-sm font-semibold text-accent-strong">{getDict(lang).home.tagline}</p>
+          <p className="mt-1 text-[10px] font-semibold tracking-[0.2em] text-muted">
+            COLLECT / TRADE / PLAY TOGETHER
+          </p>
         </div>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        {stats.map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-line bg-surface p-4 text-center shadow-xs">
-            <p className="text-2xl font-bold text-foreground">{stat.value ?? "…"}</p>
-            <p className="mt-1 text-xs text-muted">{stat.label}</p>
+        {stats.map(({ label, value, Icon, color }) => (
+          <div key={label} className="rounded-xl border border-line bg-surface p-4 text-center shadow-xs">
+            <span className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-white ${color}`}>
+              <Icon className="h-4 w-4" />
+            </span>
+            <p className="mt-2 text-2xl font-bold text-foreground">{value ?? "…"}</p>
+            <p className="mt-1 text-xs text-muted">{label}</p>
           </div>
         ))}
       </div>
 
+      <div className="mt-8 flex items-center justify-between">
+        <h2 className="text-lg font-bold tracking-tight text-foreground">{t.myPosts}</h2>
+        <Link href="/mypage/trades" className="flex items-center gap-1 text-sm font-medium text-muted hover:text-accent">
+          {t.viewAllPosts}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      </div>
+
+      {posts !== null && posts.length === 0 ? (
+        <p className="mt-4 text-sm text-muted">{t.noPosts}</p>
+      ) : (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {posts?.slice(0, 3).map((post) => (
+            <PostPreviewCard key={post.id} post={post} cardMap={cardMap} lang={lang} />
+          ))}
+        </div>
+      )}
+
       <h2 className="mt-8 text-sm font-semibold text-muted">{t.shortcuts}</h2>
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {shortcuts.map(({ href, label, Icon }) => (
+        {[
+          { href: "/wishlist", label: authT.wishlist, Icon: Star },
+          { href: "/collection", label: authT.collection, Icon: Layers },
+          { href: "/decks", label: authT.myDecks, Icon: LayoutList },
+          { href: "/mypage/trades", label: authT.tradeManagement, Icon: ArrowLeftRight },
+        ].map(({ href, label, Icon }) => (
           <Link
             key={href}
             href={href}
@@ -110,14 +177,14 @@ function MyPageContent({ lang }: { lang: Lang }) {
           </Link>
         ))}
       </div>
-    </main>
+    </AccountShell>
   );
 }
 
-export function MyPageClient({ lang }: { lang: Lang }) {
+export function MyPageClient({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   return (
     <RequireAuth>
-      <MyPageContent lang={lang} />
+      <MyPageContent cards={cards} lang={lang} />
     </RequireAuth>
   );
 }

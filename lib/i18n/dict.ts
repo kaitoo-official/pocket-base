@@ -295,6 +295,9 @@ export interface Dict {
     decksCount: string;
     tradePostsCount: string;
     shortcuts: string;
+    myPosts: string;
+    viewAllPosts: string;
+    noPosts: string;
   };
   myTrades: {
     title: string;
@@ -305,7 +308,9 @@ export interface Dict {
     edit: string;
     close: string;
     reopen: string;
+    open: string;
     closed: string;
+    noCardTitle: string;
     delete: string;
     deleteConfirm: string;
   };
@@ -610,6 +615,9 @@ const ja: Dict = {
     decksCount: "保存デッキ数",
     tradePostsCount: "トレード投稿数",
     shortcuts: "ショートカット",
+    myPosts: "自分の投稿",
+    viewAllPosts: "すべての投稿を見る",
+    noPosts: "まだ投稿がありません。",
   },
   myTrades: {
     title: "トレード投稿管理",
@@ -620,6 +628,8 @@ const ja: Dict = {
     edit: "編集",
     close: "募集終了にする",
     reopen: "募集を再開する",
+    open: "募集中",
+    noCardTitle: "友達募集",
     closed: "募集終了",
     delete: "削除",
     deleteConfirm: "この投稿を削除しますか？",
@@ -927,6 +937,9 @@ const en: Dict = {
     decksCount: "Saved decks",
     tradePostsCount: "Trade posts",
     shortcuts: "Shortcuts",
+    myPosts: "My Posts",
+    viewAllPosts: "View all posts",
+    noPosts: "You haven't posted anything yet.",
   },
   myTrades: {
     title: "My Trade Posts",
@@ -937,6 +950,8 @@ const en: Dict = {
     edit: "Edit",
     close: "Mark as closed",
     reopen: "Reopen",
+    open: "Open",
+    noCardTitle: "Friend request",
     closed: "Closed",
     delete: "Delete",
     deleteConfirm: "Delete this post?",

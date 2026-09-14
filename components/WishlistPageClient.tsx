@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { X } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
+import { AccountShell } from "@/components/AccountShell";
 import { CardOptionTile } from "@/components/CardOptionTile";
 import { useWishlist } from "@/lib/wishlist";
 import { getDict } from "@/lib/i18n/dict";
@@ -18,7 +19,7 @@ function WishlistContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
     .filter((c): c is CardOption => Boolean(c));
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
+    <AccountShell>
       <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
       <p className="mt-1 text-sm text-muted">{t.description}</p>
 
@@ -45,7 +46,7 @@ function WishlistContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
           ))}
         </div>
       )}
-    </main>
+    </AccountShell>
   );
 }
 
