@@ -92,10 +92,16 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   }, [user]);
 
   const stats = [
-    { label: t.wishlistCount, value: counts?.wishlist, Icon: Heart, color: "bg-rose-500" },
-    { label: t.collectionCount, value: counts?.collection, Icon: Layers, color: "bg-accent" },
-    { label: t.decksCount, value: counts?.decks, Icon: LayoutList, color: "bg-indigo-500" },
-    { label: t.tradePostsCount, value: posts?.length, Icon: ArrowLeftRight, color: "bg-teal-500" },
+    { href: "/wishlist", label: t.wishlistCount, value: counts?.wishlist, Icon: Heart, color: "bg-rose-500" },
+    { href: "/collection", label: t.collectionCount, value: counts?.collection, Icon: Layers, color: "bg-accent" },
+    { href: "/decks", label: t.decksCount, value: counts?.decks, Icon: LayoutList, color: "bg-indigo-500" },
+    {
+      href: "/mypage/trades",
+      label: t.tradePostsCount,
+      value: posts?.length,
+      Icon: ArrowLeftRight,
+      color: "bg-teal-500",
+    },
   ];
 
   return (
@@ -131,14 +137,18 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {stats.map(({ label, value, Icon, color }) => (
-          <div key={label} className="rounded-xl border border-line bg-surface p-4 text-center shadow-xs">
+        {stats.map(({ href, label, value, Icon, color }) => (
+          <Link
+            key={href}
+            href={href}
+            className="rounded-xl border border-line bg-surface p-4 text-center shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+          >
             <span className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-white ${color}`}>
               <Icon className="h-4 w-4" />
             </span>
             <p className="mt-2 text-2xl font-bold text-foreground">{value ?? "…"}</p>
             <p className="mt-1 text-xs text-muted">{label}</p>
-          </div>
+          </Link>
         ))}
       </div>
 
