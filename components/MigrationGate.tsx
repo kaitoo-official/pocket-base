@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/lib/auth/AuthProvider";
-import { getGuestFavoriteIds, clearGuestFavoriteIds, mergeGuestFavoritesToCloud } from "@/lib/favorites";
 import { mergeGuestDecksToCloud } from "@/lib/decks";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
@@ -11,7 +10,6 @@ const GUEST_DECKS_KEY = "pocketbase_guest_decks";
 
 function hasGuestData(): boolean {
   if (typeof window === "undefined") return false;
-  if (getGuestFavoriteIds().length > 0) return true;
   try {
     const raw = window.localStorage.getItem(GUEST_DECKS_KEY);
     return Boolean(raw && (JSON.parse(raw) as unknown[]).length > 0);
@@ -21,7 +19,7 @@ function hasGuestData(): boolean {
 }
 
 /**
- * ログイン直後、この端末にゲスト時代のお気に入り・仮デッキが残っていれば
+ * ログイン直後、この端末にゲスト時代の仮デッキが残っていれば
  * 「アカウントに引き継ぎますか？」を確認する。app/layout.tsxに常時マウントしておき、
  * ログイン状態が「未ログイン→ログイン済み」に変わった瞬間だけ判定する
  * (ログアウトするとcheckedRefをリセットし、次回ログイン時にまた判定できるようにする)。
@@ -72,8 +70,6 @@ export function MigrationGate() {
               disabled={migrating}
               onClick={async () => {
                 setMigrating(true);
-                await mergeGuestFavoritesToCloud(user.uid);
-                clearGuestFavoriteIds();
                 await mergeGuestDecksToCloud(user.uid);
                 setMigrating(false);
                 setDone(true);

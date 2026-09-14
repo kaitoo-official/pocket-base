@@ -5,7 +5,6 @@ import { getJapaneseName, getJapanesePackName, getJapaneseSeriesName } from "@/l
 import { TypeBadge } from "@/components/TypeBadge";
 import { RarityBadge } from "@/components/RarityBadge";
 import { ImageWithFallback } from "@/components/ImageWithFallback";
-import { FavoriteButton } from "@/components/FavoriteButton";
 import { WishlistButton } from "@/components/WishlistButton";
 import type { Lang } from "@/lib/i18n/lang";
 
@@ -56,8 +55,7 @@ export function CardTile({
           {caption && <p className="line-clamp-2 text-xs text-accent-strong">{caption}</p>}
         </div>
       </Link>
-      <div className="absolute right-3 top-3 flex flex-col gap-1.5">
-        <FavoriteButton cardId={card.id} />
+      <div className="absolute right-3 top-3">
         <WishlistButton cardId={card.id} />
       </div>
     </div>

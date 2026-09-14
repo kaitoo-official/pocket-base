@@ -6,10 +6,10 @@ import Link from "next/link";
 import {
   ArrowLeftRight,
   ChevronDown,
+  Heart,
   LayoutList,
   LogIn,
   LogOut,
-  Star,
   User as UserIcon,
   Layers,
 } from "lucide-react";
@@ -54,7 +54,7 @@ export function AuthMenu() {
 
   const menuLinks = [
     { href: "/mypage", label: t.myPage, Icon: UserIcon },
-    { href: "/wishlist", label: t.wishlist, Icon: Star },
+    { href: "/wishlist", label: t.wishlist, Icon: Heart },
     { href: "/collection", label: t.collection, Icon: Layers },
     { href: "/decks", label: t.myDecks, Icon: LayoutList },
     { href: "/mypage/trades", label: t.tradeManagement, Icon: ArrowLeftRight },

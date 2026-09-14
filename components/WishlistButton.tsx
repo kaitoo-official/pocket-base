@@ -1,6 +1,6 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { Heart } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useWishlist } from "@/lib/wishlist";
 import { signInWithGoogle } from "@/lib/auth/googleAuth";
@@ -20,7 +20,7 @@ export function WishlistButton({ cardId, className = "" }: { cardId: string; cla
       type="button"
       disabled={loading}
       aria-pressed={active}
-      aria-label={active ? "Wishlistから削除" : "Wishlistに追加"}
+      aria-label={active ? "ほしいリストから削除" : "ほしいリストに追加"}
       onClick={async (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -32,7 +32,7 @@ export function WishlistButton({ cardId, className = "" }: { cardId: string; cla
       }}
       className={`flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow-xs backdrop-blur-sm transition-transform hover:scale-110 disabled:opacity-60 ${className}`}
     >
-      <Star className={`h-4 w-4 ${active ? "fill-amber-400 text-amber-400" : "text-muted"}`} />
+      <Heart className={`h-4 w-4 ${active ? "fill-red-500 text-red-500" : "text-muted"}`} />
     </button>
   );
 }

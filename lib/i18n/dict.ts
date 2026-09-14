@@ -289,7 +289,6 @@ export interface Dict {
   };
   mypage: {
     title: string;
-    favoritesCount: string;
     wishlistCount: string;
     collectionCount: string;
     decksCount: string;
@@ -333,7 +332,7 @@ const ja: Dict = {
   auth: {
     signIn: "Googleでログイン",
     myPage: "マイページ",
-    wishlist: "Wishlist",
+    wishlist: "ほしいリスト",
     collection: "マイコレクション",
     myDecks: "マイデッキ",
     tradeManagement: "トレード投稿管理",
@@ -576,9 +575,9 @@ const ja: Dict = {
     confidence90: (n) => `90%の確率で ${n}パック以内`,
   },
   wishlist: {
-    title: "Wishlist",
-    description: "「欲しい」に追加したカードの一覧です。",
-    empty: "まだ「欲しい」に追加したカードがありません。",
+    title: "ほしいリスト",
+    description: "「ほしい」に追加したカードの一覧です。",
+    empty: "まだ「ほしい」に追加したカードがありません。",
     remove: "削除",
   },
   collection: {
@@ -609,8 +608,7 @@ const ja: Dict = {
   },
   mypage: {
     title: "マイページ",
-    favoritesCount: "お気に入り",
-    wishlistCount: "Wishlist",
+    wishlistCount: "ほしいリスト",
     collectionCount: "コレクション登録数",
     decksCount: "保存デッキ数",
     tradePostsCount: "トレード投稿数",
@@ -636,7 +634,7 @@ const ja: Dict = {
   },
   migrate: {
     title: "この端末のデータをアカウントに引き継ぎますか？",
-    description: "ログイン前にこの端末に保存されていたお気に入り・仮デッキを、このアカウントに引き継げます。",
+    description: "ログイン前にこの端末に保存されていた仮デッキを、このアカウントに引き継げます。",
     migrate: "引き継ぐ",
     skip: "今はしない",
     success: "データを引き継ぎました。",
@@ -931,7 +929,6 @@ const en: Dict = {
   },
   mypage: {
     title: "My Page",
-    favoritesCount: "Favorites",
     wishlistCount: "Wishlist",
     collectionCount: "Collection entries",
     decksCount: "Saved decks",
@@ -958,7 +955,7 @@ const en: Dict = {
   },
   migrate: {
     title: "Transfer this device's data to your account?",
-    description: "You can transfer favorites and draft decks saved on this device before you signed in.",
+    description: "You can transfer draft decks saved on this device before you signed in.",
     migrate: "Transfer",
     skip: "Not now",
     success: "Your data has been transferred.",

@@ -20,7 +20,6 @@ import { AttackCostIcons, RetreatCostIcons, EnergyDot } from "@/components/Energ
 import { AcquisitionSection } from "@/components/AcquisitionSection";
 import { PullRateSection } from "@/components/PullRateSection";
 import { WishlistButton } from "@/components/WishlistButton";
-import { FavoriteButton } from "@/components/FavoriteButton";
 import { CollectionQuantityControl } from "@/components/CollectionQuantityControl";
 import { BackLink } from "@/components/BackLink";
 import { getLang } from "@/lib/i18n/lang";
@@ -59,8 +58,7 @@ export default async function CardDetailPage({
             sizes="(max-width: 640px) 90vw, 400px"
             className="object-contain"
           />
-          <div className="absolute right-3 top-3 flex flex-col gap-2">
-            <FavoriteButton cardId={card.id} />
+          <div className="absolute right-3 top-3">
             <WishlistButton cardId={card.id} />
           </div>
         </div>

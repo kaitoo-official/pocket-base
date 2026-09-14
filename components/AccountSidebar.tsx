@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, User as UserIcon, Star, Layers, LayoutList, ArrowLeftRight } from "lucide-react";
+import { LogOut, User as UserIcon, Heart, Layers, LayoutList, ArrowLeftRight } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { useLang } from "@/lib/i18n/LanguageProvider";
@@ -17,7 +17,7 @@ export function AccountSidebar() {
 
   const items = [
     { href: "/mypage", label: t.myPage, Icon: UserIcon },
-    { href: "/wishlist", label: t.wishlist, Icon: Star },
+    { href: "/wishlist", label: t.wishlist, Icon: Heart },
     { href: "/collection", label: t.collection, Icon: Layers },
     { href: "/decks", label: t.myDecks, Icon: LayoutList },
     { href: "/mypage/trades", label: t.tradeManagement, Icon: ArrowLeftRight },

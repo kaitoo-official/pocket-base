@@ -3,11 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Heart, Star, Layers, LayoutList, ArrowLeftRight, MessageCircle } from "lucide-react";
+import { ArrowRight, Heart, Layers, LayoutList, ArrowLeftRight, MessageCircle } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
 import { useAuth } from "@/lib/auth/AuthProvider";
-import { getCloudFavoriteIds } from "@/lib/favorites";
 import { getWishlistEntries } from "@/lib/wishlist";
 import { getCollectionEntries } from "@/lib/collection";
 import { getCloudDecks } from "@/lib/decks";
@@ -16,7 +15,6 @@ import { getDict } from "@/lib/i18n/dict";
 import type { Lang } from "@/lib/i18n/lang";
 
 interface Counts {
-  favorites: number;
   wishlist: number;
   collection: number;
   decks: number;
@@ -74,15 +72,13 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
     let cancelled = false;
 
     Promise.all([
-      getCloudFavoriteIds(user.uid),
       getWishlistEntries(user.uid),
       getCollectionEntries(user.uid),
       getCloudDecks(user.uid),
       getMyTradePosts(user.uid),
-    ]).then(([favorites, wishlist, collection, decks, trades]) => {
+    ]).then(([wishlist, collection, decks, trades]) => {
       if (cancelled) return;
       setCounts({
-        favorites: favorites.length,
         wishlist: wishlist.length,
         collection: collection.length,
         decks: decks.length,
@@ -96,8 +92,7 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   }, [user]);
 
   const stats = [
-    { label: t.favoritesCount, value: counts?.favorites, Icon: Heart, color: "bg-rose-500" },
-    { label: t.wishlistCount, value: counts?.wishlist, Icon: Star, color: "bg-amber-500" },
+    { label: t.wishlistCount, value: counts?.wishlist, Icon: Heart, color: "bg-rose-500" },
     { label: t.collectionCount, value: counts?.collection, Icon: Layers, color: "bg-accent" },
     { label: t.decksCount, value: counts?.decks, Icon: LayoutList, color: "bg-indigo-500" },
     { label: t.tradePostsCount, value: posts?.length, Icon: ArrowLeftRight, color: "bg-teal-500" },
@@ -135,7 +130,7 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map(({ label, value, Icon, color }) => (
           <div key={label} className="rounded-xl border border-line bg-surface p-4 text-center shadow-xs">
             <span className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full text-white ${color}`}>
@@ -168,7 +163,7 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
       <h2 className="mt-8 text-sm font-semibold text-muted">{t.shortcuts}</h2>
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { href: "/wishlist", label: authT.wishlist, Icon: Star },
+          { href: "/wishlist", label: authT.wishlist, Icon: Heart },
           { href: "/collection", label: authT.collection, Icon: Layers },
           { href: "/decks", label: authT.myDecks, Icon: LayoutList },
           { href: "/mypage/trades", label: authT.tradeManagement, Icon: ArrowLeftRight },
