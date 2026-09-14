@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
 import { TypeBadge } from "@/components/TypeBadge";
@@ -73,10 +73,22 @@ function CollectionCardTile({
           type="button"
           disabled={quantity <= 0}
           onClick={() => onChange(quantity - 1)}
-          aria-label={lang === "en" ? "Decrease quantity" : "枚数を減らす"}
-          className="flex h-6 w-6 items-center justify-center rounded-full border border-line text-foreground transition-colors hover:border-accent/40 disabled:opacity-40"
+          aria-label={
+            quantity === 1
+              ? lang === "en"
+                ? "Remove from collection"
+                : "コレクションから削除"
+              : lang === "en"
+                ? "Decrease quantity"
+                : "枚数を減らす"
+          }
+          className={`flex h-6 w-6 items-center justify-center rounded-full border transition-colors disabled:opacity-40 ${
+            quantity === 1
+              ? "border-line text-red-600 hover:border-red-300 hover:bg-red-50"
+              : "border-line text-foreground hover:border-accent/40"
+          }`}
         >
-          <Minus className="h-3.5 w-3.5" />
+          {quantity === 1 ? <Trash2 className="h-3.5 w-3.5" /> : <Minus className="h-3.5 w-3.5" />}
         </button>
         <button
           type="button"
