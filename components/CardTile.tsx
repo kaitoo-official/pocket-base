@@ -55,7 +55,7 @@ export function CardTile({
           {caption && <p className="line-clamp-2 text-xs text-accent-strong">{caption}</p>}
         </div>
       </Link>
-      <div className="absolute right-3 top-3">
+      <div className="absolute -top-2 -right-2">
         <WishlistButton cardId={card.id} />
       </div>
     </div>

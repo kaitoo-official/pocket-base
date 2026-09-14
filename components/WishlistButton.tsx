@@ -30,7 +30,7 @@ export function WishlistButton({ cardId, className = "" }: { cardId: string; cla
         }
         void toggleWishlist(cardId);
       }}
-      className={`flex h-7 w-7 items-center justify-center rounded-full bg-white/90 shadow-xs backdrop-blur-sm transition-transform hover:scale-110 disabled:opacity-60 ${className}`}
+      className={`flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-md ring-1 ring-line transition-transform hover:scale-110 disabled:opacity-60 ${className}`}
     >
       <Heart className={`h-4 w-4 ${active ? "fill-red-500 text-red-500" : "text-muted"}`} />
     </button>

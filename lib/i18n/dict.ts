@@ -335,7 +335,7 @@ const ja: Dict = {
     wishlist: "ほしいリスト",
     collection: "マイコレクション",
     myDecks: "マイデッキ",
-    tradeManagement: "トレード投稿管理",
+    tradeManagement: "トレード投稿",
     signOut: "ログアウト",
   },
   footer: {
@@ -618,7 +618,7 @@ const ja: Dict = {
     noPosts: "まだ投稿がありません。",
   },
   myTrades: {
-    title: "トレード投稿管理",
+    title: "トレード投稿",
     empty: "まだ投稿がありません。",
     offering: "譲れるカード",
     wanted: "欲しいカード",

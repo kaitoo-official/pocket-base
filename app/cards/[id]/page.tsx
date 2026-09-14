@@ -51,14 +51,16 @@ export default async function CardDetailPage({
       <BackLink href="/cards">{t.backToList}</BackLink>
 
       <div className="mt-4 grid gap-8 sm:grid-cols-2">
-        <div className="relative mx-auto aspect-[245/342] w-full min-w-0 max-w-sm overflow-hidden rounded-xl bg-surface shadow-sm">
-          <ImageWithFallback
-            src={getCardImageUrl(card)}
-            alt={displayName}
-            sizes="(max-width: 640px) 90vw, 400px"
-            className="object-contain"
-          />
-          <div className="absolute right-3 top-3">
+        <div className="relative mx-auto w-full min-w-0 max-w-sm">
+          <div className="relative aspect-[245/342] w-full overflow-hidden rounded-xl bg-surface shadow-sm">
+            <ImageWithFallback
+              src={getCardImageUrl(card)}
+              alt={displayName}
+              sizes="(max-width: 640px) 90vw, 400px"
+              className="object-contain"
+            />
+          </div>
+          <div className="absolute -top-2 -right-2">
             <WishlistButton cardId={card.id} />
           </div>
         </div>
