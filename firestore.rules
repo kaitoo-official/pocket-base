@@ -116,7 +116,7 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly([
             'friendId', 'offerCardIds', 'wantCardIds', 'memo', 'createdAt',
             'authorDeviceId', 'commentCount', 'lastCommentAt', 'lastCommentAuthorId',
-            'userId', 'displayName', 'photoURL', 'closed'
+            'userId', 'nickname', 'closed'
           ])
         && request.resource.data.friendId is string
         && request.resource.data.friendId.matches('^[0-9]{10,20}$')
@@ -133,8 +133,9 @@ service cloud.firestore {
         && request.resource.data.lastCommentAt == null
         && request.resource.data.lastCommentAuthorId == null
         && request.resource.data.userId == request.auth.uid
-        && request.resource.data.displayName is string
-        && request.resource.data.photoURL is string
+        && request.resource.data.nickname is string
+        && request.resource.data.nickname.size() > 0
+        && request.resource.data.nickname.size() <= 20
         && request.resource.data.closed == false;
       allow update: if
         // コメント投稿時に件数・最終コメント情報だけを更新できるようにする(他フィールドの改ざんは不可)

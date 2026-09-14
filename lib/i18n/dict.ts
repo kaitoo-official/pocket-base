@@ -149,6 +149,10 @@ export interface Dict {
       signInTitle: string;
       signInDescription: string;
       signInButton: string;
+      nicknameLabel: string;
+      nicknameOptional: string;
+      nicknamePlaceholder: string;
+      nicknameHint: string;
     };
     cardPicker: {
       addCard: string;
@@ -460,6 +464,10 @@ const ja: Dict = {
       signInTitle: "投稿にはログインが必要です",
       signInDescription: "Googleでログインすると、トレード募集を投稿できます(掲示板の閲覧はログイン不要です)。",
       signInButton: "Googleでログイン",
+      nicknameLabel: "お名前",
+      nicknameOptional: "(任意)",
+      nicknamePlaceholder: "名前を入力",
+      nicknameHint: "掲示板に表示される名前です。Googleアカウントの本名は表示されません。未入力の場合は自動で名前が付きます。",
     },
     cardPicker: {
       addCard: "カードを追加",
@@ -773,6 +781,10 @@ const en: Dict = {
       signInTitle: "Sign in to post",
       signInDescription: "Sign in with Google to post a trade listing (browsing the board doesn't require sign-in).",
       signInButton: "Sign in with Google",
+      nicknameLabel: "Name",
+      nicknameOptional: "(optional)",
+      nicknamePlaceholder: "Enter your name",
+      nicknameHint: "This is shown publicly on the board — your Google account name is never shown. If left blank, a name is generated automatically.",
     },
     cardPicker: {
       addCard: "Add Card",

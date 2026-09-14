@@ -3,7 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeftRight, Check, Copy, MessageCircle, Send, Star, type LucideIcon } from "lucide-react";
+import { ArrowLeftRight, Check, Copy, MessageCircle, Send, Star, UserRound, type LucideIcon } from "lucide-react";
 import { TradeCommentDrawer } from "@/components/TradeCommentDrawer";
 import { formatTradeDate, MAX_CARDS_PER_SIDE, type CardOption, type TradePost } from "@/lib/trade";
 import { isPostUnread, markPostAsSeen } from "@/lib/tradeNotifications";
@@ -53,21 +53,12 @@ export function TradePostCard({
 
   return (
     <div className={`rounded-xl border border-line bg-surface p-4 shadow-xs sm:p-5 ${post.closed ? "opacity-60" : ""}`}>
-      {(post.displayName || post.closed) && (
+      {(post.nickname || post.closed) && (
         <div className="mb-3 flex items-center justify-between gap-2">
-          {post.displayName ? (
-            <div className="flex items-center gap-2">
-              {post.photoURL ? (
-                <Image
-                  src={post.photoURL}
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="rounded-full"
-                  referrerPolicy="no-referrer"
-                />
-              ) : null}
-              <span className="text-xs font-medium text-muted">{post.displayName}</span>
+          {post.nickname ? (
+            <div className="flex items-center gap-1.5">
+              <UserRound className="h-3.5 w-3.5 text-muted" />
+              <span className="text-xs font-medium text-muted">{post.nickname}</span>
             </div>
           ) : (
             <span />

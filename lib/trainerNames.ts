@@ -352,3 +352,14 @@ export function getRandomTrainerName(): string {
   const index = Math.floor(Math.random() * TRAINER_CLASS_NAMES.length);
   return TRAINER_CLASS_NAMES[index];
 }
+
+/**
+ * ニックネーム未入力のまま送信された場合に使う、自動生成の名前。
+ * 日本語ではトレーナーの種類、英語では翻訳データが無いため
+ * "Trainer1234"のような英数字の名前をランダムに生成する。
+ */
+export function generateFallbackNickname(lang: "ja" | "en"): string {
+  if (lang === "ja") return getRandomTrainerName();
+  const suffix = Math.floor(1000 + Math.random() * 9000);
+  return `Trainer${suffix}`;
+}

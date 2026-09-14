@@ -18,10 +18,12 @@ import { createTradePost, MAX_CARDS_PER_SIDE, type CardOption } from "@/lib/trad
 import type { Option } from "@/lib/filterOptions";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { signInWithGoogle } from "@/lib/auth/googleAuth";
+import { getRandomTrainerName, generateFallbackNickname } from "@/lib/trainerNames";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
 const MEMO_MAX = 200;
+const NICKNAME_MAX = 20;
 const FRIEND_ID_LENGTH = 16;
 const FRIEND_ID_PATTERN = /^\d{16}$/;
 
@@ -49,6 +51,9 @@ export function TradeComposer({
   // メモ欄のクリックで挿入できる定型文。自由記述と組み合わせて使える
   // (トレードはゲーム仕様上そもそも同レアリティ同士でしか成立しないため、「同レア希望」は候補に含めない)
   const MEMO_PRESETS = t.memoPresets;
+  // 「お名前」はコメント欄と同じく、歴代トレーナーの種類からランダムに1つ初期入力しておく
+  // (Googleアカウントの本名は掲示板に一切表示しない。あくまで初期値で自由に書き換えてよい)
+  const [nickname, setNickname] = useState(() => (lang === "en" ? "" : getRandomTrainerName()));
   const [friendId, setFriendId] = useState("");
   const [offerCardIds, setOfferCardIds] = useState<string[]>([]);
   const [wantCardIds, setWantCardIds] = useState<string[]>([]);
@@ -88,6 +93,7 @@ export function TradeComposer({
     // トレードではなくフレンド募集目的で使う運用も想定しているため)。
 
     const trimmedMemo = memo.trim().slice(0, MEMO_MAX);
+    const finalNickname = nickname.trim().slice(0, NICKNAME_MAX) || generateFallbackNickname(lang);
 
     setSubmitting(true);
     try {
@@ -96,6 +102,7 @@ export function TradeComposer({
         offerCardIds,
         wantCardIds,
         memo: trimmedMemo,
+        nickname: finalNickname,
       });
       setPostedSnapshot({
         offerCards: resolveCards(offerCardIds),
@@ -170,6 +177,25 @@ export function TradeComposer({
       {/* メモ・フレンドID・投稿ボタンは、カード追加枠と違って横に並べる必要が無いため、
           1列で中央寄せにして縦に積んでいる(その分、上のカード追加枠が横幅を広く使える)。 */}
       <div className="mx-auto mt-6 flex max-w-xl flex-col items-center gap-6">
+        <div className="w-full">
+          <label className="mb-1.5 flex items-center justify-start gap-2 text-sm font-semibold text-foreground">
+            <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 text-white">
+              <UserRound className="h-3.5 w-3.5" />
+            </span>
+            {t.nicknameLabel}
+            <span className="text-xs font-normal text-muted">{t.nicknameOptional}</span>
+          </label>
+          <input
+            type="text"
+            value={nickname}
+            onChange={(event) => setNickname(event.target.value.slice(0, NICKNAME_MAX))}
+            maxLength={NICKNAME_MAX}
+            placeholder={t.nicknamePlaceholder}
+            className="w-full rounded-lg border border-line bg-surface px-3 py-2.5 text-left text-sm text-foreground shadow-xs focus:border-accent/60 focus:outline-none"
+          />
+          <p className="mt-1.5 text-left text-xs text-muted">{t.nicknameHint}</p>
+        </div>
+
         <div className="w-full">
           <label className="mb-1.5 flex items-center justify-start gap-2 text-sm font-semibold text-foreground">
             <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-teal-400 to-emerald-500 text-white">

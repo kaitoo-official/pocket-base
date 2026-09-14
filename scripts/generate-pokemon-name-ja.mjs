@@ -24,6 +24,7 @@ const gameplay = JSON.parse(
 
 // 地方フォルム・特殊フォルムなど、自動翻訳すると不正確になりやすいパターン。
 // これらは今回は対象外にし、英語名のまま扱う。
+// (オーガポンの仮面違いはUNSUPPORTED扱いにせず、下のOGERPON_MASK_FORMSで個別対応する)
 const UNSUPPORTED_FORM_PATTERNS = [
   /^Alolan /,
   /^Galarian /,
@@ -31,12 +32,42 @@ const UNSUPPORTED_FORM_PATTERNS = [
   /^Paldean /,
   /^Origin Forme /,
   /^(Heat|Wash|Frost|Fan|Mow) Rotom$/,
-  /Mask\s?Ogerpon/,
   /^Castform (Sunny|Rainy|Snowy) Form$/,
   /^(Rapid|Single) Strike /,
   /^(Dawn Wings|Dusk Mane) /,
   /^Ultra Necrozma$/,
 ];
+
+// オーガポンの仮面違いは、種族名(オーガポン)だけでは正しい表記にならない
+// (公式は「みどりのめんオーガポン」のように仮面名を頭に付ける)。
+// PokeAPIの pokemon-species(種族名) とは別に pokemon-form(フォーム名) を
+// 問い合わせる必要があるため、専用のテーブルで対応する。
+// カード名側の表記ゆれ("Teal MaskOgerpon" のようにスペースが無い場合がある)にも対応する。
+const OGERPON_MASK_FORMS = [
+  { pattern: /^Teal\s?Mask\s?Ogerpon$/, formSlug: "ogerpon" },
+  { pattern: /^Wellspring\s?Mask\s?Ogerpon$/, formSlug: "ogerpon-wellspring-mask" },
+  { pattern: /^Hearthflame\s?Mask\s?Ogerpon$/, formSlug: "ogerpon-hearthflame-mask" },
+  { pattern: /^Cornerstone\s?Mask\s?Ogerpon$/, formSlug: "ogerpon-cornerstone-mask" },
+];
+
+function matchOgerponMaskForm(base) {
+  for (const { pattern, formSlug } of OGERPON_MASK_FORMS) {
+    if (pattern.test(base)) return formSlug;
+  }
+  return null;
+}
+
+async function fetchFormJaName(formSlug, attempt = 0) {
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon-form/${formSlug}`);
+  if (res.status === 429 && attempt < 3) {
+    await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+    return fetchFormJaName(formSlug, attempt + 1);
+  }
+  if (!res.ok) return null;
+  const data = await res.json();
+  const jaEntry = data.form_names.find((n) => n.language.name === "ja");
+  return jaEntry?.name ?? null;
+}
 
 function parseCardName(name) {
   let n = name;
@@ -90,9 +121,15 @@ for (const c of gameplay) {
 
 const entries = [];
 const skipped = [];
+const ogerponEntries = [];
 
 for (const name of pokemonNames) {
   const { base, hasEx, isMega, megaForm, hasRocket } = parseCardName(name);
+  const ogerponFormSlug = matchOgerponMaskForm(base);
+  if (ogerponFormSlug) {
+    ogerponEntries.push({ name, hasEx, formSlug: ogerponFormSlug });
+    continue;
+  }
   if (isUnsupportedForm(base)) {
     skipped.push(name);
     continue;
@@ -160,6 +197,27 @@ for (const e of entries) {
   if (e.hasRocket) jaName = `ロケット団の${jaName}`;
   if (e.hasEx) jaName = `${jaName} ex`;
   result[e.name] = jaName;
+}
+
+// オーガポンの仮面違い: 「みどりのめん」等のフォーム名(pokemon-form)+「オーガポン」(pokemon-species)を組み合わせる。
+// 公式のTCG表記("みどりのめんオーガポンex"等)に合わせている。
+if (ogerponEntries.length > 0) {
+  const ogerponSpeciesJa = await fetchJaName("ogerpon");
+  const ogerponFormSlugs = [...new Set(ogerponEntries.map((e) => e.formSlug))];
+  const formSlugToJaName = new Map();
+  for (const slug of ogerponFormSlugs) {
+    const ja = await fetchFormJaName(slug);
+    if (ja) formSlugToJaName.set(slug, ja);
+  }
+
+  for (const e of ogerponEntries) {
+    const formJa = formSlugToJaName.get(e.formSlug);
+    if (!formJa || !ogerponSpeciesJa) {
+      skipped.push(e.name);
+      continue;
+    }
+    result[e.name] = e.hasEx ? `${formJa}${ogerponSpeciesJa} ex` : `${formJa}${ogerponSpeciesJa}`;
+  }
 }
 
 const outPath = path.join(root, "lib/data/pokemon-name-ja.json");

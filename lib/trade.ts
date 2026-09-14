@@ -63,10 +63,11 @@ export interface TradePost {
   commentCount: number;
   lastCommentAt: Date | null;
   lastCommentAuthorId: string | null;
-  /** Googleログインして投稿した場合のみ入る。既存の匿名投稿にはこれらのフィールドが無い */
+  /** Googleログインして投稿した場合のみ入る(既存の匿名投稿にはこのフィールドが無い)。
+   *  自分の投稿の判定(編集・削除・管理ページ)専用で、公開表示はしない。 */
   userId: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  /** 掲示板に公開表示される名前。Googleの本名ではなく、投稿者が自由に決められるニックネーム */
+  nickname: string | null;
   closed: boolean;
 }
 
@@ -75,11 +76,15 @@ export interface NewTradePost {
   offerCardIds: string[];
   wantCardIds: string[];
   memo: string;
+  /** 掲示板に公開表示するニックネーム(Googleの本名は使わない) */
+  nickname: string;
 }
 
 /**
  * トレード投稿を作成する。ログイン(Googleサインイン)必須。
  * Firestoreルール側でも request.auth (かつ匿名認証ではないこと)を必須にしている。
+ * プライバシーのため、Googleアカウントの本名やプロフィール画像は掲示板に一切出さず、
+ * 投稿者が自由に決めたニックネームだけを公開表示する。
  */
 export async function createTradePost(post: NewTradePost): Promise<void> {
   const user = auth.currentUser;
@@ -95,8 +100,6 @@ export async function createTradePost(post: NewTradePost): Promise<void> {
     lastCommentAt: null,
     lastCommentAuthorId: null,
     userId: user.uid,
-    displayName: user.displayName ?? "",
-    photoURL: user.photoURL ?? "",
     closed: false,
   });
 }
@@ -231,8 +234,7 @@ function mapPostDoc(doc: { id: string; data: () => Record<string, unknown> }): T
     lastCommentAt,
     lastCommentAuthorId: (data.lastCommentAuthorId as string | null) ?? null,
     userId: (data.userId as string | null) ?? null,
-    displayName: (data.displayName as string | null) ?? null,
-    photoURL: (data.photoURL as string | null) ?? null,
+    nickname: (data.nickname as string | null) ?? null,
     closed: (data.closed as boolean) ?? false,
   };
 }
