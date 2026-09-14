@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -28,6 +28,18 @@ export function AuthMenu() {
   const t = getDict(lang).auth;
   const [open, setOpen] = useState(false);
   const [signingIn, setSigningIn] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
 
   if (loading) {
     // セッション復元中はボタンをガタつかせないよう、同じ大きさの空枠だけ出す
@@ -61,7 +73,7 @@ export function AuthMenu() {
   ];
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -88,39 +100,29 @@ export function AuthMenu() {
       </button>
 
       {open && (
-        <>
-          {/* メニュー外クリックで閉じるための透明オーバーレイ */}
+        <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
+          <div className="border-b border-line px-4 py-3">
+            <p className="truncate text-sm font-semibold text-foreground">{user?.displayName}</p>
+            <p className="truncate text-xs text-muted">{user?.email}</p>
+          </div>
+          {menuLinks.map(({ href, label, Icon }) => (
+            <Link key={href} href={href} className={MENU_ITEM_CLASS} onClick={() => setOpen(false)}>
+              <Icon className="h-4 w-4 text-muted" />
+              {label}
+            </Link>
+          ))}
           <button
             type="button"
-            aria-hidden="true"
-            tabIndex={-1}
-            className="fixed inset-0 z-40 cursor-default"
-            onClick={() => setOpen(false)}
-          />
-          <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
-            <div className="border-b border-line px-4 py-3">
-              <p className="truncate text-sm font-semibold text-foreground">{user?.displayName}</p>
-              <p className="truncate text-xs text-muted">{user?.email}</p>
-            </div>
-            {menuLinks.map(({ href, label, Icon }) => (
-              <Link key={href} href={href} className={MENU_ITEM_CLASS} onClick={() => setOpen(false)}>
-                <Icon className="h-4 w-4 text-muted" />
-                {label}
-              </Link>
-            ))}
-            <button
-              type="button"
-              onClick={async () => {
-                setOpen(false);
-                await signOutOfGoogle();
-              }}
-              className={`${MENU_ITEM_CLASS} w-full border-t border-line text-left`}
-            >
-              <LogOut className="h-4 w-4 text-muted" />
-              {t.signOut}
-            </button>
-          </div>
-        </>
+            onClick={async () => {
+              setOpen(false);
+              await signOutOfGoogle();
+            }}
+            className={`${MENU_ITEM_CLASS} w-full border-t border-line text-left`}
+          >
+            <LogOut className="h-4 w-4 text-muted" />
+            {t.signOut}
+          </button>
+        </div>
       )}
     </div>
   );
