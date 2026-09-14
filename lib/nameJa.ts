@@ -5,6 +5,7 @@ import moveNameJa from "@/lib/data/move-name-ja.json";
 import moveEffectJa from "@/lib/data/move-effect-ja.json";
 import abilityNameJa from "@/lib/data/ability-name-ja.json";
 import abilityEffectJa from "@/lib/data/ability-effect-ja.json";
+import trainerNameJa from "@/lib/data/trainer-name-ja.json";
 import type { Card } from "@/types/card";
 import type { Lang } from "@/lib/i18n/lang";
 
@@ -15,6 +16,7 @@ const moveNameJaMap: Record<string, string> = moveNameJa;
 const moveEffectJaMap: Record<string, string> = moveEffectJa;
 const abilityNameJaMap: Record<string, string> = abilityNameJa;
 const abilityEffectJaMap: Record<string, string> = abilityEffectJa;
+const trainerNameJaMap: Record<string, string> = trainerNameJa;
 
 /**
  * シリーズ(拡張パック)の日本語名を返す。Bulbapediaで確認した公式の日本語タイトルの対応表。
@@ -28,12 +30,12 @@ export function getJapaneseSeriesName(setCode: string, fallbackName: string, lan
 
 /**
  * カードの日本語名を返す。
- * 対応表に無い場合(トレーナーズカードや、アローラのすがた等の一部の特殊フォルム)や、
+ * 対応表に無い場合(アローラのすがた等の一部の特殊フォルム)や、
  * 英語表示時はundefined。→ 呼び出し側はundefinedの時、英語名(card.name)をそのまま表示する。
  */
 export function getJapaneseName(card: Pick<Card, "name" | "category">, lang: Lang = "ja"): string | undefined {
   if (lang === "en") return undefined;
-  if (card.category !== "Pokémon") return undefined;
+  if (card.category !== "Pokémon") return trainerNameJaMap[card.name];
   return pokemonNameJaMap[card.name];
 }
 
