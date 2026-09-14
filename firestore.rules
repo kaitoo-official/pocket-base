@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /tradePosts/{postId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasOnly([
+          'friendId', 'offerCardIds', 'wantCardIds', 'memo', 'createdAt',
+          'authorDeviceId', 'commentCount', 'lastCommentAt', 'lastCommentAuthorId'
+        ])
+        && request.resource.data.friendId is string
+        && request.resource.data.friendId.matches('^[0-9]{10,20}$')
+        && request.resource.data.offerCardIds is list
+        && request.resource.data.offerCardIds.size() <= 10
+        && request.resource.data.wantCardIds is list
+        && request.resource.data.wantCardIds.size() <= 10
+        && request.resource.data.memo is string
+        && request.resource.data.memo.size() <= 200
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.authorDeviceId is string
+        && request.resource.data.authorDeviceId.size() <= 100
+        && request.resource.data.commentCount == 0
+        && request.resource.data.lastCommentAt == null
+        && request.resource.data.lastCommentAuthorId == null;
+      // コメント投稿時に件数・最終コメント情報だけを更新できるようにする(他フィールドの改ざんは不可)
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['commentCount', 'lastCommentAt', 'lastCommentAuthorId'])
+        && request.resource.data.commentCount == resource.data.get('commentCount', 0) + 1
+        && request.resource.data.lastCommentAt == request.time
+        && request.resource.data.lastCommentAuthorId is string
+        && request.resource.data.lastCommentAuthorId.size() <= 100;
+      allow delete: if false;
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if request.auth != null
+          && request.resource.data.keys().hasOnly(['nickname', 'text', 'createdAt', 'authorDeviceId', 'authorUid'])
+          && request.resource.data.nickname is string
+          && request.resource.data.nickname.size() <= 20
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 200
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.authorDeviceId is string
+          && request.resource.data.authorDeviceId.size() <= 100
+          && request.resource.data.authorUid == request.auth.uid;
+        allow update: if false;
+        allow delete: if request.auth != null && request.auth.uid == resource.data.authorUid;
+      }
+    }
+
+    // フッターの「ご意見・ご要望」フォーム。一覧表示はせず運営がConsole側で直接確認するため、
+    // 読み取りは許可しない(トレード投稿のような公開掲示板ではないため)。
+    match /feedback/{feedbackId} {
+      allow read: if false;
+      allow create: if request.resource.data.keys().hasOnly(
+          ['message', 'contact', 'createdAt', 'authorDeviceId']
+        )
+        && request.resource.data.message is string
+        && request.resource.data.message.size() > 0
+        && request.resource.data.message.size() <= 1000
+        && request.resource.data.contact is string
+        && request.resource.data.contact.size() <= 200
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.authorDeviceId is string
+        && request.resource.data.authorDeviceId.size() <= 100;
+      allow update: if false;
+      allow delete: if false;
+    }
+  }
+}
