@@ -52,7 +52,33 @@ export function TradePostCard({
   }
 
   return (
-    <div className="rounded-xl border border-line bg-surface p-4 shadow-xs sm:p-5">
+    <div className={`rounded-xl border border-line bg-surface p-4 shadow-xs sm:p-5 ${post.closed ? "opacity-60" : ""}`}>
+      {(post.displayName || post.closed) && (
+        <div className="mb-3 flex items-center justify-between gap-2">
+          {post.displayName ? (
+            <div className="flex items-center gap-2">
+              {post.photoURL ? (
+                <Image
+                  src={post.photoURL}
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="rounded-full"
+                  referrerPolicy="no-referrer"
+                />
+              ) : null}
+              <span className="text-xs font-medium text-muted">{post.displayName}</span>
+            </div>
+          ) : (
+            <span />
+          )}
+          {post.closed && (
+            <span className="rounded-full bg-line px-2 py-0.5 text-[11px] font-semibold text-muted">
+              {t.closed}
+            </span>
+          )}
+        </div>
+      )}
       <div className="flex items-start gap-3 sm:gap-5">
         <TradeCardColumn
           label={t.offerLabel}

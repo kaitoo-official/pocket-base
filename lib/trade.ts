@@ -17,8 +17,9 @@ import {
   serverTimestamp,
   Timestamp,
   updateDoc,
+  where,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
 import { getDeviceId } from "@/lib/deviceId";
 import { ensureAuthUid } from "@/lib/authUid";
 import { getJapaneseName } from "@/lib/nameJa";
@@ -57,6 +58,11 @@ export interface TradePost {
   commentCount: number;
   lastCommentAt: Date | null;
   lastCommentAuthorId: string | null;
+  /** Googleログインして投稿した場合のみ入る。既存の匿名投稿にはこれらのフィールドが無い */
+  userId: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  closed: boolean;
 }
 
 export interface NewTradePost {
@@ -66,7 +72,16 @@ export interface NewTradePost {
   memo: string;
 }
 
+/**
+ * トレード投稿を作成する。ログイン(Googleサインイン)必須。
+ * Firestoreルール側でも request.auth (かつ匿名認証ではないこと)を必須にしている。
+ */
 export async function createTradePost(post: NewTradePost): Promise<void> {
+  const user = auth.currentUser;
+  if (!user || user.isAnonymous) {
+    throw new Error("ログインが必要です");
+  }
+
   await addDoc(collection(db, TRADE_POSTS_COLLECTION), {
     ...post,
     createdAt: serverTimestamp(),
@@ -74,7 +89,35 @@ export async function createTradePost(post: NewTradePost): Promise<void> {
     commentCount: 0,
     lastCommentAt: null,
     lastCommentAuthorId: null,
+    userId: user.uid,
+    displayName: user.displayName ?? "",
+    photoURL: user.photoURL ?? "",
+    closed: false,
   });
+}
+
+/** 自分が投稿したトレードを新しい順に取得する(トレード投稿管理ページ用) */
+export async function getMyTradePosts(uid: string): Promise<TradePost[]> {
+  const myQuery = query(
+    collection(db, TRADE_POSTS_COLLECTION),
+    where("userId", "==", uid),
+    orderBy("createdAt", "desc")
+  );
+  const snapshot = await getDocs(myQuery);
+  return snapshot.docs.map(mapPostDoc);
+}
+
+/** 投稿の内容を編集する(投稿者本人のみ。Firestoreルール側でも所有者チェックを行っている) */
+export async function updateTradePost(
+  postId: string,
+  update: { friendId: string; offerCardIds: string[]; wantCardIds: string[]; memo: string; closed: boolean }
+): Promise<void> {
+  await updateDoc(doc(db, TRADE_POSTS_COLLECTION, postId), { ...update });
+}
+
+/** 投稿を削除する(投稿者本人のみ) */
+export async function deleteTradePost(postId: string): Promise<void> {
+  await deleteDoc(doc(db, TRADE_POSTS_COLLECTION, postId));
 }
 
 /** トレード投稿の総数を返す(Homeの統計表示用)。取得に失敗した場合は0を返す */
@@ -182,6 +225,10 @@ function mapPostDoc(doc: { id: string; data: () => Record<string, unknown> }): T
     commentCount: (data.commentCount as number) ?? 0,
     lastCommentAt,
     lastCommentAuthorId: (data.lastCommentAuthorId as string | null) ?? null,
+    userId: (data.userId as string | null) ?? null,
+    displayName: (data.displayName as string | null) ?? null,
+    photoURL: (data.photoURL as string | null) ?? null,
+    closed: (data.closed as boolean) ?? false,
   };
 }
 

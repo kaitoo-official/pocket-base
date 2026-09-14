@@ -102,10 +102,15 @@ service cloud.firestore {
 
     match /tradePosts/{postId} {
       allow read: if true;
-      allow create: if request.resource.data.keys().hasOnly([
-          'friendId', 'offerCardIds', 'wantCardIds', 'memo', 'createdAt',
-          'authorDeviceId', 'commentCount', 'lastCommentAt', 'lastCommentAuthorId'
-        ])
+      // 新規投稿はGoogleログイン必須(匿名認証だけでは不可)。既存の匿名投稿(userId無し)は
+      // そのまま読み取り専用で残り続け、このルールの対象は今後の新規投稿のみ。
+      allow create: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.resource.data.keys().hasOnly([
+            'friendId', 'offerCardIds', 'wantCardIds', 'memo', 'createdAt',
+            'authorDeviceId', 'commentCount', 'lastCommentAt', 'lastCommentAuthorId',
+            'userId', 'displayName', 'photoURL', 'closed'
+          ])
         && request.resource.data.friendId is string
         && request.resource.data.friendId.matches('^[0-9]{10,20}$')
         && request.resource.data.offerCardIds is list
@@ -119,15 +124,39 @@ service cloud.firestore {
         && request.resource.data.authorDeviceId.size() <= 100
         && request.resource.data.commentCount == 0
         && request.resource.data.lastCommentAt == null
-        && request.resource.data.lastCommentAuthorId == null;
-      // コメント投稿時に件数・最終コメント情報だけを更新できるようにする(他フィールドの改ざんは不可)
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['commentCount', 'lastCommentAt', 'lastCommentAuthorId'])
-        && request.resource.data.commentCount == resource.data.get('commentCount', 0) + 1
-        && request.resource.data.lastCommentAt == request.time
-        && request.resource.data.lastCommentAuthorId is string
-        && request.resource.data.lastCommentAuthorId.size() <= 100;
-      allow delete: if false;
+        && request.resource.data.lastCommentAuthorId == null
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.displayName is string
+        && request.resource.data.photoURL is string
+        && request.resource.data.closed == false;
+      allow update: if
+        // コメント投稿時に件数・最終コメント情報だけを更新できるようにする(他フィールドの改ざんは不可)
+        (request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['commentCount', 'lastCommentAt', 'lastCommentAuthorId'])
+          && request.resource.data.commentCount == resource.data.get('commentCount', 0) + 1
+          && request.resource.data.lastCommentAt == request.time
+          && request.resource.data.lastCommentAuthorId is string
+          && request.resource.data.lastCommentAuthorId.size() <= 100)
+        ||
+        // 投稿者本人による編集・募集終了の切り替え(トレード投稿管理ページ用)
+        (request.auth != null
+          && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && request.auth.uid == resource.data.get('userId', null)
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['friendId', 'offerCardIds', 'wantCardIds', 'memo', 'closed'])
+          && request.resource.data.friendId is string
+          && request.resource.data.friendId.matches('^[0-9]{10,20}$')
+          && request.resource.data.offerCardIds is list
+          && request.resource.data.offerCardIds.size() <= 10
+          && request.resource.data.wantCardIds is list
+          && request.resource.data.wantCardIds.size() <= 10
+          && request.resource.data.memo is string
+          && request.resource.data.memo.size() <= 200
+          && request.resource.data.closed is bool);
+      // 投稿者本人のみ削除可能(既存の匿名投稿はuserIdが無いため誰も削除できない)
+      allow delete: if request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.auth.uid == resource.data.get('userId', null);
 
       match /comments/{commentId} {
         allow read: if true;

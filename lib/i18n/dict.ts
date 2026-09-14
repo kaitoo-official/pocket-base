@@ -146,6 +146,9 @@ export interface Dict {
       postedTitle: string;
       postedDescription: string;
       postAnother: string;
+      signInTitle: string;
+      signInDescription: string;
+      signInButton: string;
     };
     cardPicker: {
       addCard: string;
@@ -171,6 +174,7 @@ export interface Dict {
       commentCount: (n: string) => string;
       new: string;
       lastUpdated: (date: string) => string;
+      closed: string;
     };
     search: {
       placeholder: string;
@@ -443,6 +447,9 @@ const ja: Dict = {
       postedTitle: "投稿が完了しました！",
       postedDescription: "画像でシェアして、トレード相手を見つけやすくしましょう。",
       postAnother: "続けて投稿する",
+      signInTitle: "投稿にはログインが必要です",
+      signInDescription: "Googleでログインすると、トレード募集を投稿できます(掲示板の閲覧はログイン不要です)。",
+      signInButton: "Googleでログイン",
     },
     cardPicker: {
       addCard: "カードを追加",
@@ -468,6 +475,7 @@ const ja: Dict = {
       commentCount: (n) => `${n}件`,
       new: "NEW",
       lastUpdated: (date) => `最終更新: ${date}`,
+      closed: "募集終了",
     },
     search: {
       placeholder: "カード名で投稿を検索",
@@ -742,6 +750,9 @@ const en: Dict = {
       postedTitle: "Your post is live!",
       postedDescription: "Share it as an image to help find a trade partner.",
       postAnother: "Post another",
+      signInTitle: "Sign in to post",
+      signInDescription: "Sign in with Google to post a trade listing (browsing the board doesn't require sign-in).",
+      signInButton: "Sign in with Google",
     },
     cardPicker: {
       addCard: "Add Card",
@@ -767,6 +778,7 @@ const en: Dict = {
       commentCount: (n) => n,
       new: "NEW",
       lastUpdated: (date) => `Last updated: ${date}`,
+      closed: "Closed",
     },
     search: {
       placeholder: "Search posts by card name",

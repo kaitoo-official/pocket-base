@@ -1,11 +1,23 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { ArrowRight, CheckCircle2, ImageIcon, NotebookPen, RefreshCw, Send, Star, UserRound } from "lucide-react";
+import {
+  ArrowRight,
+  CheckCircle2,
+  ImageIcon,
+  LogIn,
+  NotebookPen,
+  RefreshCw,
+  Send,
+  Star,
+  UserRound,
+} from "lucide-react";
 import { CardPicker } from "@/components/CardPicker";
 import { TradeShareImageModal } from "@/components/TradeShareImageModal";
 import { createTradePost, MAX_CARDS_PER_SIDE, type CardOption } from "@/lib/trade";
 import type { Option } from "@/lib/filterOptions";
+import { useAuth } from "@/lib/auth/AuthProvider";
+import { signInWithGoogle } from "@/lib/auth/googleAuth";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -30,6 +42,7 @@ export function TradeComposer({
   typeOptions: Option[];
   rarityOptions: Option[];
 }) {
+  const { isSignedIn } = useAuth();
   const lang = useLang();
   const t = getDict(lang).trade.composer;
   const shareT = getDict(lang).trade.shareImage;
@@ -100,6 +113,26 @@ export function TradeComposer({
     } finally {
       setSubmitting(false);
     }
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div className="flex flex-col items-center gap-3 rounded-3xl border border-line bg-surface p-8 text-center shadow-md">
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-teal-400 text-white">
+          <LogIn className="h-5 w-5" />
+        </span>
+        <p className="text-sm font-bold text-foreground">{t.signInTitle}</p>
+        <p className="max-w-md text-xs text-muted">{t.signInDescription}</p>
+        <button
+          type="button"
+          onClick={() => void signInWithGoogle()}
+          className="mt-1 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-opacity duration-150 hover:opacity-90"
+        >
+          <LogIn className="h-4 w-4" />
+          {t.signInButton}
+        </button>
+      </div>
+    );
   }
 
   return (
