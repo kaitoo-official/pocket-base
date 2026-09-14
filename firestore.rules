@@ -26,6 +26,78 @@ service cloud.firestore {
             .hasOnly(['displayName', 'email', 'photoURL', 'updatedAt'])
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
+
+      // お気に入り。ログイン必須の機能ではない(ゲストはlocalStorage側を使う)ため、
+      // 自分のuidのサブコレクションであることだけを確認する。
+      match /favorites/{cardId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      // Wishlist(欲しいカード)。ログイン必須の機能のため、匿名認証は弾く。
+      match /wishlist/{cardId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && request.resource.data.keys().hasOnly(['cardId', 'userId', 'createdAt'])
+          && request.resource.data.cardId == cardId
+          && request.resource.data.userId == userId
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com';
+      }
+
+      // マイコレクション(所持枚数)。ログイン必須。quantityは 0〜3(3は「3枚以上」を表す)。
+      // 0枚に戻す場合はドキュメント自体を削除する運用(=未所持は「ドキュメントが無い」で表す)。
+      match /collection/{cardId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow write: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && request.resource.data.keys().hasOnly(['cardId', 'userId', 'quantity', 'updatedAt'])
+          && request.resource.data.cardId == cardId
+          && request.resource.data.userId == userId
+          && request.resource.data.quantity is int
+          && request.resource.data.quantity >= 1
+          && request.resource.data.quantity <= 3
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com';
+      }
+
+      // マイデッキ。ログイン必須。無料会員の「3デッキまで」はUI側で案内・制御しており、
+      // ここでは所有者チェックとデータ形状の検証のみ行う。
+      match /decks/{deckId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow create: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && request.resource.data.keys().hasOnly(['deckName', 'userId', 'cards', 'createdAt', 'updatedAt'])
+          && request.resource.data.userId == userId
+          && request.resource.data.deckName is string
+          && request.resource.data.deckName.size() > 0
+          && request.resource.data.deckName.size() <= 50
+          && request.resource.data.cards is list
+          && request.resource.data.cards.size() <= 20
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.updatedAt == request.time;
+        allow update: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deckName', 'cards', 'updatedAt'])
+          && request.resource.data.deckName is string
+          && request.resource.data.deckName.size() > 0
+          && request.resource.data.deckName.size() <= 50
+          && request.resource.data.cards is list
+          && request.resource.data.cards.size() <= 20
+          && request.resource.data.updatedAt == request.time;
+        allow delete: if request.auth != null
+          && request.auth.uid == userId
+          && request.auth.token.firebase.sign_in_provider == 'google.com';
+      }
     }
 
     match /tradePosts/{postId} {

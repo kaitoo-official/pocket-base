@@ -19,6 +19,9 @@ import { InfoRow } from "@/components/InfoRow";
 import { AttackCostIcons, RetreatCostIcons, EnergyDot } from "@/components/EnergyIcons";
 import { AcquisitionSection } from "@/components/AcquisitionSection";
 import { PullRateSection } from "@/components/PullRateSection";
+import { WishlistButton } from "@/components/WishlistButton";
+import { FavoriteButton } from "@/components/FavoriteButton";
+import { CollectionQuantityControl } from "@/components/CollectionQuantityControl";
 import { BackLink } from "@/components/BackLink";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
@@ -56,6 +59,10 @@ export default async function CardDetailPage({
             sizes="(max-width: 640px) 90vw, 400px"
             className="object-contain"
           />
+          <div className="absolute right-3 top-3 flex flex-col gap-2">
+            <FavoriteButton cardId={card.id} />
+            <WishlistButton cardId={card.id} />
+          </div>
         </div>
 
         <div className="min-w-0">
@@ -97,6 +104,13 @@ export default async function CardDetailPage({
               )}
             </InfoRow>
           </dl>
+
+          <div className="mt-5 border-t border-line pt-4">
+            <p className="text-xs font-semibold text-muted">{t.myCollection}</p>
+            <div className="mt-2">
+              <CollectionQuantityControl cardId={card.id} lang={lang} />
+            </div>
+          </div>
         </div>
       </div>
 

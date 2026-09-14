@@ -80,6 +80,7 @@ export interface Dict {
     ability: string;
     weakness: string;
     retreatCost: string;
+    myCollection: string;
   };
   packs: {
     title: string;
@@ -325,6 +326,7 @@ const ja: Dict = {
     ability: "特性",
     weakness: "弱点",
     retreatCost: "にげるエネルギー",
+    myCollection: "マイコレクション",
   },
   packs: {
     title: "パックデータベース",
@@ -572,6 +574,7 @@ const en: Dict = {
     ability: "Ability",
     weakness: "Weakness",
     retreatCost: "Retreat Cost",
+    myCollection: "My Collection",
   },
   packs: {
     title: "Pack Database",
