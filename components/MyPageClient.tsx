@@ -122,7 +122,7 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
             <p className="truncate text-sm text-muted">{user?.email}</p>
           </div>
         </div>
-        <div className="rounded-xl border border-line bg-background/40 px-5 py-4 text-right">
+        <div className="text-right">
           <h2 className="text-xl font-extrabold leading-tight tracking-tight text-foreground sm:text-2xl">
             {homeT.heroLine1}
             <br />
