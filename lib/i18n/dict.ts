@@ -10,6 +10,15 @@ export interface Dict {
     packs: string;
     trade: string;
   };
+  auth: {
+    signIn: string;
+    myPage: string;
+    wishlist: string;
+    collection: string;
+    myDecks: string;
+    tradeManagement: string;
+    signOut: string;
+  };
   footer: {
     disclaimer: string;
     dataCredit: string;
@@ -246,6 +255,15 @@ const ja: Dict = {
     packs: "パック",
     trade: "トレード",
   },
+  auth: {
+    signIn: "Googleでログイン",
+    myPage: "マイページ",
+    wishlist: "Wishlist",
+    collection: "マイコレクション",
+    myDecks: "マイデッキ",
+    tradeManagement: "トレード投稿管理",
+    signOut: "ログアウト",
+  },
   footer: {
     disclaimer: "本サイトは非公式のファンサイトです。Pokémon、Pokémon Trading Card Game Pocketの公式サービスではありません。",
     dataCredit: "カードデータ・画像",
@@ -481,6 +499,15 @@ const en: Dict = {
     cards: "Cards",
     packs: "Packs",
     trade: "Trade",
+  },
+  auth: {
+    signIn: "Sign in with Google",
+    myPage: "My Page",
+    wishlist: "Wishlist",
+    collection: "My Collection",
+    myDecks: "My Decks",
+    tradeManagement: "My Trade Posts",
+    signOut: "Sign Out",
   },
   footer: {
     disclaimer:

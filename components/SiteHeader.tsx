@@ -7,6 +7,7 @@ import { ArrowLeftRight, Home, LayoutGrid, PlayingCardsFan } from "lucide-react"
 import { Logo } from "@/components/Logo";
 import { Container } from "@/components/Container";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { AuthMenu } from "@/components/AuthMenu";
 import { subscribeToTradePosts } from "@/lib/trade";
 import { countUnreadPosts } from "@/lib/tradeNotifications";
 import { useLang } from "@/lib/i18n/LanguageProvider";
@@ -70,6 +71,7 @@ export function SiteHeader() {
             );
           })}
           <LanguageToggle />
+          <AuthMenu />
         </nav>
       </Container>
     </header>

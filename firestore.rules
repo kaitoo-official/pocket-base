@@ -1,6 +1,33 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Googleでログインしたユーザーのプロフィール。
+    // 匿名認証(コメント削除用)も request.auth を持つため、"Googleでログイン済みか" は
+    // sign_in_provider が 'google.com' であることまで確認して区別する。
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.resource.data.keys().hasOnly(
+            ['provider', 'providerUid', 'displayName', 'email', 'photoURL', 'createdAt', 'updatedAt']
+          )
+        && request.resource.data.provider == 'google'
+        && request.resource.data.providerUid is string
+        && request.resource.data.displayName is string
+        && request.resource.data.email is string
+        && request.resource.data.photoURL is string
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['displayName', 'email', 'photoURL', 'updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+
     match /tradePosts/{postId} {
       allow read: if true;
       allow create: if request.resource.data.keys().hasOnly([

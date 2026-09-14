@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/lang";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 import "./globals.css";
 
 // 開発中に計測データが混ざらないよう、本番ビルドの時だけGA4を読み込む
@@ -42,14 +43,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <LanguageProvider lang={lang}>
-          <SiteHeader />
-          {/*
-            bodyがflexコンテナのため、中身が「縮まない」CSSの癖を防ぐために
-            min-w-0を付けている(flexの子要素は、中の文章や横並び要素の分だけ
-            幅を広げようとする性質があり、それがページ全体の横スクロールの原因になる)。
-          */}
-          <div className="min-w-0 flex-1">{children}</div>
-          <SiteFooter />
+          <AuthProvider>
+            <SiteHeader />
+            {/*
+              bodyがflexコンテナのため、中身が「縮まない」CSSの癖を防ぐために
+              min-w-0を付けている(flexの子要素は、中の文章や横並び要素の分だけ
+              幅を広げようとする性質があり、それがページ全体の横スクロールの原因になる)。
+            */}
+            <div className="min-w-0 flex-1">{children}</div>
+            <SiteFooter />
+          </AuthProvider>
         </LanguageProvider>
       </body>
       {gaId && <GoogleAnalytics gaId={gaId} />}
