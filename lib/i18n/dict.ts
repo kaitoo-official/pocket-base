@@ -289,6 +289,7 @@ export interface Dict {
     offering: string;
     wanted: string;
     comments: string;
+    edit: string;
     close: string;
     reopen: string;
     closed: string;
@@ -590,6 +591,7 @@ const ja: Dict = {
     offering: "譲れるカード",
     wanted: "欲しいカード",
     comments: "コメント",
+    edit: "編集",
     close: "募集終了にする",
     reopen: "募集を再開する",
     closed: "募集終了",
@@ -893,6 +895,7 @@ const en: Dict = {
     offering: "Offering",
     wanted: "Wanted",
     comments: "Comments",
+    edit: "Edit",
     close: "Mark as closed",
     reopen: "Reopen",
     closed: "Closed",
