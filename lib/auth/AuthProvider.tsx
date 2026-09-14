@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from "
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { syncUserProfile } from "@/lib/users";
+import { backfillProfileFromProvider } from "@/lib/auth/googleAuth";
 
 export interface AuthState {
   /** 匿名認証中のユーザーも含む、Firebase Authが把握している現在のユーザー */
@@ -30,6 +31,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setState({ user, isSignedIn, loading: false });
       if (isSignedIn && user) {
         void syncUserProfile(user);
+        // リンク直後はuser.displayName/photoURLが空のことがあるため、補完後に再度反映する
+        void backfillProfileFromProvider(user).then(() => {
+          setState({ user, isSignedIn, loading: false });
+        });
       }
     });
     return unsubscribe;

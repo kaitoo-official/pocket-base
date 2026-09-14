@@ -13,6 +13,7 @@ import {
   signInWithPopup,
   signInWithRedirect,
   signOut as firebaseSignOut,
+  updateProfile,
   type User,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -29,6 +30,23 @@ function getErrorCode(error: unknown): string | undefined {
   return typeof error === "object" && error !== null && "code" in error
     ? String((error as { code: unknown }).code)
     : undefined;
+}
+
+/**
+ * 匿名アカウントをGoogleにリンクした直後は、Firebaseの仕様上トップレベルの
+ * user.displayName/user.photoURLが空のまま残ることがある(実際の値はリンクされた
+ * Googleプロバイダ自身のprovider情報(providerData)にだけ入っている)。
+ * ヘッダーのプロフィール表示等がuser.displayName/photoURLを直接参照しても
+ * 正しく出るよう、ここでトップレベルにも書き戻しておく。
+ */
+export async function backfillProfileFromProvider(user: User): Promise<void> {
+  const googleProviderData = user.providerData[0];
+  const update: { displayName?: string; photoURL?: string } = {};
+  if (!user.displayName && googleProviderData?.displayName) update.displayName = googleProviderData.displayName;
+  if (!user.photoURL && googleProviderData?.photoURL) update.photoURL = googleProviderData.photoURL;
+  if (Object.keys(update).length > 0) {
+    await updateProfile(user, update);
+  }
 }
 
 export async function signInWithGoogle(): Promise<SignInResult> {
