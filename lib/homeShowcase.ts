@@ -37,6 +37,8 @@ export interface InfluencerVideoEntry {
   youtubeId: string;
   titleJa: string;
   titleEn: string;
+  /** YouTube側の投稿日(ISO形式)。新着順に並べ替えるためのソートキーとして使う */
+  publishedAt: string;
 }
 
 export interface InfluencerChannelEntry {
@@ -65,6 +67,7 @@ export const INFLUENCER_CHANNELS: InfluencerChannelEntry[] = [
           "『ポケポケ』超高勝率を出している誰でも使える超簡単最強デッキ 大会予選全勝したバタフリージュカインを解説&紹介します",
         titleEn:
           "[Pokémon TCG Pocket] An easy, top-tier deck with an insanely high win rate — undefeated in tournament qualifiers with Butterfree & Sceptile",
+        publishedAt: "2026-09-03T03:00:34-07:00",
       },
       {
         id: "sig-mega-charizard",
@@ -73,6 +76,16 @@ export const INFLUENCER_CHANNELS: InfluencerChannelEntry[] = [
           "【ロケット団の野望】\"爆速マスター到達\"勝率83%で無双した1ターンキル多数最強メガリザードンデッキを紹介します　Pokémon Trading Card Game Pocket",
         titleEn:
           "[Team Rocket's Ambition] Reached Master rank in record time with an 83% win rate — the strongest Mega Charizard deck with tons of one-turn kills",
+        publishedAt: "2026-09-15T01:11:07-07:00",
+      },
+      {
+        id: "sig-tier1-decks",
+        youtubeId: "dpM87nJrJEY",
+        titleJa:
+          "【ポケポケ】\"Tier1確定。この動画の最強デッキを作るだけで良い\"新環境でも生き残りTier1が確定しているデッキを4個紹介します　Pokémon Trading Card Game Pocket",
+        titleEn:
+          "[Pokémon TCG Pocket] \"Tier 1 confirmed — just build the deck in this video\" Introducing 4 decks confirmed Tier 1 even in the new environment",
+        publishedAt: "2026-09-02T05:05:58-07:00",
       },
     ],
   },
