@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Container } from "@/components/Container";
 import { FeedbackLink } from "@/components/FeedbackLink";
@@ -44,7 +45,13 @@ export async function SiteFooter() {
               PokeAPI
             </a>
           </p>
-          <div>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <Link
+              href="/privacy"
+              className="text-xs text-muted underline decoration-line underline-offset-2 transition-colors hover:text-accent"
+            >
+              {t.privacyLink}
+            </Link>
             <FeedbackLink />
           </div>
         </div>

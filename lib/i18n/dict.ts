@@ -25,6 +25,12 @@ export interface Dict {
     nameCredit: string;
     tagline: string;
     feedbackLink: string;
+    privacyLink: string;
+  };
+  privacy: {
+    title: string;
+    lastUpdated: string;
+    sections: Array<{ heading: string; paragraphs: string[] }>;
   };
   cards: {
     title: string;
@@ -343,6 +349,69 @@ const ja: Dict = {
     nameCredit: "ポケモンの日本語名",
     tagline: "CARD DATABASE PLATFORM",
     feedbackLink: "ご意見・ご要望はこちら",
+    privacyLink: "プライバシーポリシー",
+  },
+  privacy: {
+    title: "プライバシーポリシー",
+    lastUpdated: "最終更新日: 2026年9月15日",
+    sections: [
+      {
+        heading: "はじめに",
+        paragraphs: [
+          "このページでは、Pocket Base(以下「本サイト」)における利用者情報の取り扱いについて説明します。",
+          "本サイトは個人が運営する非公式のファンサイトであり、株式会社ポケモン・任天堂株式会社・クリーチャーズ株式会社とは一切関係ありません。",
+        ],
+      },
+      {
+        heading: "取得する情報",
+        paragraphs: [
+          "Googleアカウントでログインした場合、表示名・メールアドレス・プロフィール画像のURLを取得します(Firebase Authenticationを通じて取得)。",
+          "ほしいリスト・マイコレクション・マイデッキに登録した内容(選択したカードや所持枚数など)は、ログインアカウントに紐づけて保存します。",
+          "トレード投稿やコメントを行った場合、フレンドID・募集内容・任意入力のニックネーム・コメント本文を取得します。",
+          "フッターのフィードバックフォームから送信された場合、メッセージ本文と任意入力の連絡先を取得します。",
+          "ログイン不要な投稿・コメントの削除権限を判定するためだけに、ブラウザのlocalStorageに匿名の識別子を保存します。これは個人を特定する情報ではありません。",
+          "後述のGoogle Analyticsによるアクセス解析情報を取得します。",
+        ],
+      },
+      {
+        heading: "利用目的",
+        paragraphs: [
+          "ログイン状態の維持、およびアカウントに紐づく機能(ほしいリスト・マイコレクション・マイデッキ・トレード投稿管理)の提供のため。",
+          "トレード掲示板・コメント機能における投稿者本人の識別、および他人による不正な編集・削除を防ぐため。",
+          "フィードバックへの対応のため(連絡先をご記入いただいた場合のみ、返信のために使用します)。",
+          "サイトの利用状況を把握し、機能改善に役立てるため。",
+        ],
+      },
+      {
+        heading: "Google Analyticsについて",
+        paragraphs: [
+          "本サイトはアクセス解析のためGoogle Analytics(GA4)を利用しています。Google Analyticsはcookie等を用いて閲覧ページや滞在時間などの利用状況を収集しますが、氏名など個人を特定する情報は含みません。",
+          "このデータ収集はGoogleのプライバシーポリシーに基づいて行われます。詳細は https://policies.google.com/privacy をご確認ください。",
+          "Google Analyticsオプトアウトアドオン(https://tools.google.com/dlpage/gaoptout)を利用することで、データ収集を無効にできます。",
+        ],
+      },
+      {
+        heading: "第三者への提供",
+        paragraphs: [
+          "法令に基づく場合を除き、取得した情報をご本人の同意なく第三者へ提供することはありません。",
+          "本サイトのデータはGoogle社が提供するFirebase(Google Cloud Platform)上に保存されており、Google社のプライバシーポリシーに基づいて管理されています。",
+        ],
+      },
+      {
+        heading: "情報の保管・削除",
+        paragraphs: [
+          "登録情報の削除(アカウントに紐づくデータの削除、投稿の削除など)をご希望の場合は、下記のお問い合わせ先までご連絡ください。",
+        ],
+      },
+      {
+        heading: "お問い合わせ",
+        paragraphs: ["本ページの内容やご自身の情報の取り扱いに関するお問い合わせは、フッターの「ご意見・ご要望」フォームからご連絡ください。"],
+      },
+      {
+        heading: "改定について",
+        paragraphs: ["本ポリシーの内容は、法令の変更やサービス内容の変更に応じて、予告なく改定される場合があります。"],
+      },
+    ],
   },
   cards: {
     title: "カードデータベース",
@@ -662,6 +731,71 @@ const en: Dict = {
     nameCredit: "Japanese Pokémon names",
     tagline: "CARD DATABASE PLATFORM",
     feedbackLink: "Send Feedback",
+    privacyLink: "Privacy Policy",
+  },
+  privacy: {
+    title: "Privacy Policy",
+    lastUpdated: "Last updated: September 15, 2026",
+    sections: [
+      {
+        heading: "Introduction",
+        paragraphs: [
+          "This page explains how Pocket Base (this \"Site\") handles information about its users.",
+          "This Site is an unofficial fan site run by an individual and is not affiliated with The Pokémon Company, Nintendo, or Creatures Inc.",
+        ],
+      },
+      {
+        heading: "Information we collect",
+        paragraphs: [
+          "If you sign in with a Google account, we collect your display name, email address, and profile picture URL (via Firebase Authentication).",
+          "Anything you save to your Wishlist, My Collection, or My Decks (selected cards, owned quantities, etc.) is stored linked to your signed-in account.",
+          "If you create a trade post or comment, we collect your in-game Friend ID, the details of your post, an optional nickname you choose, and your comment text.",
+          "If you submit the feedback form in the footer, we collect your message and an optional contact detail you provide.",
+          "We store an anonymous identifier in your browser's localStorage, used only to determine permission to edit or delete posts/comments made without signing in. This does not identify you personally.",
+          "We collect analytics information via Google Analytics, described below.",
+        ],
+      },
+      {
+        heading: "How we use this information",
+        paragraphs: [
+          "To keep you signed in and provide account-linked features (Wishlist, My Collection, My Decks, trade post management).",
+          "To identify the author of a trade post or comment, and to prevent unauthorized edits or deletions by others.",
+          "To respond to feedback (only when you provide a contact detail).",
+          "To understand how the Site is used and to improve it.",
+        ],
+      },
+      {
+        heading: "About Google Analytics",
+        paragraphs: [
+          "This Site uses Google Analytics (GA4) to analyze site traffic. Google Analytics uses cookies and similar technologies to collect usage data such as pages viewed and time spent, but does not include information that identifies you by name.",
+          "This data collection is governed by Google's Privacy Policy. See https://policies.google.com/privacy for details.",
+          "You can opt out of this data collection using the Google Analytics Opt-out Browser Add-on (https://tools.google.com/dlpage/gaoptout).",
+        ],
+      },
+      {
+        heading: "Sharing with third parties",
+        paragraphs: [
+          "We do not share the information we collect with third parties without your consent, except where required by law.",
+          "Site data is stored on Firebase (Google Cloud Platform) and is managed in accordance with Google's Privacy Policy.",
+        ],
+      },
+      {
+        heading: "Data retention and deletion",
+        paragraphs: [
+          "If you would like data linked to your account (or a post) deleted, please contact us using the details below.",
+        ],
+      },
+      {
+        heading: "Contact",
+        paragraphs: [
+          "For questions about this page or how your information is handled, please use the \"Send Feedback\" form in the footer.",
+        ],
+      },
+      {
+        heading: "Changes to this policy",
+        paragraphs: ["This policy may be revised without notice to reflect changes in law or in the Site's services."],
+      },
+    ],
   },
   cards: {
     title: "Card Database",
