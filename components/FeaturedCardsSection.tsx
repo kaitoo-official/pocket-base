@@ -32,7 +32,7 @@ export function FeaturedCardsSection({ lang }: { lang: Lang }) {
   return (
     <section>
       <SectionHeader title={t.featuredCards} />
-      <div className="mt-5 [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
+      <div className="mt-5 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)]">
         <div
           className="marquee-track flex w-max gap-3"
           style={{ "--marquee-duration": `${cards.length * 3.5}s` } as CSSProperties}

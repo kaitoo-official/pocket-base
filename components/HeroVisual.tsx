@@ -137,7 +137,7 @@ export function HeroVisual({ packs }: { packs: FeaturedPack[] }) {
         onPointerMove={handlePointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
-        className="relative mx-auto h-64 w-full max-w-xs touch-pan-y select-none [perspective:1000px] focus:outline-none sm:h-80 sm:max-w-sm lg:h-[26rem] lg:max-w-none"
+        className="relative mx-auto h-64 w-full max-w-xs touch-pan-y select-none overflow-hidden [perspective:1000px] focus:outline-none sm:h-80 sm:max-w-sm lg:h-[26rem] lg:max-w-none"
       >
         {/* パックを浮かせて見せる、ごく薄いradialグラデーション */}
         <div
