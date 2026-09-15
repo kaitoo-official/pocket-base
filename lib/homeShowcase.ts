@@ -50,4 +50,13 @@ export const INFLUENCER_VIDEOS: InfluencerVideoEntry[] = [
       "[Pokémon TCG Pocket] An easy, top-tier deck with an insanely high win rate — undefeated in tournament qualifiers with Butterfree & Sceptile",
     channelName: "シグ",
   },
+  {
+    id: "sig-mega-charizard",
+    youtubeId: "MXbbtN2xpkM",
+    titleJa:
+      "【ロケット団の野望】\"爆速マスター到達\"勝率83%で無双した1ターンキル多数最強メガリザードンデッキを紹介します　Pokémon Trading Card Game Pocket",
+    titleEn:
+      "[Team Rocket's Ambition] Reached Master rank in record time with an 83% win rate — the strongest Mega Charizard deck with tons of one-turn kills",
+    channelName: "シグ",
+  },
 ];
