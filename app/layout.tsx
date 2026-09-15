@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_JP, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -35,6 +35,11 @@ export const metadata: Metadata = {
   verification: {
     google: "7oPD_y6SwMaa1YOX2PZRMZ4HFM2cmtPdScorjurBiJk",
   },
+};
+
+// PWAとしてホーム画面に追加した時のステータスバー/タスク切替画面の色
+export const viewport: Viewport = {
+  themeColor: "#0a1230",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
