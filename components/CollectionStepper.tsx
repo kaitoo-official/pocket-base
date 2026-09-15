@@ -1,7 +1,7 @@
 "use client";
 
 import type { MouseEvent } from "react";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Layers, Minus, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useCollection, MAX_COLLECTION_QUANTITY } from "@/lib/collection";
 import { signInWithGoogle } from "@/lib/auth/googleAuth";
@@ -33,8 +33,9 @@ export function CollectionStepper({ cardId, lang = "ja" }: { cardId: string; lan
   return (
     <div
       onClick={(event) => event.preventDefault()}
-      className="flex items-center gap-1 rounded-full border border-line bg-white shadow-xs"
+      className="flex items-center gap-1 rounded-full border border-line bg-white py-0.5 pr-1 pl-2 shadow-xs"
     >
+      <Layers className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden="true" />
       <button
         type="button"
         disabled={loading || (isSignedIn && quantity <= 0)}
