@@ -37,26 +37,39 @@ export interface InfluencerVideoEntry {
   youtubeId: string;
   titleJa: string;
   titleEn: string;
-  channelName: string;
 }
 
-export const INFLUENCER_VIDEOS: InfluencerVideoEntry[] = [
+export interface InfluencerChannelEntry {
+  /** React key用 */
+  id: string;
+  channelName: string;
+  /** チャンネルトップページのURL */
+  channelUrl: string;
+  videos: InfluencerVideoEntry[];
+}
+
+export const INFLUENCER_CHANNELS: InfluencerChannelEntry[] = [
   {
-    id: "sig-butterfree-jukain",
-    youtubeId: "MUNbAFPyaVY",
-    titleJa:
-      "『ポケポケ』超高勝率を出している誰でも使える超簡単最強デッキ 大会予選全勝したバタフリージュカインを解説&紹介します",
-    titleEn:
-      "[Pokémon TCG Pocket] An easy, top-tier deck with an insanely high win rate — undefeated in tournament qualifiers with Butterfree & Sceptile",
+    id: "sig",
     channelName: "シグ",
-  },
-  {
-    id: "sig-mega-charizard",
-    youtubeId: "MXbbtN2xpkM",
-    titleJa:
-      "【ロケット団の野望】\"爆速マスター到達\"勝率83%で無双した1ターンキル多数最強メガリザードンデッキを紹介します　Pokémon Trading Card Game Pocket",
-    titleEn:
-      "[Team Rocket's Ambition] Reached Master rank in record time with an 83% win rate — the strongest Mega Charizard deck with tons of one-turn kills",
-    channelName: "シグ",
+    channelUrl: "https://youtube.com/@_s1gun",
+    videos: [
+      {
+        id: "sig-butterfree-jukain",
+        youtubeId: "MUNbAFPyaVY",
+        titleJa:
+          "『ポケポケ』超高勝率を出している誰でも使える超簡単最強デッキ 大会予選全勝したバタフリージュカインを解説&紹介します",
+        titleEn:
+          "[Pokémon TCG Pocket] An easy, top-tier deck with an insanely high win rate — undefeated in tournament qualifiers with Butterfree & Sceptile",
+      },
+      {
+        id: "sig-mega-charizard",
+        youtubeId: "MXbbtN2xpkM",
+        titleJa:
+          "【ロケット団の野望】\"爆速マスター到達\"勝率83%で無双した1ターンキル多数最強メガリザードンデッキを紹介します　Pokémon Trading Card Game Pocket",
+        titleEn:
+          "[Team Rocket's Ambition] Reached Master rank in record time with an 83% win rate — the strongest Mega Charizard deck with tons of one-turn kills",
+      },
+    ],
   },
 ];
