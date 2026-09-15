@@ -92,7 +92,7 @@ export function FeedbackModal({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={onClose}
             aria-label={t.close}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
           >
             <X className="h-5 w-5" />
           </button>
@@ -151,7 +151,7 @@ export function FeedbackModal({ onClose }: { onClose: () => void }) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-opacity duration-150 hover:opacity-90 disabled:opacity-50"
+                className="w-full cursor-pointer rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-opacity duration-150 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {submitting ? t.submitting : t.submit}
               </button>

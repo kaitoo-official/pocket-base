@@ -17,7 +17,7 @@ export function FeedbackLink() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1 text-xs text-muted underline decoration-line underline-offset-2 transition-colors hover:text-accent"
+        className="inline-flex cursor-pointer items-center gap-1 text-xs text-muted underline decoration-line underline-offset-2 transition-colors hover:text-accent"
       >
         <MessageSquarePlus className="h-3.5 w-3.5" />
         {t.feedbackLink}
