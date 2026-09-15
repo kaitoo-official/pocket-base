@@ -5,6 +5,7 @@ import { getJapaneseName, getJapanesePackName, getJapaneseSeriesName } from "@/l
 import { TypeBadge } from "@/components/TypeBadge";
 import { RarityBadge } from "@/components/RarityBadge";
 import { ImageWithFallback } from "@/components/ImageWithFallback";
+import { Layers } from "lucide-react";
 import { WishlistButton } from "@/components/WishlistButton";
 import { CollectionStepper } from "@/components/CollectionStepper";
 import type { Lang } from "@/lib/i18n/lang";
@@ -59,7 +60,8 @@ export function CardTile({
       <div className="absolute -top-2 -right-2">
         <WishlistButton cardId={card.id} />
       </div>
-      <div className="mt-2 flex justify-center">
+      <div className="relative mt-2 flex items-center justify-center">
+        <Layers className="absolute left-0 h-4 w-4 text-muted" aria-hidden="true" />
         <CollectionStepper cardId={card.id} lang={lang} />
       </div>
     </div>
