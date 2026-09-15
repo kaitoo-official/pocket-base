@@ -32,6 +32,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Pocket Base",
   description: "Pokémon Trading Card Game Pocketの非公式カード検索・データベースサイト",
+  verification: {
+    google: "7oPD_y6SwMaa1YOX2PZRMZ4HFM2cmtPdScorjurBiJk",
+  },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
