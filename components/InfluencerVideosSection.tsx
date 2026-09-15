@@ -22,22 +22,23 @@ export function InfluencerVideosSection({ lang }: { lang: Lang }) {
       <SectionHeader title={t.influencerVideos} />
       <div className="mt-5 space-y-6">
         {INFLUENCER_CHANNELS.map((channel) => (
-          <div key={channel.id} className="overflow-hidden rounded-2xl border border-line shadow-xs">
-            <div className="hero-dark bg-hero-gradient-dark px-4 py-3 sm:px-5">
-              <a href={channel.channelUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
-                <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-line">
-                  <Image src={channel.avatarUrl} alt={channel.channelName} fill sizes="44px" className="object-cover" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground group-hover:text-accent">{channel.channelName}</p>
-                  <p className="flex items-center gap-1 text-xs text-muted">
-                    YouTube
-                    <ExternalLink className="h-3 w-3" />
-                  </p>
-                </div>
-              </a>
-            </div>
-            <div className="grid grid-cols-1 gap-4 bg-surface p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-3">
+          <div
+            key={channel.id}
+            className="hero-dark rounded-2xl border border-line bg-hero-gradient-dark p-4 shadow-xs sm:p-5"
+          >
+            <a href={channel.channelUrl} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-line">
+                <Image src={channel.avatarUrl} alt={channel.channelName} fill sizes="44px" className="object-cover" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground group-hover:text-accent">{channel.channelName}</p>
+                <p className="flex items-center gap-1 text-xs text-muted">
+                  YouTube
+                  <ExternalLink className="h-3 w-3" />
+                </p>
+              </div>
+            </a>
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[...channel.videos]
                 .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
                 .map((video) => (
@@ -46,7 +47,7 @@ export function InfluencerVideosSection({ lang }: { lang: Lang }) {
                   href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group overflow-hidden rounded-xl border border-line bg-background shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+                  className="group overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
                 >
                   <div className="relative aspect-video w-full overflow-hidden bg-background">
                     <Image
