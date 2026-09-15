@@ -45,6 +45,8 @@ export interface InfluencerChannelEntry {
   channelName: string;
   /** チャンネルトップページのURL */
   channelUrl: string;
+  /** チャンネルアイコン画像のURL(YouTube側から直接取得。自サーバーには保存しない) */
+  avatarUrl: string;
   videos: InfluencerVideoEntry[];
 }
 
@@ -53,6 +55,8 @@ export const INFLUENCER_CHANNELS: InfluencerChannelEntry[] = [
     id: "sig",
     channelName: "シグ",
     channelUrl: "https://youtube.com/@_s1gun",
+    avatarUrl:
+      "https://yt3.googleusercontent.com/xvZbdOIEBT-jIbfl24otS79RkwIF0PVB1LXR2WSgr1Z9RWz_32PixalKJ30ITsJtpHE0QmBRiQ=s160-c-k-c0x00ffffff-no-rj",
     videos: [
       {
         id: "sig-butterfree-jukain",

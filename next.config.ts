@@ -26,6 +26,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        // インフルエンサー動画セクションのYouTubeチャンネルアイコン用
+        protocol: "https",
+        hostname: "yt3.googleusercontent.com",
+      },
     ],
   },
 };

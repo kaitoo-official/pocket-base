@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Play, SquarePlay } from "lucide-react";
+import { ExternalLink, Play } from "lucide-react";
 import { INFLUENCER_CHANNELS } from "@/lib/homeShowcase";
 import { SectionHeader } from "@/components/SectionHeader";
 import { getDict } from "@/lib/i18n/dict";
@@ -7,7 +7,7 @@ import type { Lang } from "@/lib/i18n/lang";
 
 /**
  * ホーム画面の「インフルエンサー動画」セクション。lib/homeShowcase.ts で手動登録した
- * チャンネル単位で「チャンネル名(チャンネルページへのリンク)→動画サムネイル一覧」の
+ * チャンネル単位で「チャンネルカード(アイコン+名前+YouTubeへのリンク)→動画サムネイル一覧」の
  * 階層で紹介する。動画サムネはクリックでYouTube側の動画ページを新しいタブで開く
  * (埋め込みプレイヤーは使わず、外部サイトへのリンクに留めている)。
  * INFLUENCER_CHANNELSが空の間は何も表示しない。
@@ -22,24 +22,32 @@ export function InfluencerVideosSection({ lang }: { lang: Lang }) {
       <SectionHeader title={t.influencerVideos} />
       <div className="mt-5 space-y-6">
         {INFLUENCER_CHANNELS.map((channel) => (
-          <div key={channel.id}>
+          <div key={channel.id} className="rounded-2xl border border-line bg-surface p-4 shadow-xs sm:p-5">
             <a
               href={channel.channelUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-bold text-foreground hover:text-accent"
+              className="group inline-flex items-center gap-3"
             >
-              <SquarePlay className="h-4 w-4 text-red-600" />
-              {channel.channelName}
+              <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full bg-background ring-1 ring-line">
+                <Image src={channel.avatarUrl} alt={channel.channelName} fill sizes="44px" className="object-cover" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-foreground group-hover:text-accent">{channel.channelName}</p>
+                <p className="flex items-center gap-1 text-xs text-muted">
+                  YouTube
+                  <ExternalLink className="h-3 w-3" />
+                </p>
+              </div>
             </a>
-            <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {channel.videos.map((video) => (
                 <a
                   key={video.id}
                   href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group overflow-hidden rounded-xl border border-line bg-surface shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
+                  className="group overflow-hidden rounded-xl border border-line bg-background shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
                 >
                   <div className="relative aspect-video w-full overflow-hidden bg-background">
                     <Image
