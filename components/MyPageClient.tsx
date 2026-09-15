@@ -60,7 +60,6 @@ function PostPreviewCard({ post, cardMap, lang }: { post: TradePost; cardMap: Ma
 
 function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   const t = getDict(lang).mypage;
-  const authT = getDict(lang).auth;
   const homeT = getDict(lang).home;
   const { user } = useAuth();
   const [counts, setCounts] = useState<Counts | null>(null);
@@ -169,25 +168,6 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
           ))}
         </div>
       )}
-
-      <h2 className="mt-8 text-sm font-semibold text-muted">{t.shortcuts}</h2>
-      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          { href: "/wishlist", label: authT.wishlist, Icon: Heart },
-          { href: "/collection", label: authT.collection, Icon: Layers },
-          { href: "/decks", label: authT.myDecks, Icon: LayoutList },
-          { href: "/mypage/trades", label: authT.tradeManagement, Icon: ArrowLeftRight },
-        ].map(({ href, label, Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className="flex flex-col items-center gap-2 rounded-xl border border-line bg-surface p-4 text-center shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md"
-          >
-            <Icon className="h-6 w-6 text-accent" />
-            <span className="text-xs font-medium text-foreground">{label}</span>
-          </Link>
-        ))}
-      </div>
     </AccountShell>
   );
 }

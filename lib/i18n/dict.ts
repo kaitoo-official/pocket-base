@@ -293,7 +293,6 @@ export interface Dict {
     collectionCount: string;
     decksCount: string;
     tradePostsCount: string;
-    shortcuts: string;
     myPosts: string;
     viewAllPosts: string;
     noPosts: string;
@@ -612,7 +611,6 @@ const ja: Dict = {
     collectionCount: "コレクション登録数",
     decksCount: "保存デッキ数",
     tradePostsCount: "トレード投稿数",
-    shortcuts: "ショートカット",
     myPosts: "自分の投稿",
     viewAllPosts: "すべての投稿を見る",
     noPosts: "まだ投稿がありません。",
@@ -933,7 +931,6 @@ const en: Dict = {
     collectionCount: "Collection entries",
     decksCount: "Saved decks",
     tradePostsCount: "Trade posts",
-    shortcuts: "Shortcuts",
     myPosts: "My Posts",
     viewAllPosts: "View all posts",
     noPosts: "You haven't posted anything yet.",
