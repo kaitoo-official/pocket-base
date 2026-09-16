@@ -22,21 +22,41 @@ const gameplay = JSON.parse(
   )
 );
 
-// 地方フォルム・特殊フォルムなど、自動翻訳すると不正確になりやすいパターン。
-// これらは今回は対象外にし、英語名のまま扱う。
-// (オーガポンの仮面違いはUNSUPPORTED扱いにせず、下のOGERPON_MASK_FORMSで個別対応する)
-const UNSUPPORTED_FORM_PATTERNS = [
-  /^Alolan /,
-  /^Galarian /,
-  /^Hisuian /,
-  /^Paldean /,
-  /^Origin Forme /,
-  /^(Heat|Wash|Frost|Fan|Mow) Rotom$/,
-  /^Castform (Sunny|Rainy|Snowy) Form$/,
-  /^(Rapid|Single) Strike /,
-  /^(Dawn Wings|Dusk Mane) /,
-  /^Ultra Necrozma$/,
+// 今のところ自動対応できないパターン(現状の対象カードには存在しないはずだが、
+// 将来新しいフォーム違いが追加された時に誤訳を防ぐための保険)。
+const UNSUPPORTED_FORM_PATTERNS = [];
+
+// 地方フォルム(アローラ/ガラル/ヒスイ/パルデア)は「地方名+素の種族名」を直接つなげる
+// 公式表記(例: "アローラディグダ")になっている。PokeAPIのpokemon-form APIが返す
+// フォームラベル("アローラのすがた"等)はゲーム内メニュー用の表記で、カード名としては
+// 使えないため、素の種族名(pokemon-species)に地方名を前置する方式を取る。
+// Bulbapediaの実カードページ(例: Alolan Diglett)で表記を確認済み。
+const REGIONAL_FORM_PREFIXES = [
+  { pattern: /^Alolan /, jaPrefix: "アローラ" },
+  { pattern: /^Galarian /, jaPrefix: "ガラル" },
+  { pattern: /^Hisuian /, jaPrefix: "ヒスイ" },
+  { pattern: /^Paldean /, jaPrefix: "パルデア" },
 ];
+
+// 上記の単純な「地方名+種族名」の規則に当てはまらない特殊フォルム。
+// Bulbapediaの実カードページで個別に確認した表記をそのまま使う。
+const SPECIAL_FORM_NAMES = {
+  "Fan Rotom": "スピンロトム",
+  "Frost Rotom": "フロストロトム",
+  "Heat Rotom": "ヒートロトム",
+  "Mow Rotom": "カットロトム",
+  "Wash Rotom": "ウォッシュロトム",
+  "Origin Forme Dialga": "オリジンディアルガ",
+  "Origin Forme Palkia": "オリジンパルキア",
+  "Castform Sunny Form": "ポワルン たいようのすがた",
+  "Castform Rainy Form": "ポワルン あまみずのすがた",
+  "Castform Snowy Form": "ポワルン ゆきぐものすがた",
+  "Rapid Strike Urshifu": "れんげきのかたウーラオス",
+  "Single Strike Urshifu": "いちげきのかたウーラオス",
+  "Dawn Wings Necrozma": "ネクロズマあかつきのつばさ",
+  "Dusk Mane Necrozma": "ネクロズマたそがれのたてがみ",
+  "Ultra Necrozma ex": "ウルトラネクロズマ ex",
+};
 
 // オーガポンの仮面違いは、種族名(オーガポン)だけでは正しい表記にならない
 // (公式は「みどりのめんオーガポン」のように仮面名を頭に付ける)。
@@ -122,8 +142,22 @@ for (const c of gameplay) {
 const entries = [];
 const skipped = [];
 const ogerponEntries = [];
+const specialResult = {};
 
 for (const name of pokemonNames) {
+  if (SPECIAL_FORM_NAMES[name]) {
+    specialResult[name] = SPECIAL_FORM_NAMES[name];
+    continue;
+  }
+
+  const regional = REGIONAL_FORM_PREFIXES.find(({ pattern }) => pattern.test(name));
+  if (regional) {
+    const rest = name.replace(regional.pattern, "");
+    const { base, hasEx } = parseCardName(rest);
+    entries.push({ name, base, slug: toSlug(base), hasEx, isMega: false, megaForm: "", hasRocket: false, regionalPrefix: regional.jaPrefix });
+    continue;
+  }
+
   const { base, hasEx, isMega, megaForm, hasRocket } = parseCardName(name);
   const ogerponFormSlug = matchOgerponMaskForm(base);
   if (ogerponFormSlug) {
@@ -193,11 +227,14 @@ for (const e of entries) {
   speciesResult[e.base] = jaBase;
 
   let jaName = jaBase;
+  if (e.regionalPrefix) jaName = `${e.regionalPrefix}${jaName}`;
   if (e.isMega) jaName = `メガ${jaName}${e.megaForm}`;
   if (e.hasRocket) jaName = `ロケット団の${jaName}`;
   if (e.hasEx) jaName = `${jaName} ex`;
   result[e.name] = jaName;
 }
+
+Object.assign(result, specialResult);
 
 // オーガポンの仮面違い: 「みどりのめん」等のフォーム名(pokemon-form)+「オーガポン」(pokemon-species)を組み合わせる。
 // 公式のTCG表記("みどりのめんオーガポンex"等)に合わせている。
