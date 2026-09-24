@@ -175,3 +175,11 @@ body {
   display: none;
 }
 
+/*
+ * アプリ版(Capacitor)で下タブバーを表示している間、ページ末尾のコンテンツが
+ * タブバーの下に隠れないようにする余白(NativeBottomNavコンポーネントが付け外しする)。
+ */
+.has-native-bottom-nav {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+

@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_JP, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { NativeBottomNav } from "@/components/NativeBottomNav";
 import { getLang } from "@/lib/i18n/lang";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { AuthProvider } from "@/lib/auth/AuthProvider";
@@ -62,6 +63,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             */}
             <div className="min-w-0 flex-1">{children}</div>
             <SiteFooter />
+            <NativeBottomNav />
           </AuthProvider>
         </LanguageProvider>
       </body>

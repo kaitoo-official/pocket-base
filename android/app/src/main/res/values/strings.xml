@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Pocket Base</string>
+    <string name="title_activity_main">Pocket Base</string>
+    <string name="package_name">com.kaitooofficial.pocketbase</string>
+    <string name="custom_url_scheme">com.kaitooofficial.pocketbase</string>
+</resources>
