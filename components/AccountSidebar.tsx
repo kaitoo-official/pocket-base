@@ -7,13 +7,22 @@ import { useAuth } from "@/lib/auth/AuthProvider";
 import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
+import { useIsNativeApp } from "@/lib/useIsNativeApp";
 
-/** マイページ系のページ間を移動するための、常設のサイドナビゲーション */
+/**
+ * マイページ系のページ間を移動するための、常設のサイドナビゲーション。
+ * アプリ版(Capacitor)では下タブバーの「マイページ」と役割が重複する
+ * (マイページを開いた時に「マイページ」という項目が二重に見える)ため非表示にする。
+ * ログアウトはマイページ本体の下部(MyPageClient)に移動している。
+ */
 export function AccountSidebar() {
   const pathname = usePathname();
   const { isSignedIn } = useAuth();
   const lang = useLang();
   const t = getDict(lang).auth;
+  const isNative = useIsNativeApp();
+
+  if (isNative) return null;
 
   const items = [
     { href: "/mypage", label: t.myPage, Icon: UserIcon },

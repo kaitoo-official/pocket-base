@@ -3,16 +3,18 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Heart, Layers, LayoutList, ArrowLeftRight, MessageCircle } from "lucide-react";
+import { ArrowRight, Heart, Layers, LayoutList, ArrowLeftRight, LogOut, MessageCircle } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
 import { useAuth } from "@/lib/auth/AuthProvider";
+import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { getWishlistEntries } from "@/lib/wishlist";
 import { getCollectionEntries } from "@/lib/collection";
 import { getCloudDecks } from "@/lib/decks";
 import { getMyTradePosts, formatTradeDate, type CardOption, type TradePost } from "@/lib/trade";
 import { getDict } from "@/lib/i18n/dict";
 import type { Lang } from "@/lib/i18n/lang";
+import { useIsNativeApp } from "@/lib/useIsNativeApp";
 
 interface Counts {
   wishlist: number;
@@ -61,7 +63,9 @@ function PostPreviewCard({ post, cardMap, lang }: { post: TradePost; cardMap: Ma
 function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
   const t = getDict(lang).mypage;
   const homeT = getDict(lang).home;
+  const authT = getDict(lang).auth;
   const { user } = useAuth();
+  const isNative = useIsNativeApp();
   const [counts, setCounts] = useState<Counts | null>(null);
   const [posts, setPosts] = useState<TradePost[] | null>(null);
   const cardMap = useMemo(() => new Map(cards.map((c) => [c.id, c])), [cards]);
@@ -167,6 +171,21 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
             <PostPreviewCard key={post.id} post={post} cardMap={cardMap} lang={lang} />
           ))}
         </div>
+      )}
+
+      {/*
+        アプリ版ではAccountSidebar(=ログアウトボタンの元の置き場所)を隠しているため、
+        代わりにここでログアウト導線を用意する。Web版はサイドバー側に既にあるのでここには出さない。
+      */}
+      {isNative && (
+        <button
+          type="button"
+          onClick={() => void signOutOfGoogle()}
+          className="mt-8 flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-surface py-3 text-sm font-medium text-muted transition-colors hover:bg-surface-hover hover:text-foreground"
+        >
+          <LogOut className="h-4 w-4" />
+          {authT.signOut}
+        </button>
       )}
     </AccountShell>
   );

@@ -38,8 +38,9 @@ proguard/
 # Android Studio captures folder
 captures/
 
-# IntelliJ
+# IntelliJ / Android Studio (ローカル設定なので丸ごと無視する)
 *.iml
+.idea/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/gradle.xml
@@ -53,9 +54,10 @@ captures/
 .idea/navEditor.xml
 
 # Keystore files
-# Uncomment the following lines if you do not want to check your keystore files in.
-#*.jks
-#*.keystore
+# 署名鍵とパスワードは絶対に公開リポジトリに含めない。
+*.jks
+*.keystore
+keystore.properties
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
