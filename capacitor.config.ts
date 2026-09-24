@@ -22,6 +22,14 @@ const config: CapacitorConfig = {
       androidSplashResourceName: "splash",
       showSpinner: false,
     },
+    // Googleログインをアプリ内WebViewではなくAndroidネイティブの画面で行う設定。
+    // skipNativeAuth: true にして、ネイティブ側ではGoogleのサインインダイアログだけ
+    // 行わせ、その結果(IDトークン)をlib/auth/googleAuth.tsでWeb版と同じ
+    // Firebase JS SDKに渡す(=アプリ全体が参照しているログイン状態と一本化するため)。
+    FirebaseAuthentication: {
+      skipNativeAuth: true,
+      providers: ["google.com"],
+    },
   },
 };
 

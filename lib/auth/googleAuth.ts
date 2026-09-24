@@ -9,13 +9,18 @@
 
 import {
   GoogleAuthProvider,
+  linkWithCredential,
   linkWithPopup,
+  signInWithCredential,
   signInWithPopup,
   signInWithRedirect,
   signOut as firebaseSignOut,
   updateProfile,
+  type AuthCredential,
   type User,
 } from "firebase/auth";
+import { Capacitor } from "@capacitor/core";
+import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 import { auth } from "@/lib/firebase";
 
 const googleProvider = new GoogleAuthProvider();
@@ -49,7 +54,57 @@ export async function backfillProfileFromProvider(user: User): Promise<void> {
   }
 }
 
-export async function signInWithGoogle(): Promise<SignInResult> {
+/**
+ * 匿名ユーザーならGoogleアカウントにリンクを試み(データ引き継ぎ)、
+ * 既に別デバイス等でそのGoogleアカウントが使用済みでリンクできない場合のみ
+ * 通常のサインインにフォールバックする。ID トークンから作った credential は
+ * (ポップアップ由来のものと違い)使い回せるので、リンク→サインインの両方で
+ * 同じ credential を使える。
+ */
+async function signInOrLinkWithCredential(credential: AuthCredential): Promise<SignInResult> {
+  const currentUser = auth.currentUser;
+
+  if (currentUser?.isAnonymous) {
+    try {
+      const result = await linkWithCredential(currentUser, credential);
+      return { status: "success", user: result.user };
+    } catch (linkError) {
+      if (getErrorCode(linkError) !== "auth/credential-already-in-use") {
+        throw linkError;
+      }
+    }
+  }
+
+  const result = await signInWithCredential(auth, credential);
+  return { status: "success", user: result.user };
+}
+
+/**
+ * アプリ版(Capacitor)用のログイン。
+ * ブラウザのポップアップ/リダイレクトの仕組みはWebView内では正しく機能しない
+ * (Googleがアプリ内WebViewからのログインをブロックする、またリダイレクト方式は
+ * 外部Chromeとアプリ内WebViewでログイン状態が別々になり結果が戻らない)ため、
+ * Androidネイティブのログイン画面(@capacitor-firebase/authentication)を使い、
+ * その結果のIDトークンをWeb版と共通のFirebase JS SDKに渡して認証状態を揃える。
+ */
+async function signInWithGoogleNative(): Promise<SignInResult> {
+  try {
+    const { credential } = await FirebaseAuthentication.signInWithGoogle();
+    const idToken = credential?.idToken;
+    if (!idToken) {
+      return { status: "cancelled" };
+    }
+    return await signInOrLinkWithCredential(GoogleAuthProvider.credential(idToken));
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (/cancel/i.test(message)) {
+      return { status: "cancelled" };
+    }
+    return { status: "error", message: "ログインに失敗しました。時間をおいて試してください。" };
+  }
+}
+
+async function signInWithGoogleWeb(): Promise<SignInResult> {
   try {
     const currentUser = auth.currentUser;
 
@@ -82,6 +137,10 @@ export async function signInWithGoogle(): Promise<SignInResult> {
     }
     return { status: "error", message: "ログインに失敗しました。時間をおいて試してください。" };
   }
+}
+
+export async function signInWithGoogle(): Promise<SignInResult> {
+  return Capacitor.isNativePlatform() ? signInWithGoogleNative() : signInWithGoogleWeb();
 }
 
 export async function signOutOfGoogle(): Promise<void> {
