@@ -6,9 +6,11 @@ const LOGO_ASPECT = 1048 / 1119;
 interface LogoProps {
   withTagline?: boolean;
   size?: "sm" | "lg";
+  /** 狭い画面では"Pocket Base"の文字を隠し、アイコンだけにする(ヘッダーの省スペース用) */
+  hideTextOnMobile?: boolean;
 }
 
-export function Logo({ withTagline = false, size = "sm" }: LogoProps) {
+export function Logo({ withTagline = false, size = "sm", hideTextOnMobile = false }: LogoProps) {
   const isLarge = size === "lg";
   const height = isLarge ? 64 : 28;
   const width = Math.round(height * LOGO_ASPECT);
@@ -22,7 +24,7 @@ export function Logo({ withTagline = false, size = "sm" }: LogoProps) {
         height={height}
         priority={isLarge}
       />
-      <span className="flex flex-col leading-tight">
+      <span className={`flex-col leading-tight ${hideTextOnMobile ? "hidden sm:flex" : "flex"}`}>
         <span
           className={`font-bold tracking-wide text-foreground ${isLarge ? "text-4xl" : ""}`}
         >

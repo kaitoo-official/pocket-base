@@ -45,7 +45,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-line bg-background/80 backdrop-blur-md">
       <Container className="flex h-16 items-center justify-between gap-2">
         <Link href="/" className="shrink-0">
-          <Logo />
+          <Logo hideTextOnMobile />
         </Link>
         <div className="flex min-w-0 items-center gap-1">
           {/*
