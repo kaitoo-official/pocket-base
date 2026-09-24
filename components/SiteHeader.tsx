@@ -12,6 +12,7 @@ import { subscribeToTradePosts } from "@/lib/trade";
 import { countUnreadPosts } from "@/lib/tradeNotifications";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
+import { useIsNativeApp } from "@/lib/useIsNativeApp";
 
 const NAV_ITEMS = [
   { href: "/", key: "home" as const, Icon: Home },
@@ -31,6 +32,7 @@ export function SiteHeader() {
   const lang = useLang();
   const t = getDict(lang).nav;
   const [unreadCount, setUnreadCount] = useState(0);
+  const isNative = useIsNativeApp();
 
   useEffect(() => {
     const unsubscribe = subscribeToTradePosts((posts) => {
@@ -46,36 +48,44 @@ export function SiteHeader() {
           <Logo />
         </Link>
         <nav className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto text-sm font-medium">
-          {NAV_ITEMS.map(({ href, key, Icon }) => {
-            const active = isActivePath(pathname, href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
-                  active
-                    ? "bg-[#0b2d5b] text-white"
-                    : "text-muted hover:bg-[#0b2d5b]/10 hover:text-foreground"
-                }`}
-              >
-                <span className="relative">
-                  <Icon className="h-5 w-5" />
-                  {href === "/trade" && unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
-                      {unreadCount > 9 ? "9+" : unreadCount}
-                    </span>
-                  )}
-                </span>
-                <span className="hidden sm:inline">{t[key]}</span>
-              </Link>
-            );
-          })}
+          {/*
+            アプリ版(Capacitor)では、この移動リンクと下のログインメニューは
+            下タブバー(NativeBottomNav)・マイページと役割が重複するため隠す。
+            言語切替だけは他に置き場がないのでそのまま残す。
+          */}
+          {!isNative &&
+            NAV_ITEMS.map(({ href, key, Icon }) => {
+              const active = isActivePath(pathname, href);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
+                    active
+                      ? "bg-[#0b2d5b] text-white"
+                      : "text-muted hover:bg-[#0b2d5b]/10 hover:text-foreground"
+                  }`}
+                >
+                  <span className="relative">
+                    <Icon className="h-5 w-5" />
+                    {href === "/trade" && unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
+                  </span>
+                  <span className="hidden sm:inline">{t[key]}</span>
+                </Link>
+              );
+            })}
           <div className="shrink-0">
             <LanguageToggle />
           </div>
-          <div className="shrink-0">
-            <AuthMenu />
-          </div>
+          {!isNative && (
+            <div className="shrink-0">
+              <AuthMenu />
+            </div>
+          )}
         </nav>
       </Container>
     </header>

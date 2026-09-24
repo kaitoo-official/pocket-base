@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Capacitor } from "@capacitor/core";
 import { LayoutGrid, PlayingCardsFan, ArrowLeftRight, User } from "lucide-react";
+import { useIsNativeApp } from "@/lib/useIsNativeApp";
 
 const TABS = [
   { href: "/cards", label: "カード", Icon: LayoutGrid },
@@ -20,12 +20,8 @@ const TABS = [
  * 余白を確保する(globals.cssの.has-native-bottom-nav参照)。
  */
 export function NativeBottomNav() {
-  const [isNative, setIsNative] = useState(false);
+  const isNative = useIsNativeApp();
   const pathname = usePathname();
-
-  useEffect(() => {
-    setIsNative(Capacitor.isNativePlatform());
-  }, []);
 
   useEffect(() => {
     document.body.classList.toggle("has-native-bottom-nav", isNative);
