@@ -161,3 +161,17 @@ body {
   }
 }
 
+/*
+ * ヘッダーのナビ(SiteHeader)用。幅の狭い画面ではロゴ+ナビの合計幅が
+ * 画面幅を超えるため、ナビ側だけを横スクロール可能にしてページ全体の
+ * 横スクロール・要素の重なりを防ぐ。スクロールバー自体は見た目上隠す。
+ */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+

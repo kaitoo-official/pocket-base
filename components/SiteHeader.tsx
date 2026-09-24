@@ -41,18 +41,18 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-background/80 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between">
-        <Link href="/">
+      <Container className="flex h-16 items-center justify-between gap-2">
+        <Link href="/" className="shrink-0">
           <Logo />
         </Link>
-        <nav className="flex items-center gap-1 text-sm font-medium">
+        <nav className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto text-sm font-medium">
           {NAV_ITEMS.map(({ href, key, Icon }) => {
             const active = isActivePath(pathname, href);
             return (
               <Link
                 key={href}
                 href={href}
-                className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
+                className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
                   active
                     ? "bg-[#0b2d5b] text-white"
                     : "text-muted hover:bg-[#0b2d5b]/10 hover:text-foreground"
@@ -70,8 +70,12 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <LanguageToggle />
-          <AuthMenu />
+          <div className="shrink-0">
+            <LanguageToggle />
+          </div>
+          <div className="shrink-0">
+            <AuthMenu />
+          </div>
         </nav>
       </Container>
     </header>
