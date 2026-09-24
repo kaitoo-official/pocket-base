@@ -47,37 +47,46 @@ export function SiteHeader() {
         <Link href="/" className="shrink-0">
           <Logo />
         </Link>
-        <nav className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto text-sm font-medium">
+        <div className="flex min-w-0 items-center gap-1">
           {/*
             アプリ版(Capacitor)では、この移動リンクと下のログインメニューは
             下タブバー(NativeBottomNav)・マイページと役割が重複するため隠す。
             言語切替だけは他に置き場がないのでそのまま残す。
+
+            ナビ項目だけをoverflow-x-autoにして横スクロール対象にしている
+            (幅の狭い画面でロゴ+ナビの合計幅が画面を超える対策)。言語切替・
+            ログインメニューまで同じ場所に入れると、overflow-x-autoを付けた
+            要素は仕様上overflow-yも自動的にクリップされてしまい、ログイン
+            メニューのドロップダウンが見えなくなってしまうため、あえて外に出している。
           */}
-          {!isNative &&
-            NAV_ITEMS.map(({ href, key, Icon }) => {
-              const active = isActivePath(pathname, href);
-              return (
-                <Link
-                  key={href}
-                  href={href}
-                  className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
-                    active
-                      ? "bg-[#0b2d5b] text-white"
-                      : "text-muted hover:bg-[#0b2d5b]/10 hover:text-foreground"
-                  }`}
-                >
-                  <span className="relative">
-                    <Icon className="h-5 w-5" />
-                    {href === "/trade" && unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
-                        {unreadCount > 9 ? "9+" : unreadCount}
-                      </span>
-                    )}
-                  </span>
-                  <span className="hidden sm:inline">{t[key]}</span>
-                </Link>
-              );
-            })}
+          {!isNative && (
+            <nav className="no-scrollbar flex min-w-0 items-center gap-1 overflow-x-auto text-sm font-medium">
+              {NAV_ITEMS.map(({ href, key, Icon }) => {
+                const active = isActivePath(pathname, href);
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`relative flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors duration-150 ${
+                      active
+                        ? "bg-[#0b2d5b] text-white"
+                        : "text-muted hover:bg-[#0b2d5b]/10 hover:text-foreground"
+                    }`}
+                  >
+                    <span className="relative">
+                      <Icon className="h-5 w-5" />
+                      {href === "/trade" && unreadCount > 0 && (
+                        <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </span>
+                      )}
+                    </span>
+                    <span className="hidden sm:inline">{t[key]}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          )}
           <div className="shrink-0">
             <LanguageToggle />
           </div>
@@ -86,7 +95,7 @@ export function SiteHeader() {
               <AuthMenu />
             </div>
           )}
-        </nav>
+        </div>
       </Container>
     </header>
   );
