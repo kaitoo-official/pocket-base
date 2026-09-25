@@ -1,8 +1,28 @@
 apply plugin: 'com.android.application'
 
+// リリース署名用の設定(keystore.properties)を読み込む。
+// パスワードなどの機密情報をbuild.gradleに直書きしないための仕組み。
+// このファイルは.gitignoreで除外されており、無い場合(≒デバッグビルドのみの環境)は
+// 署名設定を単純にスキップする。
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace = "com.kaitooofficial.pocketbase"
     compileSdk = rootProject.ext.compileSdkVersion
+    if (keystorePropertiesFile.exists()) {
+        signingConfigs {
+            release {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
     defaultConfig {
         applicationId "com.kaitooofficial.pocketbase"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -20,6 +40,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (keystorePropertiesFile.exists()) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
