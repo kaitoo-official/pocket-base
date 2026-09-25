@@ -3,6 +3,11 @@
 // ログイン済み: Firestore users/{uid}/decks/{deckId} に保存。
 // 無料会員は合計MAX_FREE_DECKS件までしか保存できない(課金機能は今回実装しないため、
 // 上限を超える場合は常にこのメッセージを表示するだけで、有料プランへの導線は出さない)。
+//
+// クラウド保存分のドキュメントIDは、ランダムな値ではなく DECK_SLOT_IDS の固定3種類のみを使う。
+// これにより「3件まで」をFirestoreのセキュリティルール側でも
+// (件数を数えることができない代わりに)IDの許可リストとして強制でき、
+// ブラウザから直接書き込んでも上限を回避できないようにしている。
 
 "use client";
 
@@ -21,6 +26,9 @@ import { db } from "@/lib/firebase";
 import { useAuth } from "@/lib/auth/AuthProvider";
 
 export const MAX_FREE_DECKS = 3;
+
+/** クラウド保存デッキが使えるドキュメントIDはこの3つだけ(firestore.rulesと対応させること) */
+const DECK_SLOT_IDS = Array.from({ length: MAX_FREE_DECKS }, (_, i) => `slot-${i}`);
 
 const GUEST_KEY = "pocketbase_guest_decks";
 
@@ -82,6 +90,11 @@ function decksCollection(uid: string) {
   return collection(db, "users", uid, "decks");
 }
 
+/** 使用中のドキュメントIDから、まだ空いているスロットIDを1つ返す(無ければnull) */
+function findFreeSlotId(usedIds: string[]): string | null {
+  return DECK_SLOT_IDS.find((slot) => !usedIds.includes(slot)) ?? null;
+}
+
 export async function getCloudDecks(uid: string): Promise<Deck[]> {
   const snapshot = await getDocs(decksCollection(uid));
   return snapshot.docs.map((d) => {
@@ -101,11 +114,12 @@ export async function getCloudDecks(uid: string): Promise<Deck[]> {
 
 async function createCloudDeck(
   uid: string,
+  deckId: string,
   deckName: string,
   cards: string[],
   energyTypes: string[]
 ): Promise<void> {
-  await setDoc(doc(decksCollection(uid), generateId()), {
+  await setDoc(doc(decksCollection(uid), deckId), {
     deckName,
     userId: uid,
     cards,
@@ -145,12 +159,17 @@ export async function mergeGuestDecksToCloud(uid: string): Promise<{ migrated: n
   if (guestDecks.length === 0) return { migrated: 0, skipped: 0 };
 
   const existing = await getCloudDecks(uid);
-  const remainingSlots = Math.max(0, MAX_FREE_DECKS - existing.length);
-  const toMigrate = guestDecks.slice(0, remainingSlots);
-  const toSkip = guestDecks.slice(remainingSlots);
+  const existingIds = existing.map((deck) => deck.id);
+  const remainingCount = Math.max(0, MAX_FREE_DECKS - existing.length);
+  // 空きスロットIDのうち、残り件数の枠に収まる分だけ使う
+  const freeSlotIds = DECK_SLOT_IDS.filter((slot) => !existingIds.includes(slot)).slice(0, remainingCount);
+  const toMigrate = guestDecks.slice(0, freeSlotIds.length);
+  const toSkip = guestDecks.slice(freeSlotIds.length);
 
   await Promise.all(
-    toMigrate.map((deck) => createCloudDeck(uid, deck.deckName, deck.cards, deck.energyTypes ?? []))
+    toMigrate.map((deck, i) =>
+      createCloudDeck(uid, freeSlotIds[i], deck.deckName, deck.cards, deck.energyTypes ?? [])
+    )
   );
   // 移行できなかった分だけlocalStorageに残す
   writeGuestDecks(toSkip);
@@ -198,7 +217,9 @@ export function useDecks() {
       if (decks.length >= MAX_FREE_DECKS) return { ok: false, reason: "limit" };
 
       if (isSignedIn && user) {
-        await createCloudDeck(user.uid, deckName, cards, energyTypes);
+        const freeSlotId = findFreeSlotId(decks.map((deck) => deck.id));
+        if (!freeSlotId) return { ok: false, reason: "limit" };
+        await createCloudDeck(user.uid, freeSlotId, deckName, cards, energyTypes);
       } else {
         const now = new Date().toISOString();
         const guestDecks = readGuestDecks();
@@ -208,7 +229,7 @@ export function useDecks() {
       await reload();
       return { ok: true };
     },
-    [decks.length, isSignedIn, user, reload]
+    [decks, isSignedIn, user, reload]
   );
 
   const updateDeck = useCallback(

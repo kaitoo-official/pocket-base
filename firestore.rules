@@ -62,13 +62,16 @@ service cloud.firestore {
           && request.auth.token.firebase.sign_in_provider == 'google.com';
       }
 
-      // マイデッキ。ログイン必須。無料会員の「3デッキまで」はUI側で案内・制御しており、
-      // ここでは所有者チェックとデータ形状の検証のみ行う。
+      // マイデッキ。ログイン必須。無料会員の「3デッキまで」は、ドキュメントIDを
+      // slot-0/slot-1/slot-2 の3つだけに限定することでルール側でも強制している
+      // (Firestoreのルールはコレクション内の件数を直接数えられないため、
+      // 許可するIDを最初から3つに絞ることで同じ効果を得ている。lib/decks.tsと対応)。
       match /decks/{deckId} {
         allow read: if request.auth != null && request.auth.uid == userId;
         allow create: if request.auth != null
           && request.auth.uid == userId
           && request.auth.token.firebase.sign_in_provider == 'google.com'
+          && deckId in ['slot-0', 'slot-1', 'slot-2']
           && request.resource.data.keys().hasOnly(
               ['deckName', 'userId', 'cards', 'energyTypes', 'createdAt', 'updatedAt']
             )
