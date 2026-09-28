@@ -1,0 +1,41 @@
+# Codemagic(クラウドのMac)でiOSアプリをビルドし、TestFlightへ配信する設定。
+# 手元のMacは最新Xcodeが使えないため、ビルド・署名・アップロードはすべてここで行う。
+# 事前にCodemagicの「Team integrations」でApp Store Connect APIキーを
+# 「pocket-base-asc」という名前で登録しておくこと。
+workflows:
+  ios-testflight:
+    name: iOS TestFlight
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: pocket-base-asc
+    environment:
+      ios_signing:
+        # 配信用の証明書・プロファイルをAPIキー経由でCodemagicが自動取得する
+        distribution_type: app_store
+        bundle_identifier: com.kaitooofficial.pocketbase
+      node: 22
+      xcode: latest
+    scripts:
+      - name: npmパッケージのインストール
+        script: npm ci
+      - name: Capacitorの設定をiOSプロジェクトへ反映
+        script: npx cap sync ios
+      - name: 署名設定をXcodeプロジェクトに適用
+        script: xcode-project use-profiles
+      - name: ビルド番号をCodemagicの通し番号にする(TestFlightは同じ番号を受け付けないため)
+        script: |
+          cd ios/App
+          agvtool new-version -all $BUILD_NUMBER
+      - name: ipaファイルのビルド
+        script: |
+          xcode-project build-ipa \
+            --project ios/App/App.xcodeproj \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
