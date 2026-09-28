@@ -1,0 +1,62 @@
+workflows:
+  ios-preflight:
+    name: Pocket Base - iOS Preflight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+
+    environment:
+      node: v22.11.0
+      xcode: latest
+      cocoapods: default
+
+    scripts:
+      - name: Show tool versions
+        script: |
+          set -e
+          echo "Node:"
+          node -v
+          echo "npm:"
+          npm -v
+          echo "Xcode:"
+          xcodebuild -version
+          echo "CocoaPods:"
+          pod --version
+
+      - name: Install JavaScript dependencies
+        script: |
+          set -e
+          npm ci
+
+      - name: Install Capacitor iOS package for CI
+        script: |
+          set -e
+          npm install --no-save @capacitor/ios@8.5.2
+
+      - name: Generate iOS project
+        script: |
+          set -e
+          rm -rf ios
+          npx cap add ios
+          npx cap sync ios
+
+      - name: Install iOS pods
+        script: |
+          set -e
+          cd ios/App
+          pod install
+
+      - name: Build iOS app without code signing
+        script: |
+          set -euo pipefail
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "generic/platform=iOS Simulator" \
+            CODE_SIGNING_ALLOWED=NO \
+            build | tee /tmp/xcodebuild.log
+
+    artifacts:
+      - /tmp/xcodebuild.log
+      - ios/App/Podfile.lock
