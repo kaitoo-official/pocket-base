@@ -9,8 +9,7 @@ const config: CapacitorConfig = {
   server: {
     // アプリ内で本番サイトをそのまま表示する(=コードを二重管理しない方式)。
     // これによりWeb側を更新するだけでアプリの内容も即座に反映される。
-    // アプリ起動時はホーム画面ではなく、カード一覧から始まるようにしている。
-    url: "https://pocket-base-delta.vercel.app/cards",
+    url: "https://pocket-base-delta.vercel.app",
     cleartext: false,
   },
   plugins: {

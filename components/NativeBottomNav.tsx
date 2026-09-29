@@ -3,10 +3,11 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, PlayingCardsFan, ArrowLeftRight, User } from "lucide-react";
+import { Home, LayoutGrid, PlayingCardsFan, ArrowLeftRight, User } from "lucide-react";
 import { useIsNativeApp } from "@/lib/useIsNativeApp";
 
 const TABS = [
+  { href: "/", label: "ホーム", Icon: Home },
   { href: "/cards", label: "カード", Icon: LayoutGrid },
   { href: "/packs", label: "パック", Icon: PlayingCardsFan },
   { href: "/trade", label: "トレード", Icon: ArrowLeftRight },
