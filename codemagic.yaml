@@ -29,6 +29,8 @@ workflows:
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
+      - name: 取得した証明書をキーチェーンに追加
+        script: keychain add-certificates
       - name: 署名設定をXcodeプロジェクトに適用
         script: xcode-project use-profiles
       - name: ビルド番号をCodemagicの通し番号にする(TestFlightは同じ番号を受け付けないため)
