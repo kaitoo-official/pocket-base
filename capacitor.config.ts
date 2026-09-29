@@ -27,7 +27,7 @@ const config: CapacitorConfig = {
     // Firebase JS SDKに渡す(=アプリ全体が参照しているログイン状態と一本化するため)。
     FirebaseAuthentication: {
       skipNativeAuth: true,
-      providers: ["google.com"],
+      providers: ["google.com", "apple.com"],
     },
   },
 };

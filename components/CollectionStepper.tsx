@@ -4,17 +4,16 @@ import type { MouseEvent } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useCollection, MAX_COLLECTION_QUANTITY } from "@/lib/collection";
-import { signInWithGoogle } from "@/lib/auth/googleAuth";
 import type { Lang } from "@/lib/i18n/lang";
 
 /**
  * カード1枚分のマイコレクション+/-ステッパー(コンパクト版)。ログイン必須のため、
- * 未ログイン時に押すとそのままGoogleログインを促す。1枚の状態から減らす操作は
+ * 未ログイン時に押すとそのままログインを促す。1枚の状態から減らす操作は
  * 削除を意味するため、その時だけゴミ箱アイコンにする。
  * CardTile等のLinkの外側に置くこと(aタグの中にbuttonをネストしないため)。
  */
 export function CollectionStepper({ cardId, lang = "ja" }: { cardId: string; lang?: Lang }) {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, signIn } = useAuth();
   const { getQuantity, setQuantity, loading } = useCollection();
   const quantity = isSignedIn ? getQuantity(cardId) : 0;
 
@@ -23,7 +22,7 @@ export function CollectionStepper({ cardId, lang = "ja" }: { cardId: string; lan
       event.preventDefault();
       event.stopPropagation();
       if (!isSignedIn) {
-        await signInWithGoogle();
+        await signIn();
         return;
       }
       void setQuantity(cardId, quantity + delta);

@@ -17,7 +17,6 @@ import { TradeShareImageModal } from "@/components/TradeShareImageModal";
 import { createTradePost, MAX_CARDS_PER_SIDE, type CardOption } from "@/lib/trade";
 import type { Option } from "@/lib/filterOptions";
 import { useAuth } from "@/lib/auth/AuthProvider";
-import { signInWithGoogle } from "@/lib/auth/googleAuth";
 import { getRandomTrainerName, generateFallbackNickname } from "@/lib/trainerNames";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
@@ -44,7 +43,7 @@ export function TradeComposer({
   typeOptions: Option[];
   rarityOptions: Option[];
 }) {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, signIn } = useAuth();
   const lang = useLang();
   const t = getDict(lang).trade.composer;
   const shareT = getDict(lang).trade.shareImage;
@@ -132,7 +131,7 @@ export function TradeComposer({
         <p className="max-w-md text-xs text-muted">{t.signInDescription}</p>
         <button
           type="button"
-          onClick={() => void signInWithGoogle()}
+          onClick={() => void signIn()}
           className="mt-1 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-opacity duration-150 hover:opacity-90"
         >
           <LogIn className="h-4 w-4" />

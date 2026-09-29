@@ -14,7 +14,7 @@ import {
   Layers,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
-import { signInWithGoogle, signOutOfGoogle } from "@/lib/auth/googleAuth";
+import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -23,7 +23,7 @@ const MENU_ITEM_CLASS =
 
 /** ヘッダー右上の認証導線。未ログインならログインボタン、ログイン済みならプロフィール+ドロップダウン */
 export function AuthMenu() {
-  const { user, isSignedIn, loading } = useAuth();
+  const { user, isSignedIn, loading, signIn } = useAuth();
   const lang = useLang();
   const t = getDict(lang).auth;
   const [open, setOpen] = useState(false);
@@ -53,7 +53,7 @@ export function AuthMenu() {
         disabled={signingIn}
         onClick={async () => {
           setSigningIn(true);
-          await signInWithGoogle();
+          await signIn();
           setSigningIn(false);
         }}
         className="flex items-center gap-1.5 rounded-full bg-accent px-3 py-1.5 text-sm font-semibold text-white shadow-xs transition-colors duration-150 hover:bg-accent-strong disabled:opacity-60"

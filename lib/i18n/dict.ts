@@ -18,6 +18,10 @@ export interface Dict {
     myDecks: string;
     tradeManagement: string;
     signOut: string;
+    chooseTitle: string;
+    appleButton: string;
+    googleButton: string;
+    cancel: string;
   };
   footer: {
     disclaimer: string;
@@ -335,13 +339,17 @@ const ja: Dict = {
     trade: "トレード",
   },
   auth: {
-    signIn: "Googleでログイン",
+    signIn: "ログイン",
     myPage: "マイページ",
     wishlist: "ほしいリスト",
     collection: "マイコレクション",
     myDecks: "マイデッキ",
     tradeManagement: "トレード投稿",
     signOut: "ログアウト",
+    chooseTitle: "ログイン方法を選択",
+    appleButton: "Appleでサインイン",
+    googleButton: "Googleでログイン",
+    cancel: "キャンセル",
   },
   footer: {
     disclaimer: "本サイトは非公式のファンサイトです。Pokémon、Pokémon Trading Card Game Pocketの公式サービスではありません。",
@@ -353,7 +361,7 @@ const ja: Dict = {
   },
   privacy: {
     title: "プライバシーポリシー",
-    lastUpdated: "最終更新日: 2026年9月15日",
+    lastUpdated: "最終更新日: 2026年9月29日",
     sections: [
       {
         heading: "はじめに",
@@ -366,6 +374,7 @@ const ja: Dict = {
         heading: "取得する情報",
         paragraphs: [
           "Googleアカウントでログインした場合、表示名・メールアドレス・プロフィール画像のURLを取得します(Firebase Authenticationを通じて取得)。",
+          "Apple IDでサインインした場合、氏名とメールアドレス(メールアドレスの非公開を選択された場合はAppleが発行する中継用アドレス)を取得します。",
           "ほしいリスト・マイコレクション・マイデッキに登録した内容(選択したカードや所持枚数など)は、ログインアカウントに紐づけて保存します。",
           "トレード投稿やコメントを行った場合、フレンドID・募集内容・任意入力のニックネーム・コメント本文を取得します。",
           "フッターのフィードバックフォームから送信された場合、メッセージ本文と任意入力の連絡先を取得します。",
@@ -534,8 +543,8 @@ const ja: Dict = {
       postedDescription: "画像でシェアして、トレード相手を見つけやすくしましょう。",
       postAnother: "続けて投稿する",
       signInTitle: "投稿にはログインが必要です",
-      signInDescription: "Googleでログインすると、トレード募集を投稿できます(掲示板の閲覧はログイン不要です)。",
-      signInButton: "Googleでログイン",
+      signInDescription: "ログインすると、トレード募集を投稿できます(掲示板の閲覧はログイン不要です)。",
+      signInButton: "ログイン",
       nicknameLabel: "お名前",
       nicknameOptional: "(任意)",
       nicknamePlaceholder: "名前を入力",
@@ -716,13 +725,17 @@ const en: Dict = {
     trade: "Trade",
   },
   auth: {
-    signIn: "Sign in with Google",
+    signIn: "Sign in",
     myPage: "My Page",
     wishlist: "Wishlist",
     collection: "My Collection",
     myDecks: "My Decks",
     tradeManagement: "My Trade Posts",
     signOut: "Sign Out",
+    chooseTitle: "Choose how to sign in",
+    appleButton: "Sign in with Apple",
+    googleButton: "Sign in with Google",
+    cancel: "Cancel",
   },
   footer: {
     disclaimer:
@@ -735,7 +748,7 @@ const en: Dict = {
   },
   privacy: {
     title: "Privacy Policy",
-    lastUpdated: "Last updated: September 15, 2026",
+    lastUpdated: "Last updated: September 29, 2026",
     sections: [
       {
         heading: "Introduction",
@@ -748,6 +761,7 @@ const en: Dict = {
         heading: "Information we collect",
         paragraphs: [
           "If you sign in with a Google account, we collect your display name, email address, and profile picture URL (via Firebase Authentication).",
+          "If you sign in with Apple, we collect your name and email address (or the private relay address Apple issues if you choose to hide your email).",
           "Anything you save to your Wishlist, My Collection, or My Decks (selected cards, owned quantities, etc.) is stored linked to your signed-in account.",
           "If you create a trade post or comment, we collect your in-game Friend ID, the details of your post, an optional nickname you choose, and your comment text.",
           "If you submit the feedback form in the footer, we collect your message and an optional contact detail you provide.",
@@ -919,8 +933,8 @@ const en: Dict = {
       postedDescription: "Share it as an image to help find a trade partner.",
       postAnother: "Post another",
       signInTitle: "Sign in to post",
-      signInDescription: "Sign in with Google to post a trade listing (browsing the board doesn't require sign-in).",
-      signInButton: "Sign in with Google",
+      signInDescription: "Sign in to post a trade listing (browsing the board doesn't require sign-in).",
+      signInButton: "Sign in",
       nicknameLabel: "Name",
       nicknameOptional: "(optional)",
       nicknamePlaceholder: "Enter your name",

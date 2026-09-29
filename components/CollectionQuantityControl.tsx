@@ -3,7 +3,6 @@
 import { Minus, Plus } from "lucide-react";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useCollection, MAX_COLLECTION_QUANTITY } from "@/lib/collection";
-import { signInWithGoogle } from "@/lib/auth/googleAuth";
 import type { Lang } from "@/lib/i18n/lang";
 
 const LABELS_JA = ["未所持", "1枚", "2枚", "3枚以上"];
@@ -11,10 +10,10 @@ const LABELS_EN = ["Not owned", "1 copy", "2 copies", "3+ copies"];
 
 /**
  * マイコレクション(所持枚数)の増減コントロール。ログイン必須。
- * 未ログイン時は押すとそのままGoogleログインを促す。
+ * 未ログイン時は押すとそのままログインを促す。
  */
 export function CollectionQuantityControl({ cardId, lang = "ja" }: { cardId: string; lang?: Lang }) {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, signIn } = useAuth();
   const { getQuantity, setQuantity, loading } = useCollection();
   const labels = lang === "en" ? LABELS_EN : LABELS_JA;
 
@@ -22,7 +21,7 @@ export function CollectionQuantityControl({ cardId, lang = "ja" }: { cardId: str
     return (
       <button
         type="button"
-        onClick={() => void signInWithGoogle()}
+        onClick={() => void signIn()}
         className="text-xs font-medium text-accent underline decoration-line underline-offset-2 hover:text-accent-strong"
       >
         {lang === "en" ? "Sign in to track your collection" : "ログインしてコレクションを記録"}

@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { NativeBottomNav } from "@/components/NativeBottomNav";
+import { NativeViewportLock } from "@/components/NativeViewportLock";
 import { getLang } from "@/lib/i18n/lang";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { AuthProvider } from "@/lib/auth/AuthProvider";
@@ -58,6 +59,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <LanguageProvider lang={lang}>
           <AuthProvider>
+            <NativeViewportLock />
             <MigrationGate />
             <SiteHeader />
             {/*
