@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { MoreVertical, Play, Trash2 } from "lucide-react";
+import { LogIn, MoreVertical, Play, Trash2 } from "lucide-react";
 import {
   createTradeComment,
   deleteTradeComment,
@@ -12,6 +12,7 @@ import {
 import { getRandomTrainerName } from "@/lib/trainerNames";
 import { markPostAsCommented, markPostAsSeen } from "@/lib/tradeNotifications";
 import { ensureAuthUid } from "@/lib/authUid";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -22,6 +23,7 @@ const TEXT_MAX = 200;
 export function TradeComments({ postId }: { postId: string }) {
   const lang = useLang();
   const t = getDict(lang).trade.comments;
+  const { isSignedIn, signIn } = useAuth();
   // コメント欄のクリックで挿入できる定型文。「○○」の部分はカード名などに書き換えて使う想定
   const COMMENT_PRESETS = t.presets;
   const [comments, setComments] = useState<TradeComment[]>([]);
@@ -141,7 +143,21 @@ export function TradeComments({ postId }: { postId: string }) {
         </div>
       )}
 
-      {/* 「既にあるコメント」と見分けやすいよう、投稿フォームは背景色を変えた枠で区切っている */}
+      {/* コメントの閲覧はログイン不要だが、投稿にはログインが必要(なりすまし・荒らし対策) */}
+      {!isSignedIn ? (
+        <div className="mt-4 flex flex-col items-center gap-2 rounded-xl border border-accent/20 bg-accent/5 p-4 text-center">
+          <p className="text-sm text-muted">{t.signInToCommentDescription}</p>
+          <button
+            type="button"
+            onClick={() => void signIn()}
+            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-teal-400 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-opacity duration-150 hover:opacity-90"
+          >
+            <LogIn className="h-4 w-4" />
+            {t.signInToCommentButton}
+          </button>
+        </div>
+      ) : (
+      /* 「既にあるコメント」と見分けやすいよう、投稿フォームは背景色を変えた枠で区切っている */
       <form
         onSubmit={handleSubmit}
         className="mt-4 space-y-2 rounded-xl border border-accent/20 bg-accent/5 p-3"
@@ -217,6 +233,7 @@ export function TradeComments({ postId }: { postId: string }) {
 
         {error && <p className="text-sm text-red-600">{error}</p>}
       </form>
+      )}
     </div>
   );
 }

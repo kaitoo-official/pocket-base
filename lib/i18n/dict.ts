@@ -212,6 +212,8 @@ export interface Dict {
       deleteButton: string;
       commentMenuLabel: string;
       postCommentTitle: string;
+      signInToCommentDescription: string;
+      signInToCommentButton: string;
       nameOptional: string;
       namePlaceholder: string;
       commentLabel: string;
@@ -598,6 +600,8 @@ const ja: Dict = {
       deleteButton: "削除",
       commentMenuLabel: "コメントのメニュー",
       postCommentTitle: "コメントを投稿",
+      signInToCommentDescription: "コメントの投稿にはログインが必要です(閲覧はログイン不要です)。",
+      signInToCommentButton: "ログインしてコメントする",
       nameOptional: "(任意)",
       namePlaceholder: "名前を入力",
       commentLabel: "コメント",
@@ -988,6 +992,8 @@ const en: Dict = {
       deleteButton: "Delete",
       commentMenuLabel: "Comment menu",
       postCommentTitle: "Add a comment",
+      signInToCommentDescription: "Sign in to post a comment (browsing doesn't require sign-in).",
+      signInToCommentButton: "Sign in to comment",
       nameOptional: "(optional)",
       namePlaceholder: "Enter your name",
       commentLabel: "Comment",
