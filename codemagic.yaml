@@ -10,6 +10,9 @@ workflows:
     integrations:
       app_store_connect: pocket-base-asc
     environment:
+      groups:
+        # CERTIFICATE_PRIVATE_KEY(証明書を新規作成する際に使うRSA秘密鍵)を含む
+        - ios_signing
       vars:
         BUNDLE_ID: "com.kaitooofficial.pocketbase"
       node: 22
