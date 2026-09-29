@@ -21,8 +21,15 @@
           注意: 以前は "android:background" が指定されていたが、これはウィンドウの背景を
           制御する属性ではないため実際には何も効いていなかった(常にOS標準の背景色が出ていた)。
           Android 12以降のSplashScreen APIで背景色を変えるには windowSplashScreenBackground を使う。
-          アイコン自体はアプリのランチャーアイコン(ic_launcher)がOSにより自動で使われる。
+
+          windowSplashScreenAnimatedIconを指定しない場合、OSはアプリのランチャーアイコン
+          (ic_launcher、背景色つきのアダプティブアイコン)を自動的に丸くトリミングして使うが、
+          そのアイコン自身の背景色とwindowSplashScreenBackgroundの色がわずかにズレて見え、
+          ロゴの周りに不自然な丸い縁が出てしまう。背景を透明にした専用画像
+          (drawable/splash_icon.png、ロゴのみ)を指定することで、丸トリミングされても
+          背景色がそのまま透けて見え、ロゴだけが浮かんでいるように見える。
         -->
         <item name="windowSplashScreenBackground">@color/splashBackground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
     </style>
 </resources>

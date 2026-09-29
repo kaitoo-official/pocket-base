@@ -78,7 +78,33 @@ async function main() {
     .png()
     .toFile(path.join(assetsDir, "splash.png"));
 
-  console.log("Generated: assets/icon.png, icon-foreground.png, icon-background.png, splash.png");
+  // android-splash-icon.png: Android 12以降のOS標準スプラッシュ(windowSplashScreenAnimatedIcon)専用。
+  // 背景を透明にしておくことで、OS側が丸くトリミングしてもテーマの背景色がそのまま透けて見え、
+  // アイコンだけが浮かんでいるように見える(インスタ等と同じ見た目)。
+  // ランチャーアイコンのような背景色つきの正方形画像を使うと、丸いトリミング境界が
+  // テーマ背景色とわずかに色ズレして見えてしまう。
+  const iconOnlySize = 960;
+  const iconOnlyLogoWidth = Math.round(iconOnlySize * 0.62);
+  const iconOnlyLogo = await sharp(path.join(publicDir, "images", "logo.png"))
+    .resize(iconOnlyLogoWidth)
+    .toBuffer();
+  const iconOnlyLogoMeta = await sharp(iconOnlyLogo).metadata();
+  await sharp({
+    create: { width: iconOnlySize, height: iconOnlySize, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } },
+  })
+    .composite([
+      {
+        input: iconOnlyLogo,
+        left: Math.round((iconOnlySize - iconOnlyLogoWidth) / 2),
+        top: Math.round((iconOnlySize - (iconOnlyLogoMeta.height ?? iconOnlyLogoWidth)) / 2),
+      },
+    ])
+    .png()
+    .toFile(path.join(assetsDir, "android-splash-icon.png"));
+
+  console.log(
+    "Generated: assets/icon.png, icon-foreground.png, icon-background.png, splash.png, android-splash-icon.png"
+  );
 }
 
 main();
