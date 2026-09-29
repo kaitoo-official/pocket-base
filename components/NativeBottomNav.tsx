@@ -5,14 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, LayoutGrid, PlayingCardsFan, ArrowLeftRight, User } from "lucide-react";
 import { useIsNativeApp } from "@/lib/useIsNativeApp";
-
-const TABS = [
-  { href: "/", label: "ホーム", Icon: Home },
-  { href: "/cards", label: "カード", Icon: LayoutGrid },
-  { href: "/packs", label: "パック", Icon: PlayingCardsFan },
-  { href: "/trade", label: "トレード", Icon: ArrowLeftRight },
-  { href: "/mypage", label: "マイページ", Icon: User },
-];
+import { useLang } from "@/lib/i18n/LanguageProvider";
+import { getDict } from "@/lib/i18n/dict";
 
 /**
  * アプリ版(Capacitor)でのみ表示する下タブバー。
@@ -23,6 +17,17 @@ const TABS = [
 export function NativeBottomNav() {
   const isNative = useIsNativeApp();
   const pathname = usePathname();
+  const lang = useLang();
+  const nav = getDict(lang).nav;
+  const auth = getDict(lang).auth;
+
+  const TABS = [
+    { href: "/", label: nav.home, Icon: Home },
+    { href: "/cards", label: nav.cards, Icon: LayoutGrid },
+    { href: "/packs", label: nav.packs, Icon: PlayingCardsFan },
+    { href: "/trade", label: nav.trade, Icon: ArrowLeftRight },
+    { href: "/mypage", label: auth.myPage, Icon: User },
+  ];
 
   useEffect(() => {
     document.body.classList.toggle("has-native-bottom-nav", isNative);
@@ -42,7 +47,7 @@ export function NativeBottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs font-medium transition-colors ${
+            className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-medium whitespace-nowrap transition-colors ${
               active ? "text-accent" : "text-muted"
             }`}
           >
