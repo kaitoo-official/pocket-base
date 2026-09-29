@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "237869507682-40e2it6nrf6qapbaso4g39kg1k5q3rdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kaitooofficial.pocketbase",
+            "certificate_hash": "eef21e4814aa62e4f9e3ec395095a6970fc7f968"
+          }
+        },
+        {
           "client_id": "237869507682-hs2ujv1c0to64oe0d4ga2ga555j7d5lb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "237869507682-4n2b35d251o15hcjvq44vrsmqpnicslu.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "237869507682-c2i1amin07cb2bjud4ltg7166p0lq3t1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kaitooofficial.pocketbase"
+              }
             }
           ]
         }
