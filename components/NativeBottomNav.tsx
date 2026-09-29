@@ -31,14 +31,17 @@ export function NativeBottomNav() {
   if (!isNative) return null;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
+    <nav
+      className="fixed inset-x-4 z-40 flex overflow-hidden rounded-2xl border border-line bg-surface/95 shadow-lg shadow-black/10 backdrop-blur-md"
+      style={{ bottom: "calc(env(safe-area-inset-bottom) + 12px)" }}
+    >
       {TABS.map(({ href, label, Icon }) => {
         const active = pathname === href || pathname.startsWith(`${href}/`);
         return (
           <Link
             key={href}
             href={href}
-            className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition-colors ${
+            className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-xs font-medium transition-colors ${
               active ? "text-accent" : "text-muted"
             }`}
           >

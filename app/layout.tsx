@@ -38,9 +38,13 @@ export const metadata: Metadata = {
   },
 };
 
-// PWAとしてホーム画面に追加した時のステータスバー/タスク切替画面の色
+// PWAとしてホーム画面に追加した時のステータスバー/タスク切替画面の色。
+// viewportFit: "cover"はiOSでノッチ・ホームバーの領域までWebViewを広げる代わりに、
+// CSSのenv(safe-area-inset-*)で実際の余白サイズを取得できるようにする設定
+// (これが無いとenv()は常に0を返し、ヘッダーがステータスバーに重なってしまう)。
 export const viewport: Viewport = {
   themeColor: "#0a1230",
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
