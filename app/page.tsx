@@ -22,9 +22,11 @@ import { InfluencerVideosSection } from "@/components/InfluencerVideosSection";
 import { getLang, type Lang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
 
-// トレード投稿数をFirestoreから毎回取得するため、このページはビルド時に固定せず
-// リクエストのたびにレンダリングする(そうしないと件数が古いまま固定されてしまう)
-export const dynamic = "force-dynamic";
+// トレード投稿数をFirestoreから取得するため完全な静的固定はできないが、
+// リクエストのたびにサーバーで再実行する(force-dynamic)とアクセス増加時にCPU使用量を
+// 圧迫するため、60秒間隔のISR(Incremental Static Regeneration)に留める。
+// 件数は最大60秒ほど古くなる可能性があるが許容範囲とする。
+export const revalidate = 60;
 
 // トレーナーズの分類(グッズ・サポート等)は「タイプ/属性」の探索としては趣旨が異なるため、
 // Homeの「タイプから探す」ではポケモンのエネルギータイプのみを対象にする
