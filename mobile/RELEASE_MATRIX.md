@@ -1,6 +1,6 @@
 # プラットフォーム別リリース状況マトリクス
 
-最終更新: 2026-10-02
+最終更新: 2026-10-02（iOS欄はApp Store Connect TestFlight画面・Codemagic Publishingログの実機確認結果を反映）
 
 ## Web
 
@@ -33,8 +33,8 @@
 | Build method | Capacitor（`ios/`）をCodemagic（クラウドMac、`codemagic.yaml`の`ios-testflight`ワークフロー）でビルド・署名。手元のMac（旧機種）では最新Xcode要件を満たせないための回避策 |
 | Auth | ネイティブApple Sign-In（`FirebaseAuthentication.signInWithApple()`）+ Googleログイン（iOS/Webは選択シート表示） |
 | Distribution | App Store Connect（アプリID 6817170301、バージョン1.0） |
-| Current status | **Build ready / submission pending** — Codemagicでのビルド・App Store Connectへのアップロードまでは成功実績あり（`submit_to_testflight: false`のため審査提出は手動）。審査用スクリーンショット・申請文面は下書き済み（[`app-store-connect-draft.md`](../app-store-connect-draft.md)）。**TestFlight配信・App Store審査提出は未実施** |
-| Next action | App Store Connectでのプライバシー申告入力 → TestFlight内部テスト確認 → 審査提出（Human承認必須） |
+| Current status | **TestFlight配信済み・内部テスト実施中。App Store審査提出: 未確認**（App Store Connectの配信/審査画面を未確認のため断定しない）。App Store Connect TestFlight画面（Human確認、2026-10-02）でVersion 1.0・Build 5/6/7/8の存在を確認。最新Build 8は「提出準備完了」ステータスでInternal Testersグループに追加済み（招待数1・インストール数1・セッション数3）。Build 7（インストール数1・セッション数14）、Build 5（インストール数1・セッション数19）も実際にインストール・起動されている。Codemagic Build #8のPublishingログで`UPLOAD SUCCEEDED`を確認済み。**つまりCodemagicビルド→App Store Connectアップロード→TestFlight反映→インストール→起動まではCONFIRMED。** ただしBuild 8でApple Sign-In・Google Sign-In・ほしいリスト・マイコレクション・マイデッキ・トレード投稿・コメント・ゲスト→アカウント移行・スプラッシュ・ナビゲーションを実際に動作確認したかは**UNKNOWN**（推測しない） |
+| Next action | Build 8の提出前QA（上記UNKNOWN項目を実機で確認）→ App Store Connectメタデータ最終確認 → App Store審査提出（Human承認必須） |
 | Dependencies | Apple Developer Program（年次更新）、Codemagicの`pocket-base-asc` App Store Connect API連携、`ios_signing`変数グループ |
 | Known risks | App IDへの機能追加（Sign In with Apple等）でプロビジョニングプロファイルが無効化され、次回ビルドでの自動再作成に依存する構成になっている点。iPhone専用設定（`TARGETED_DEVICE_FAMILY = "1"`）のため、iPad非対応である点を審査メモ・ストア掲載情報と一致させる必要がある |
 

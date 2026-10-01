@@ -7,7 +7,9 @@
 
 ## NOW（現在進行中・最優先）
 
-- **iOSのApp Store Connect本提出**: ビルド体制（Codemagic）・Apple Sign-In・審査用素材（スクリーンショット・申請文面）は準備済み。TestFlightアップロード→審査提出が未完了
+- **iOS: Build 8の提出前QA → App Store Connectメタデータ最終確認 → App Store審査提出**（この順で実施）
+  - 2026-10-02、App Store Connect TestFlight画面でBuild 5/6/7/8のTestFlight配信・インストール・起動実績をHumanが実機確認済み（[[../mobile/RELEASE_MATRIX.md]]参照）。**TestFlight配信・インストール・起動まではCONFIRMED**
+  - ただし、Build 8でApple Sign-In・Google Sign-In・ほしいリスト・マイコレクション・マイデッキ・トレード投稿・コメント・ゲスト→アカウント移行・スプラッシュ・ナビゲーションを実際に動作確認したかはUNKNOWN。**推測で「確認済み」として進めない**。[[../testing/REGRESSION_CHECKLIST.md]]のiOS/AUTH項目に沿って提出前QAを実施してから、App Store Connect側のメタデータ最終確認・審査提出に進む
 - **Androidクローズドテストの継続運用**: Discord「Androidクローズドテスト攻略組」経由でのテスター募集中。Googleポリシー上必要な「12人以上・14日間継続」の達成状況を確認する必要がある
 - **Vercel CPU/可用性の監視**: 2026-10-02にHobbyプランのCPU使用量超過でアカウント全体が一時停止した事故（INC-004）の再発防止。Proプランへ移行済みだが、今後のトラフィック増加に備えた監視が必要
 

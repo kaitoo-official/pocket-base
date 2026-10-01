@@ -61,6 +61,15 @@
 - **Confidence**: 確定
 - **Action**: 「一部の値だけ最新であってほしい」という要求に対しては、ページ全体の`force-dynamic`ではなく、短い`revalidate`間隔のISR、またはクライアントサイドでの個別フェッチを優先的に検討する
 
+### L-006: 「設定・コードがmainにマージされている」ことと「そのCI/CDパイプラインが実際に実行され成功した」ことは別物であり、混同しない
+
+- **Date**: 2026-10-02
+- **Context**: iOSのApp Store提出準備状況を調査した際、`codemagic.yaml`のワークフロー設定・Apple Sign-In実装・署名自動化はすべてmainにマージ済みだったが、それだけでは「実際にCodemagicビルドが成功したか」「App Store Connectへアップロードされたか」「TestFlightで動作確認されたか」は一切判断できなかった。実際には、Humanが直接App Store Connect TestFlight画面とCodemagicのPublishingログを確認して初めて、Build 5/6/7/8のTestFlight配信・インストール・起動（セッション発生）という一次証拠が得られた
+- **Evidence**: git履歴・リポジトリ内のmarkdownメモだけを調査した段階では「ATTEMPTED/NOT CONFIRMED」止まりだったが、App Store Connect画面の実機確認（インストール数・セッション数）とCodemagic Build #8の`UPLOAD SUCCEEDED`ログにより、TestFlight配信までがCONFIRMEDに格上げされた。また調査中、過去のメモリ記録「`codemagic-ios-preflight`ブランチは削除済み」が誤りで、実際にはoriginに現存していることも判明した（記録と実態の乖離の実例）
+- **Related Files**: [[../mobile/RELEASE_MATRIX.md]], `codemagic.yaml`
+- **Confidence**: 確定
+- **Action**: CI/CDパイプラインの「設定完了」を「実行成功」や「配信完了」と同一視しない。本番配信状況を確認する際は、リポジトリ内の記述だけで判断せず、必ず実際のプラットフォーム画面（Codemagicのビルド/Publishingログ、App Store Connect/Play Consoleの配信状況画面）をHumanに確認してもらう。また、古いメモリ/メモ記録は「書かれた時点の記録」に過ぎず、現在の実態と食い違うことがある前提で扱う
+
 ---
 
 ## PROMISING
