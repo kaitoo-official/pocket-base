@@ -4,6 +4,7 @@ import { filterCards, parseFilterState } from "@/lib/filter";
 import { sortCards, parseSortCriterion, parseSortDirection, getDefaultDirection } from "@/lib/sort";
 import { CardGrid } from "@/components/CardGrid";
 import { Pager } from "@/components/Pager";
+import { buildReturnPath } from "@/lib/returnPath";
 import { SearchBar } from "@/components/SearchBar";
 import { FilterPanel } from "@/components/FilterPanel";
 import { SortSelect } from "@/components/SortSelect";
@@ -73,7 +74,11 @@ export default async function CardsPage({
       </div>
 
       <Container className="py-8 sm:py-10">
-        <CardGrid cards={pageCards} lang={lang} />
+        <CardGrid
+          cards={pageCards}
+          lang={lang}
+          returnTo={buildReturnPath("/cards", { ...params, page: String(currentPage) })}
+        />
         <Pager currentPage={currentPage} totalPages={totalPages} searchParams={params} lang={lang} />
       </Container>
     </main>

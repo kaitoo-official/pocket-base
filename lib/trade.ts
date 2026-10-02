@@ -273,11 +273,19 @@ export async function getLatestTradePosts(count: number): Promise<TradePost[]> {
 /**
  * ゲーム内のトレード機能は ♦1〜♦4・★1・★2(色違い含む)のカードのみ対象で、
  * ★3・Crown Rare・プロモカードは交換不可(gamewith.jpのトレード条件記事で確認済み)。
- * データ側の tradable フラグがこの制限をそのまま表しているので、それだけで絞り込む。
+ * データ側の tradable フラグがこの制限をそのまま表しているので、それだけで絞り込む
+ * (この絞り込み自体は仕様通りの正常動作であり、変更しない)。
+ *
+ * 絞り込んだ後、発売日が新しい順に並べ替えている。元データ(collectionData)は
+ * 発売日が古いパックから順に格納されているため、並べ替えずに使うと
+ * CardPicker側の表示件数上限(MAX_RESULTS)に収まるのが常に最も古いパックのカードだけに
+ * なってしまい、検索やフィルターを使わない限り新しいパックのカードを選べなかった。
+ * 同じ発売日のカード同士は、Array.prototype.sortの安定性により元のset/card順のまま維持される。
  */
 export function getTradableCardOptions(lang: Lang = "ja"): CardOption[] {
   return getAllCards()
     .filter((card) => card.tradable)
+    .sort((a, b) => (b.releaseDate ?? "").localeCompare(a.releaseDate ?? ""))
     .map((card) => ({
       id: card.id,
       name: getJapaneseName(card, lang) ?? card.name,

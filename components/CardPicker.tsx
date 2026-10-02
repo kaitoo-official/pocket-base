@@ -16,6 +16,10 @@ const MAX_RESULTS = 40;
 /**
  * カード名で検索・タイプ/レアリティで絞り込みながら、複数枚選べる入力欄。
  * 3,879件を一気に表示するのは重いため、条件に合った上位件数だけ表示する。
+ *
+ * デフォルト(maxPerCard=1)はトレード用の「同じカードは1枚まで」のトグル方式。
+ * maxPerCardに2以上を渡すと(デッキ編成用)、同じカードを複数回タップして
+ * その枚数まで追加できるモードになる(valueの配列内に同じcardIdが複数回入る形で表現する)。
  */
 export function CardPicker({
   label,
@@ -28,6 +32,7 @@ export function CardPicker({
   value,
   onChange,
   max,
+  maxPerCard = 1,
 }: {
   label: string;
   hint?: string;
@@ -40,6 +45,8 @@ export function CardPicker({
   value: string[];
   onChange: (ids: string[]) => void;
   max: number;
+  /** 同じカードを最大何枚まで選べるか(未指定時は1枚まで=トレードの重複禁止トグル方式) */
+  maxPerCard?: number;
 }) {
   const lang = useLang();
   const t = getDict(lang).trade.cardPicker;
@@ -50,7 +57,10 @@ export function CardPicker({
   const containerRef = useRef<HTMLDivElement>(null);
 
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
-  const selectedCards = value.map((id) => cardMap.get(id)).filter((c): c is CardOption => Boolean(c));
+  // indexをvalue配列上の実際の位置のまま保持する(一部のIDがcardMapに無い場合でもズレないように)
+  const selectedCards = value
+    .map((id, index) => ({ card: cardMap.get(id), index }))
+    .filter((entry): entry is { card: CardOption; index: number } => Boolean(entry.card));
   const isFull = value.length >= max;
 
   const results = useMemo(() => {
@@ -77,6 +87,11 @@ export function CardPicker({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  function countOf(id: string): number {
+    return value.filter((v) => v === id).length;
+  }
+
+  /** トレード用(maxPerCard=1)の従来通りの挙動: 選択済みなら外す、未選択なら追加する */
   function toggleCard(id: string) {
     if (value.includes(id)) {
       onChange(value.filter((v) => v !== id));
@@ -84,6 +99,27 @@ export function CardPicker({
     }
     if (value.length >= max) return;
     onChange([...value, id]);
+  }
+
+  /** デッキ用(maxPerCard>=2)の挙動: 1枚ずつ追加していく。上限に達したら何もしない */
+  function addOneCopy(id: string) {
+    if (value.length >= max) return;
+    if (countOf(id) >= maxPerCard) return;
+    onChange([...value, id]);
+  }
+
+  /** タップ時の挙動の切り替え。トレード(1枚まで)は従来通りトグル、デッキ(2枚まで等)は加算のみ */
+  function handleResultClick(id: string) {
+    if (maxPerCard <= 1) {
+      toggleCard(id);
+    } else {
+      addOneCopy(id);
+    }
+  }
+
+  /** 選択済み一覧からの削除。同じカードが複数枚ある場合もその1枚(指定indexの1件)だけを外す */
+  function removeAt(index: number) {
+    onChange(value.filter((_, i) => i !== index));
   }
 
   return (
@@ -131,15 +167,15 @@ export function CardPicker({
         // 選択済みカードは実物に近い縦長サムネイルで見せ、追加枠は空いている分だけ
         // グリッドの続きに現れる(枚数が少ない時に2行分を無理に埋めたりはしない)。
         <div className="grid grid-cols-5 gap-2 rounded-xl border border-line bg-surface p-2">
-          {selectedCards.map((card) => (
+          {selectedCards.map(({ card, index }) => (
             <div
-              key={card.id}
+              key={`${card.id}-${index}`}
               className="group relative aspect-[245/342] overflow-hidden rounded-lg border border-line bg-background"
             >
               <Image src={card.image} alt={card.name} fill sizes="120px" className="object-contain" />
               <button
                 type="button"
-                onClick={() => toggleCard(card.id)}
+                onClick={() => removeAt(index)}
                 aria-label={t.removeCard(card.name)}
                 className="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-red-500"
               >
@@ -222,20 +258,27 @@ export function CardPicker({
               <p className="px-3 py-3 text-sm text-muted">{t.noResults}</p>
             )}
             {results.map((card) => {
-              const isSelected = value.includes(card.id);
-              const isDisabled = !isSelected && isFull;
+              const count = countOf(card.id);
+              const isSelected = count > 0;
+              const isDisabled =
+                maxPerCard <= 1 ? !isSelected && isFull : count >= maxPerCard || isFull;
               return (
                 <button
                   key={card.id}
                   type="button"
                   disabled={isDisabled}
-                  onClick={() => toggleCard(card.id)}
+                  onClick={() => handleResultClick(card.id)}
                   className={`flex w-full items-center gap-2 px-3 py-2 text-left transition-colors ${
                     isSelected ? "bg-accent/10" : "hover:bg-surface-hover"
                   } ${isDisabled ? "cursor-not-allowed opacity-40" : ""}`}
                 >
                   <CardThumb card={card} />
                   <span className="truncate text-sm text-foreground">{card.name}</span>
+                  {maxPerCard > 1 && count > 0 && (
+                    <span className="ml-auto shrink-0 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                      ×{count}
+                    </span>
+                  )}
                 </button>
               );
             })}

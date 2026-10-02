@@ -284,6 +284,7 @@ export interface Dict {
     empty: string;
     newDeck: string;
     deckNamePlaceholder: string;
+    nameRequired: string;
     cardsCount: (n: string) => string;
     save: string;
     cancel: string;
@@ -672,6 +673,7 @@ const ja: Dict = {
     empty: "まだ保存したデッキがありません。",
     newDeck: "デッキを作成",
     deckNamePlaceholder: "デッキ名を入力",
+    nameRequired: "デッキ名を入力すると保存できます",
     cardsCount: (n) => `${n}枚`,
     save: "保存",
     cancel: "キャンセル",
@@ -1064,6 +1066,7 @@ const en: Dict = {
     empty: "You haven't saved any decks yet.",
     newDeck: "Create Deck",
     deckNamePlaceholder: "Enter a deck name",
+    nameRequired: "Enter a deck name to enable saving",
     cardsCount: (n) => `${n} cards`,
     save: "Save",
     cancel: "Cancel",

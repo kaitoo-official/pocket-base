@@ -24,11 +24,14 @@ import { CollectionQuantityControl } from "@/components/CollectionQuantityContro
 import { BackLink } from "@/components/BackLink";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
+import { sanitizeReturnPath } from "@/lib/returnPath";
 
 export default async function CardDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { id } = await params;
   const card = getCardById(id);
@@ -39,6 +42,10 @@ export default async function CardDetailPage({
 
   const lang = await getLang();
   const t = getDict(lang).cardDetail;
+  const query = await searchParams;
+  // 一覧・パック詳細から来た場合はその呼び出し元(検索条件・ページ番号込み)に戻る。
+  // 直接URLを開いた場合など文脈が無い/不正な値の場合は従来通り/cardsに戻す。
+  const backHref = sanitizeReturnPath(query.from, "/cards");
 
   const displayName = getJapaneseName(card, lang) ?? card.name;
   const hasJapaneseName = displayName !== card.name;
@@ -48,7 +55,7 @@ export default async function CardDetailPage({
 
   return (
     <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-      <BackLink href="/cards">{t.backToList}</BackLink>
+      <BackLink href={backHref}>{t.backToList}</BackLink>
 
       <div className="mt-4 grid gap-8 sm:grid-cols-2">
         <div className="relative mx-auto w-full min-w-0 max-w-sm">
