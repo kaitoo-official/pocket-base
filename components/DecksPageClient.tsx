@@ -2,20 +2,32 @@
 
 import { useMemo, useState } from "react";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
-import { CardPicker } from "@/components/CardPicker";
+import { DeckCardBrowser } from "@/components/DeckCardBrowser";
+import { DeckCardBrowserTile } from "@/components/DeckCardBrowserTile";
+import { DeckPreviewModal } from "@/components/DeckPreviewModal";
 import { AccountShell } from "@/components/AccountShell";
 import { TypeIcon } from "@/components/TypeIcon";
 import { useDecks, type Deck } from "@/lib/decks";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useCollection } from "@/lib/collection";
-import { validateDeck, isDeckValid, DECK_ENERGY_TYPES, type DeckValidationFlags } from "@/lib/deckValidation";
+import {
+  validateDeck,
+  isDeckValid,
+  getDeckOwnershipInfo,
+  addCardToDeck,
+  removeCardFromDeck,
+  countCardInDeck,
+  DECK_ENERGY_TYPES,
+  type DeckValidationFlags,
+} from "@/lib/deckValidation";
 import { getTypeLabel } from "@/lib/typeLabels";
 import { getDict } from "@/lib/i18n/dict";
-import type { CardOption } from "@/lib/trade";
+import type { DeckBrowserCard } from "@/lib/deckBrowserCards";
 import type { Option } from "@/lib/filterOptions";
 import type { Lang } from "@/lib/i18n/lang";
 
 const MAX_DECK_CARDS = 20;
+const MAX_PER_CARD = 2;
 
 type Mode = { type: "list" } | { type: "create" } | { type: "edit"; deck: Deck };
 
@@ -35,7 +47,6 @@ function ValidationWarningModal({
   const issues = [
     !flags.exactSize && t.issueExactSize,
     !flags.hasBasicPokemon && t.issueBasicPokemon,
-    !flags.ownsAllCards && t.issueOwnedOnly,
     !flags.hasEnergySet && t.issueEnergySet,
   ].filter((issue): issue is string => Boolean(issue));
 
@@ -116,19 +127,93 @@ function EnergyTypeSelector({
   );
 }
 
+/** 現在デッキに入っているカードを、種類ごとに(枚数バッジ付きで)表示するコンパクトなグリッド */
+function SelectedDeckCards({
+  cardIds,
+  cardMap,
+  lang,
+  ownedQuantities,
+  onChange,
+  onOpenBrowser,
+}: {
+  cardIds: string[];
+  cardMap: Map<string, DeckBrowserCard>;
+  lang: Lang;
+  ownedQuantities: Record<string, number> | null;
+  onChange: (ids: string[]) => void;
+  onOpenBrowser: () => void;
+}) {
+  const t = getDict(lang).decks.browser;
+  const uniqueIds = useMemo(() => [...new Set(cardIds)], [cardIds]);
+
+  if (uniqueIds.length === 0) {
+    return (
+      <button
+        type="button"
+        onClick={onOpenBrowser}
+        className="flex w-full flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-line bg-surface px-4 py-10 text-muted transition-colors duration-150 hover:border-accent/40 hover:bg-surface-hover"
+      >
+        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-strong text-white shadow-md">
+          <Plus className="h-6 w-6" />
+        </span>
+        <span className="text-sm font-semibold text-foreground">{t.openButton}</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-4 gap-2 rounded-xl border border-line bg-surface p-2 sm:grid-cols-6">
+      {uniqueIds.map((id) => {
+        const card = cardMap.get(id);
+        if (!card) return null;
+        return (
+          <DeckCardBrowserTile
+            key={id}
+            card={card}
+            lang={lang}
+            count={countCardInDeck(cardIds, id)}
+            maxPerCard={MAX_PER_CARD}
+            ownedQuantity={ownedQuantities ? (ownedQuantities[id] ?? 0) : null}
+            onAdd={() => onChange(addCardToDeck(cardIds, id, MAX_DECK_CARDS, MAX_PER_CARD))}
+            onRemove={() => onChange(removeCardFromDeck(cardIds, id))}
+          />
+        );
+      })}
+      {cardIds.length < MAX_DECK_CARDS && (
+        <button
+          type="button"
+          onClick={onOpenBrowser}
+          aria-label={t.openButton}
+          className="flex aspect-[245/342] items-center justify-center rounded-lg border-2 border-dashed border-line text-muted transition-colors duration-150 hover:border-accent/40 hover:bg-surface-hover"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-accent to-accent-strong text-white">
+            <Plus className="h-4 w-4" />
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
 function DeckForm({
   cards,
   typeOptions,
   rarityOptions,
+  stageOptions,
+  seriesOptions,
+  packOptionsBySeries,
   lang,
   ownedQuantities,
   initial,
   onCancel,
   onSave,
 }: {
-  cards: CardOption[];
+  cards: DeckBrowserCard[];
   typeOptions: Option[];
   rarityOptions: Option[];
+  stageOptions: Option[];
+  seriesOptions: Option[];
+  packOptionsBySeries: Record<string, Option[]>;
   lang: Lang;
   ownedQuantities: Record<string, number> | null;
   initial?: Deck;
@@ -141,8 +226,13 @@ function DeckForm({
   const [energyTypes, setEnergyTypes] = useState<string[]>(initial?.energyTypes ?? []);
   const [saving, setSaving] = useState(false);
   const [pendingFlags, setPendingFlags] = useState<DeckValidationFlags | null>(null);
+  const [browserOpen, setBrowserOpen] = useState(false);
 
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
+  const ownershipInfo = useMemo(
+    () => getDeckOwnershipInfo(cardIds, ownedQuantities),
+    [cardIds, ownedQuantities]
+  );
 
   async function doSave() {
     setSaving(true);
@@ -151,7 +241,7 @@ function DeckForm({
   }
 
   function handleSaveClick() {
-    const flags = validateDeck(cardIds, energyTypes, cardMap, ownedQuantities);
+    const flags = validateDeck(cardIds, energyTypes, cardMap);
     if (!isDeckValid(flags)) {
       setPendingFlags(flags);
       return;
@@ -168,18 +258,36 @@ function DeckForm({
         maxLength={50}
         className="w-full rounded-lg border border-line bg-background px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
       />
+
       <div className="mt-4">
-        <CardPicker
-          label={t.cardsCount(String(cardIds.length))}
-          cards={cards}
-          typeOptions={typeOptions}
-          rarityOptions={rarityOptions}
-          value={cardIds}
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-sm font-semibold text-foreground">
+            {t.browser.deckCount(String(cardIds.length), String(MAX_DECK_CARDS))}
+          </p>
+          <button
+            type="button"
+            onClick={() => setBrowserOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-foreground shadow-xs transition-colors hover:border-accent/40 hover:bg-surface-hover"
+          >
+            <Plus className="h-3.5 w-3.5 text-accent" />
+            {t.browser.openButton}
+          </button>
+        </div>
+        <SelectedDeckCards
+          cardIds={cardIds}
+          cardMap={cardMap}
+          lang={lang}
+          ownedQuantities={ownedQuantities}
           onChange={setCardIds}
-          max={MAX_DECK_CARDS}
-          maxPerCard={2}
+          onOpenBrowser={() => setBrowserOpen(true)}
         />
+        {ownershipInfo && ownershipInfo.missingCount > 0 && (
+          <p className="mt-2 text-xs text-muted">
+            {t.browser.missingSummary(String(ownershipInfo.missingCount))}
+          </p>
+        )}
       </div>
+
       <EnergyTypeSelector value={energyTypes} onChange={setEnergyTypes} lang={lang} />
       <div className="mt-4 flex items-center justify-end gap-2">
         {!name.trim() && (
@@ -213,6 +321,22 @@ function DeckForm({
           }}
         />
       )}
+
+      <DeckCardBrowser
+        open={browserOpen}
+        onClose={() => setBrowserOpen(false)}
+        cards={cards}
+        lang={lang}
+        value={cardIds}
+        onChange={setCardIds}
+        max={MAX_DECK_CARDS}
+        maxPerCard={MAX_PER_CARD}
+        typeOptions={typeOptions}
+        rarityOptions={rarityOptions}
+        stageOptions={stageOptions}
+        seriesOptions={seriesOptions}
+        packOptionsBySeries={packOptionsBySeries}
+      />
     </div>
   );
 }
@@ -221,11 +345,17 @@ export function DecksPageClient({
   cards,
   typeOptions,
   rarityOptions,
+  stageOptions,
+  seriesOptions,
+  packOptionsBySeries,
   lang,
 }: {
-  cards: CardOption[];
+  cards: DeckBrowserCard[];
   typeOptions: Option[];
   rarityOptions: Option[];
+  stageOptions: Option[];
+  seriesOptions: Option[];
+  packOptionsBySeries: Record<string, Option[]>;
   lang: Lang;
 }) {
   const t = getDict(lang).decks;
@@ -234,9 +364,10 @@ export function DecksPageClient({
   const { decks, loading, createDeck, updateDeck, deleteDeck, canCreateMore } = useDecks();
   const [mode, setMode] = useState<Mode>({ type: "list" });
   const [limitNotice, setLimitNotice] = useState(false);
+  const [previewDeck, setPreviewDeck] = useState<Deck | null>(null);
 
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
-  // 未ログイン時はマイコレクションが無いため「所持カードのみ」チェックの対象外にする
+  // 未ログイン時はマイコレクションが無いため「所持カードのみ」表示の対象外にする
   const ownedQuantities = isSignedIn ? quantities : null;
 
   return (
@@ -265,7 +396,7 @@ export function DecksPageClient({
           ) : (
             <div className="mt-4 space-y-3">
               {decks.map((deck) => {
-                const flags = validateDeck(deck.cards, deck.energyTypes, cardMap, ownedQuantities);
+                const flags = validateDeck(deck.cards, deck.energyTypes, cardMap);
                 const valid = isDeckValid(flags);
                 return (
                   <div
@@ -274,7 +405,13 @@ export function DecksPageClient({
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="truncate font-semibold text-foreground">{deck.deckName}</p>
+                        <button
+                          type="button"
+                          onClick={() => setPreviewDeck(deck)}
+                          className="cursor-pointer truncate font-semibold text-foreground underline decoration-transparent decoration-2 underline-offset-2 transition-colors hover:text-accent hover:decoration-accent"
+                        >
+                          {deck.deckName}
+                        </button>
                         {!valid && (
                           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">
                             <AlertTriangle className="h-3 w-3" />
@@ -307,6 +444,18 @@ export function DecksPageClient({
               })}
             </div>
           )}
+
+          <DeckPreviewModal
+            open={previewDeck !== null}
+            deck={previewDeck}
+            cardMap={cardMap}
+            lang={lang}
+            onClose={() => setPreviewDeck(null)}
+            onEdit={() => {
+              if (previewDeck) setMode({ type: "edit", deck: previewDeck });
+              setPreviewDeck(null);
+            }}
+          />
         </>
       )}
 
@@ -316,6 +465,9 @@ export function DecksPageClient({
             cards={cards}
             typeOptions={typeOptions}
             rarityOptions={rarityOptions}
+            stageOptions={stageOptions}
+            seriesOptions={seriesOptions}
+            packOptionsBySeries={packOptionsBySeries}
             lang={lang}
             ownedQuantities={ownedQuantities}
             onCancel={() => setMode({ type: "list" })}
@@ -337,6 +489,9 @@ export function DecksPageClient({
             cards={cards}
             typeOptions={typeOptions}
             rarityOptions={rarityOptions}
+            stageOptions={stageOptions}
+            seriesOptions={seriesOptions}
+            packOptionsBySeries={packOptionsBySeries}
             lang={lang}
             ownedQuantities={ownedQuantities}
             initial={mode.deck}

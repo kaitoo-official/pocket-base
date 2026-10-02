@@ -45,7 +45,8 @@ export function getDefaultDirection(criterion: SortCriterion): SortDirection {
   return SORT_OPTIONS.find((opt) => opt.value === criterion)?.defaultDirection ?? "asc";
 }
 
-function getExpansionOrderMap(): Map<string, number> {
+/** シリーズ(setCode)→発売順インデックスの対応表。番号順ソートで使う(deckBrowserCards.tsからも再利用) */
+export function getExpansionOrderMap(): Map<string, number> {
   const map = new Map<string, number>();
   getAllExpansions().forEach((exp, index) => map.set(exp.id, index));
   return map;
