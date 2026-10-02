@@ -6,6 +6,7 @@ import { Pencil, Trash2, RotateCcw, CheckCircle2 } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
 import { CardPicker } from "@/components/CardPicker";
+import { BlockedUsersSection } from "@/components/BlockedUsersSection";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import {
   getMyTradePosts,
@@ -16,6 +17,7 @@ import {
   type CardOption,
   type TradePost,
 } from "@/lib/trade";
+import { containsBannedContent } from "@/lib/contentFilter";
 import { getDict } from "@/lib/i18n/dict";
 import type { Option } from "@/lib/filterOptions";
 import type { Lang } from "@/lib/i18n/lang";
@@ -38,11 +40,13 @@ function EditForm({
   onSaved: (updated: TradePost) => void;
 }) {
   const t = getDict(lang).trade.composer;
+  const safetyT = getDict(lang).safety;
   const [friendId, setFriendId] = useState(post.friendId);
   const [offerCardIds, setOfferCardIds] = useState(post.offerCardIds);
   const [wantCardIds, setWantCardIds] = useState(post.wantCardIds);
   const [memo, setMemo] = useState(post.memo);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="mt-3 space-y-4 rounded-xl border border-line bg-background p-4">
@@ -78,6 +82,8 @@ function EditForm({
         onChange={(event) => setFriendId(event.target.value.replace(/\D/g, "").slice(0, 16))}
         className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-foreground focus:border-accent focus:outline-none"
       />
+      {error && <p className="text-sm text-red-600">{error}</p>}
+
       <div className="flex justify-end gap-2">
         <button
           type="button"
@@ -90,6 +96,11 @@ function EditForm({
           type="button"
           disabled={saving}
           onClick={async () => {
+            setError(null);
+            if (containsBannedContent(memo)) {
+              setError(safetyT.filterRejected);
+              return;
+            }
             setSaving(true);
             await updateTradePost(post.id, { friendId, offerCardIds, wantCardIds, memo, closed: post.closed });
             onSaved({ ...post, friendId, offerCardIds, wantCardIds, memo });
@@ -157,6 +168,8 @@ function MyTradesContent({
   return (
     <AccountShell>
       <h1 className="text-xl font-bold text-foreground">{t.title}</h1>
+
+      <BlockedUsersSection lang={lang} />
 
       {posts !== null && posts.length === 0 && <p className="mt-8 text-sm text-muted">{t.empty}</p>}
 

@@ -5,8 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeftRight, Check, Copy, MessageCircle, Send, Star, UserRound, type LucideIcon } from "lucide-react";
 import { TradeCommentDrawer } from "@/components/TradeCommentDrawer";
+import { UserSafetyMenu } from "@/components/UserSafetyMenu";
 import { formatTradeDate, MAX_CARDS_PER_SIDE, type CardOption, type TradePost } from "@/lib/trade";
 import { isPostUnread, markPostAsSeen } from "@/lib/tradeNotifications";
+import { useAuth } from "@/lib/auth/AuthProvider";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -28,6 +30,8 @@ export function TradePostCard({
 }) {
   const lang = useLang();
   const t = getDict(lang).trade.postCard;
+  const { user } = useAuth();
+  const isOwn = !!user && !!post.userId && user.uid === post.userId;
   const [copied, setCopied] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
   const unread = useSyncExternalStore(
@@ -53,7 +57,7 @@ export function TradePostCard({
 
   return (
     <div className={`rounded-xl border border-line bg-surface p-4 shadow-xs sm:p-5 ${post.closed ? "opacity-60" : ""}`}>
-      {(post.nickname || post.closed) && (
+      {(post.nickname || post.closed || !isOwn) && (
         <div className="mb-3 flex items-center justify-between gap-2">
           {post.nickname ? (
             <div className="flex items-center gap-1.5">
@@ -63,11 +67,22 @@ export function TradePostCard({
           ) : (
             <span />
           )}
-          {post.closed && (
-            <span className="rounded-full bg-line px-2 py-0.5 text-[11px] font-semibold text-muted">
-              {t.closed}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {post.closed && (
+              <span className="rounded-full bg-line px-2 py-0.5 text-[11px] font-semibold text-muted">
+                {t.closed}
+              </span>
+            )}
+            {!isOwn && (
+              <UserSafetyMenu
+                targetType="tradePost"
+                targetId={post.id}
+                postId={post.id}
+                targetAuthorUid={post.userId}
+                targetNickname={post.nickname}
+              />
+            )}
+          </div>
         </div>
       )}
       <div className="flex items-start gap-3 sm:gap-5">

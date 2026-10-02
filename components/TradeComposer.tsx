@@ -15,6 +15,7 @@ import {
 import { CardPicker } from "@/components/CardPicker";
 import { TradeShareImageModal } from "@/components/TradeShareImageModal";
 import { createTradePost, MAX_CARDS_PER_SIDE, type CardOption } from "@/lib/trade";
+import { containsBannedContent } from "@/lib/contentFilter";
 import type { Option } from "@/lib/filterOptions";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { getRandomTrainerName, generateFallbackNickname } from "@/lib/trainerNames";
@@ -47,6 +48,7 @@ export function TradeComposer({
   const lang = useLang();
   const t = getDict(lang).trade.composer;
   const shareT = getDict(lang).trade.shareImage;
+  const safetyT = getDict(lang).safety;
   // メモ欄のクリックで挿入できる定型文。自由記述と組み合わせて使える
   // (トレードはゲーム仕様上そもそも同レアリティ同士でしか成立しないため、「同レア希望」は候補に含めない)
   const MEMO_PRESETS = t.memoPresets;
@@ -93,6 +95,11 @@ export function TradeComposer({
 
     const trimmedMemo = memo.trim().slice(0, MEMO_MAX);
     const finalNickname = nickname.trim().slice(0, NICKNAME_MAX) || generateFallbackNickname(lang);
+
+    if (containsBannedContent(trimmedMemo) || containsBannedContent(finalNickname)) {
+      setError(safetyT.filterRejected);
+      return;
+    }
 
     setSubmitting(true);
     try {

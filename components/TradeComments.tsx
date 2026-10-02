@@ -13,6 +13,9 @@ import { getRandomTrainerName } from "@/lib/trainerNames";
 import { markPostAsCommented, markPostAsSeen } from "@/lib/tradeNotifications";
 import { ensureAuthUid } from "@/lib/authUid";
 import { useAuth } from "@/lib/auth/AuthProvider";
+import { useBlockedUserIds } from "@/lib/blockedUsers";
+import { containsBannedContent } from "@/lib/contentFilter";
+import { UserSafetyMenu } from "@/components/UserSafetyMenu";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -23,7 +26,9 @@ const TEXT_MAX = 200;
 export function TradeComments({ postId }: { postId: string }) {
   const lang = useLang();
   const t = getDict(lang).trade.comments;
+  const safetyT = getDict(lang).safety;
   const { isSignedIn, signIn } = useAuth();
+  const blockedUserIds = useBlockedUserIds();
   // コメント欄のクリックで挿入できる定型文。「○○」の部分はカード名などに書き換えて使う想定
   const COMMENT_PRESETS = t.presets;
   const [comments, setComments] = useState<TradeComment[]>([]);
@@ -75,10 +80,16 @@ export function TradeComments({ postId }: { postId: string }) {
       return;
     }
 
+    const trimmedNickname = nickname.trim().slice(0, NICKNAME_MAX);
+    if (containsBannedContent(trimmedText) || containsBannedContent(trimmedNickname)) {
+      setError(safetyT.filterRejected);
+      return;
+    }
+
     setSubmitting(true);
     try {
       await createTradeComment(postId, {
-        nickname: nickname.trim().slice(0, NICKNAME_MAX),
+        nickname: trimmedNickname,
         text: trimmedText.slice(0, TEXT_MAX),
       });
       // 自分のコメントで通知バッジが立たないよう、既読扱いにしておく
@@ -102,16 +113,18 @@ export function TradeComments({ postId }: { postId: string }) {
     }
   }
 
+  const visibleComments = comments.filter((comment) => !blockedUserIds.has(comment.authorUid));
+
   return (
     <div>
       {loading && <p className="text-sm text-muted">{t.loading}</p>}
-      {!loading && comments.length === 0 && (
+      {!loading && visibleComments.length === 0 && (
         <p className="text-sm text-muted">{t.empty}</p>
       )}
 
-      {comments.length > 0 && (
+      {visibleComments.length > 0 && (
         <div className="space-y-2">
-          {comments.map((comment) => {
+          {visibleComments.map((comment) => {
             const isMine = !!myUid && comment.authorUid === myUid;
             return (
               <div key={comment.id} className="relative rounded-lg border border-line bg-background p-3">
@@ -124,7 +137,7 @@ export function TradeComments({ postId }: { postId: string }) {
                   </div>
                   <div className="flex shrink-0 items-center gap-1">
                     <span className="text-[11px] text-muted">{formatTradeDate(comment.createdAt, lang)}</span>
-                    {isMine && (
+                    {isMine ? (
                       <CommentMenu
                         isOpen={openMenuId === comment.id}
                         onToggle={() =>
@@ -132,6 +145,14 @@ export function TradeComments({ postId }: { postId: string }) {
                         }
                         onClose={() => setOpenMenuId(null)}
                         onDelete={() => handleDelete(comment.id)}
+                      />
+                    ) : (
+                      <UserSafetyMenu
+                        targetType="comment"
+                        targetId={comment.id}
+                        postId={postId}
+                        targetAuthorUid={comment.authorUid || null}
+                        targetNickname={comment.nickname || null}
                       />
                     )}
                   </div>
