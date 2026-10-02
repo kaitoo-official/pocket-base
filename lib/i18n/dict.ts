@@ -316,6 +316,13 @@ export interface Dict {
       moreResults: (shown: string, total: string) => string;
       done: string;
     };
+    preview: {
+      title: string;
+      editDeck: string;
+      close: string;
+      cardsInDeck: string;
+      energyTypes: string;
+    };
   };
   mypage: {
     title: string;
@@ -721,6 +728,13 @@ const ja: Dict = {
       noResults: "該当するカードが見つかりませんでした",
       moreResults: (shown, total) => `${shown}件を表示中(全${total}件)。絞り込むとさらに見つかりやすくなります`,
       done: "完了",
+    },
+    preview: {
+      title: "デッキ内容",
+      editDeck: "編集",
+      close: "閉じる",
+      cardsInDeck: "収録カード",
+      energyTypes: "エネルギータイプ",
     },
   },
   mypage: {
@@ -1131,6 +1145,13 @@ const en: Dict = {
       noResults: "No matching cards found",
       moreResults: (shown, total) => `Showing ${shown} of ${total}. Narrow your search to find more easily`,
       done: "Done",
+    },
+    preview: {
+      title: "Deck Contents",
+      editDeck: "Edit",
+      close: "Close",
+      cardsInDeck: "Cards in Deck",
+      energyTypes: "Energy Types",
     },
   },
   mypage: {

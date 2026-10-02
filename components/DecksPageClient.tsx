@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
 import { DeckCardBrowser } from "@/components/DeckCardBrowser";
 import { DeckCardBrowserTile } from "@/components/DeckCardBrowserTile";
+import { DeckPreviewModal } from "@/components/DeckPreviewModal";
 import { AccountShell } from "@/components/AccountShell";
 import { TypeIcon } from "@/components/TypeIcon";
 import { useDecks, type Deck } from "@/lib/decks";
@@ -363,6 +364,7 @@ export function DecksPageClient({
   const { decks, loading, createDeck, updateDeck, deleteDeck, canCreateMore } = useDecks();
   const [mode, setMode] = useState<Mode>({ type: "list" });
   const [limitNotice, setLimitNotice] = useState(false);
+  const [previewDeck, setPreviewDeck] = useState<Deck | null>(null);
 
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
   // 未ログイン時はマイコレクションが無いため「所持カードのみ」表示の対象外にする
@@ -403,7 +405,13 @@ export function DecksPageClient({
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className="truncate font-semibold text-foreground">{deck.deckName}</p>
+                        <button
+                          type="button"
+                          onClick={() => setPreviewDeck(deck)}
+                          className="cursor-pointer truncate font-semibold text-foreground underline decoration-transparent decoration-2 underline-offset-2 transition-colors hover:text-accent hover:decoration-accent"
+                        >
+                          {deck.deckName}
+                        </button>
                         {!valid && (
                           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">
                             <AlertTriangle className="h-3 w-3" />
@@ -436,6 +444,18 @@ export function DecksPageClient({
               })}
             </div>
           )}
+
+          <DeckPreviewModal
+            open={previewDeck !== null}
+            deck={previewDeck}
+            cardMap={cardMap}
+            lang={lang}
+            onClose={() => setPreviewDeck(null)}
+            onEdit={() => {
+              if (previewDeck) setMode({ type: "edit", deck: previewDeck });
+              setPreviewDeck(null);
+            }}
+          />
         </>
       )}
 
