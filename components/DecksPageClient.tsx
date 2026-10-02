@@ -177,10 +177,14 @@ function DeckForm({
           value={cardIds}
           onChange={setCardIds}
           max={MAX_DECK_CARDS}
+          maxPerCard={2}
         />
       </div>
       <EnergyTypeSelector value={energyTypes} onChange={setEnergyTypes} lang={lang} />
-      <div className="mt-4 flex justify-end gap-2">
+      <div className="mt-4 flex items-center justify-end gap-2">
+        {!name.trim() && (
+          <p className="mr-auto text-xs font-medium text-red-600">{t.nameRequired}</p>
+        )}
         <button
           type="button"
           onClick={onCancel}

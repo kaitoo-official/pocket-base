@@ -17,17 +17,25 @@ export function CardTile({
   card,
   lang = "ja",
   caption,
+  returnTo,
 }: {
   card: Card;
   lang?: Lang;
   /** 「注目カード」など、運営コメントを添えたい時だけ渡す */
   caption?: string;
+  /**
+   * カード詳細ページの「戻る」リンク行き先(呼び出し元の現在のURL)。
+   * 一覧の検索・フィルター条件やパック詳細のページ番号を維持して戻れるようにするために渡す。
+   * 省略時はカード詳細側のデフォルト(/cards)に戻る、従来通りの挙動になる。
+   */
+  returnTo?: string;
 }) {
   const displayName = getJapaneseName(card, lang) ?? card.name;
+  const href = returnTo ? `/cards/${card.id}?from=${encodeURIComponent(returnTo)}` : `/cards/${card.id}`;
 
   return (
     <div className="group relative flex flex-col rounded-xl border border-line bg-surface p-2 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-md">
-      <Link href={`/cards/${card.id}`} className="flex flex-col">
+      <Link href={href} className="flex flex-col">
         <div className="relative aspect-[245/342] w-full overflow-hidden rounded-lg bg-background">
           <ImageWithFallback
             src={getCardImageUrl(card)}

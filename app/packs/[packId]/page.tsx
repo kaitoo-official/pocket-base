@@ -9,6 +9,7 @@ import { BackLink } from "@/components/BackLink";
 import { Container } from "@/components/Container";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
+import { buildReturnPath } from "@/lib/returnPath";
 
 const PAGE_SIZE = 60;
 
@@ -63,7 +64,11 @@ export default async function PackDetailPage({
       </div>
 
       <div className="mt-6">
-        <CardGrid cards={pageCards} lang={lang} />
+        <CardGrid
+          cards={pageCards}
+          lang={lang}
+          returnTo={buildReturnPath(`/packs/${packId}`, { page: String(currentPage) })}
+        />
       </div>
 
       <Pager

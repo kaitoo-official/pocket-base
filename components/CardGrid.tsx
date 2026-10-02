@@ -7,7 +7,16 @@ import type { Lang } from "@/lib/i18n/lang";
 /**
  * カードを並べるグリッド。スマホは2列、PCは最大6列まで広がる。
  */
-export function CardGrid({ cards, lang = "ja" }: { cards: Card[]; lang?: Lang }) {
+export function CardGrid({
+  cards,
+  lang = "ja",
+  returnTo,
+}: {
+  cards: Card[];
+  lang?: Lang;
+  /** カード詳細の「戻る」行き先。各CardTileにそのまま渡す */
+  returnTo?: string;
+}) {
   if (cards.length === 0) {
     return (
       <EmptyState
@@ -25,7 +34,7 @@ export function CardGrid({ cards, lang = "ja" }: { cards: Card[]; lang?: Lang })
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {cards.map((card) => (
-        <CardTile key={card.id} card={card} lang={lang} />
+        <CardTile key={card.id} card={card} lang={lang} returnTo={returnTo} />
       ))}
     </div>
   );
