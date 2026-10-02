@@ -141,8 +141,10 @@ export function DeckCardBrowser({
         aria-label={t.title}
         className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-surface shadow-xl sm:h-[85vh] sm:max-w-5xl sm:rounded-2xl sm:border sm:border-line"
       >
-        {/* ヘッダー: タイトル・現在のデッキ枚数・閉じるボタン */}
-        <div className="flex shrink-0 items-center justify-between border-b border-line px-4 py-3">
+        {/* ヘッダー: タイトル・現在のデッキ枚数・閉じるボタン。
+            フルスクリーン表示(h-[100dvh])のため、iOSのノッチ/ステータスバーに重ならないよう
+            safe-area-inset-topぶんの余白を足す(SiteHeader.tsxと同じ方式) */}
+        <div className="flex shrink-0 items-center justify-between border-b border-line px-4 py-3 pt-[calc(env(safe-area-inset-top)+0.75rem)]">
           <p className="text-sm font-semibold text-foreground">{t.title}</p>
           <div className="flex items-center gap-3">
             <span className="rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">

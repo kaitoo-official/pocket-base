@@ -55,8 +55,10 @@ export function DeckPreviewModal({
         aria-label={tp.title}
         className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-surface shadow-xl sm:h-[85vh] sm:max-w-4xl sm:rounded-2xl sm:border sm:border-line"
       >
-        {/* ヘッダー: デッキ名・枚数・閉じるボタン */}
-        <div className="flex shrink-0 items-center justify-between border-b border-line px-4 py-3">
+        {/* ヘッダー: デッキ名・枚数・閉じるボタン。
+            フルスクリーン表示(h-[100dvh])のため、iOSのノッチ/ステータスバーに重ならないよう
+            safe-area-inset-topぶんの余白を足す(SiteHeader.tsxと同じ方式) */}
+        <div className="flex shrink-0 items-center justify-between border-b border-line px-4 py-3 pt-[calc(env(safe-area-inset-top)+0.75rem)]">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-foreground">{deck.deckName}</p>
             <p className="text-xs text-muted">
