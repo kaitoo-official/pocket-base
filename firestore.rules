@@ -9,6 +9,13 @@ service cloud.firestore {
           || request.auth.token.firebase.sign_in_provider == 'apple.com');
     }
 
+    // URLスパム・外部リンク誘導の最終防波堤。クライアント側のlib/contentFilter.tsにある
+    // より広い禁止語チェックはここには展開していない(保守性の観点。詳細はdocs/operations/MODERATION.md)。
+    // ここではクライアントを経由しない直接書き込みでも弾けるよう、分かりやすいURLパターンのみ検証する。
+    function hasNoUrl(text) {
+      return !text.matches('.*(https?://|www\\.).*');
+    }
+
     // Google/Appleでログインしたユーザーのプロフィール。
     match /users/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
@@ -96,6 +103,50 @@ service cloud.firestore {
           && request.resource.data.updatedAt == request.time;
         allow delete: if isVerifiedSignIn() && request.auth.uid == userId;
       }
+
+      // ブロックしたユーザーの一覧。ログイン必須、自分のサブコレクションのみ読み書き可能。
+      // 相手(ドキュメントIDがそのUID)を自分自身にはできない。
+      match /blockedUsers/{blockedUid} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow create: if isVerifiedSignIn()
+          && request.auth.uid == userId
+          && blockedUid != userId
+          && request.resource.data.keys().hasOnly(['blockedUid', 'blockedNickname', 'createdAt'])
+          && request.resource.data.blockedUid == blockedUid
+          && (request.resource.data.blockedNickname == null || request.resource.data.blockedNickname is string)
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+        allow delete: if isVerifiedSignIn() && request.auth.uid == userId;
+      }
+    }
+
+    // 投稿・コメントの通報。Apple App Store Guideline 1.2対応。
+    // 通報した本人だけが自分の通報内容を読める(他ユーザーの通報内容は閲覧不可)。
+    // 運営(自分)はFirebase Console側の管理者権限で確認する(詳細はdocs/operations/MODERATION.md)。
+    match /reports/{reportId} {
+      allow read: if request.auth != null && resource.data.reporterUid == request.auth.uid;
+      // reportIdを `${reporterUid}_${targetType}_${targetId}` 形式に固定することで、
+      // 同一ユーザーが同じ対象を2回目以降通報しようとした場合は"update"扱いになり、
+      // allow update: if false により拒否される(=二重通報の防止)。
+      allow create: if isVerifiedSignIn()
+        && reportId == request.auth.uid + '_' + request.resource.data.targetType + '_' + request.resource.data.targetId
+        && request.resource.data.keys().hasOnly(
+            ['reporterUid', 'targetType', 'targetId', 'postId', 'targetAuthorUid', 'reason', 'details', 'createdAt', 'status']
+          )
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.targetType in ['tradePost', 'comment']
+        && request.resource.data.targetId is string
+        && request.resource.data.targetId.size() > 0
+        && request.resource.data.postId is string
+        && request.resource.data.postId.size() > 0
+        && (request.resource.data.targetAuthorUid == null || request.resource.data.targetAuthorUid is string)
+        && request.resource.data.reason in ['inappropriate', 'harassment', 'spam', 'scam', 'personal_info', 'other']
+        && request.resource.data.details is string
+        && request.resource.data.details.size() <= 300
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.status == 'open';
+      allow update: if false;
+      allow delete: if false;
     }
 
     match /tradePosts/{postId} {
@@ -116,6 +167,7 @@ service cloud.firestore {
         && request.resource.data.wantCardIds.size() <= 10
         && request.resource.data.memo is string
         && request.resource.data.memo.size() <= 200
+        && hasNoUrl(request.resource.data.memo)
         && request.resource.data.createdAt == request.time
         && request.resource.data.authorDeviceId is string
         && request.resource.data.authorDeviceId.size() <= 100
@@ -126,6 +178,7 @@ service cloud.firestore {
         && request.resource.data.nickname is string
         && request.resource.data.nickname.size() > 0
         && request.resource.data.nickname.size() <= 20
+        && hasNoUrl(request.resource.data.nickname)
         && request.resource.data.closed == false;
       allow update: if
         // コメント投稿時に件数・最終コメント情報だけを更新できるようにする(他フィールドの改ざんは不可)
@@ -149,6 +202,7 @@ service cloud.firestore {
           && request.resource.data.wantCardIds.size() <= 10
           && request.resource.data.memo is string
           && request.resource.data.memo.size() <= 200
+          && hasNoUrl(request.resource.data.memo)
           && request.resource.data.closed is bool);
       // 投稿者本人のみ削除可能(既存の匿名投稿はuserIdが無いため誰も削除できない)
       allow delete: if isVerifiedSignIn() && request.auth.uid == resource.data.get('userId', null);
@@ -160,9 +214,11 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly(['nickname', 'text', 'createdAt', 'authorDeviceId', 'authorUid'])
           && request.resource.data.nickname is string
           && request.resource.data.nickname.size() <= 20
+          && hasNoUrl(request.resource.data.nickname)
           && request.resource.data.text is string
           && request.resource.data.text.size() > 0
           && request.resource.data.text.size() <= 200
+          && hasNoUrl(request.resource.data.text)
           && request.resource.data.createdAt == request.time
           && request.resource.data.authorDeviceId is string
           && request.resource.data.authorDeviceId.size() <= 100

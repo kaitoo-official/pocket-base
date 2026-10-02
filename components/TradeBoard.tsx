@@ -7,8 +7,10 @@ import { TradePostCard } from "@/components/TradePostCard";
 import { TradePostSearch } from "@/components/TradePostSearch";
 import { TradePostSortSelect, type TradeSortOrder } from "@/components/TradePostSortSelect";
 import { EmptyState } from "@/components/EmptyState";
+import { FeedbackLink } from "@/components/FeedbackLink";
 import { subscribeToTradePosts, type CardOption, type TradePost } from "@/lib/trade";
 import { parseRarityFilterValue, type Option } from "@/lib/filterOptions";
+import { useBlockedUserIds } from "@/lib/blockedUsers";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -23,7 +25,9 @@ export function TradeBoard({
 }) {
   const lang = useLang();
   const t = getDict(lang).trade;
+  const safetyT = getDict(lang).safety;
   const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
+  const blockedUserIds = useBlockedUserIds();
 
   const [posts, setPosts] = useState<TradePost[]>([]);
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -59,6 +63,7 @@ export function TradeBoard({
     }
 
     const filtered = posts.filter((post) => {
+      if (post.userId && blockedUserIds.has(post.userId)) return false;
       const involvedCards = postCards(post);
       if (keyword && !involvedCards.some((card) => card.name.includes(keyword))) return false;
       if (typeFilter && !involvedCards.some((card) => card.type === typeFilter)) return false;
@@ -78,14 +83,19 @@ export function TradeBoard({
       const bTime = b.createdAt?.getTime() ?? 0;
       return sortOrder === "old" ? aTime - bTime : bTime - aTime;
     });
-  }, [posts, query, typeFilter, rarityFilter, sortOrder, cardMap]);
+  }, [posts, query, typeFilter, rarityFilter, sortOrder, cardMap, blockedUserIds]);
 
   return (
     <div>
       <TradeComposer cards={cards} typeOptions={typeOptions} rarityOptions={rarityOptions} />
 
       {/* カードデータベース(app/cards)の検索エリアと同じ、hero-darkのダーク背景に揃えている */}
-      <div className="hero-dark mt-8 rounded-2xl border border-line bg-hero-gradient-dark p-6 sm:p-8">
+      <p className="mt-6 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-muted">
+        <span>{safetyT.contactDescription}</span>
+        <FeedbackLink label={safetyT.contactLinkLabel} />
+      </p>
+
+      <div className="hero-dark mt-4 rounded-2xl border border-line bg-hero-gradient-dark p-6 sm:p-8">
         <h2 className="text-lg font-bold text-foreground">{t.board.postsListTitle}</h2>
         <div className="mt-3">
           <TradePostSearch

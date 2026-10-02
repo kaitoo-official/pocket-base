@@ -356,6 +356,42 @@ export interface Dict {
     skip: string;
     success: string;
   };
+  safety: {
+    menuLabel: string;
+    reportButton: string;
+    reportAlready: string;
+    reportModalTitle: string;
+    reportReasonLabel: string;
+    reportReasons: {
+      inappropriate: string;
+      harassment: string;
+      spam: string;
+      scam: string;
+      personalInfo: string;
+      other: string;
+    };
+    reportDetailsLabel: string;
+    reportDetailsOptional: string;
+    reportDetailsPlaceholder: string;
+    reportCancel: string;
+    reportSubmit: string;
+    reportSubmitting: string;
+    reportSuccessTitle: string;
+    reportSuccessDescription: string;
+    reportError: string;
+    reportSignInDescription: string;
+    reportSignInButton: string;
+    blockButton: string;
+    unblockButton: string;
+    blockError: string;
+    blockedNotice: string;
+    blockedUsersTitle: string;
+    blockedUsersDescription: string;
+    blockedUsersEmpty: string;
+    contactDescription: string;
+    contactLinkLabel: string;
+    filterRejected: string;
+  };
 }
 
 const ja: Dict = {
@@ -761,6 +797,42 @@ const ja: Dict = {
     closed: "募集終了",
     delete: "削除",
     deleteConfirm: "この投稿を削除しますか？",
+  },
+  safety: {
+    menuLabel: "メニュー",
+    reportButton: "通報する",
+    reportAlready: "通報済み",
+    reportModalTitle: "この内容を通報",
+    reportReasonLabel: "通報理由",
+    reportReasons: {
+      inappropriate: "不適切な内容",
+      harassment: "嫌がらせ・暴言",
+      spam: "スパム",
+      scam: "詐欺・不正な取引",
+      personalInfo: "個人情報",
+      other: "その他",
+    },
+    reportDetailsLabel: "詳細",
+    reportDetailsOptional: "(任意)",
+    reportDetailsPlaceholder: "具体的な内容があればご記入ください",
+    reportCancel: "キャンセル",
+    reportSubmit: "通報する",
+    reportSubmitting: "送信中...",
+    reportSuccessTitle: "通報を受け付けました",
+    reportSuccessDescription: "ご報告ありがとうございます。内容を確認いたします。",
+    reportError: "通報の送信に失敗しました。時間をおいて試してください",
+    reportSignInDescription: "通報にはログインが必要です。",
+    reportSignInButton: "ログインして通報する",
+    blockButton: "ユーザーをブロック",
+    unblockButton: "ブロック解除",
+    blockError: "ブロックに失敗しました。時間をおいて試してください",
+    blockedNotice: "このユーザーの投稿を表示しません",
+    blockedUsersTitle: "ブロックしたユーザー",
+    blockedUsersDescription: "ブロックしたユーザーの投稿・コメントは、トレード掲示板で表示されなくなります。",
+    blockedUsersEmpty: "ブロックしたユーザーはいません。",
+    contactDescription: "問題のある投稿・コメントは、それぞれの「通報する」ボタンから報告できます。",
+    contactLinkLabel: "その他のお問い合わせはこちら",
+    filterRejected: "不適切な内容が含まれているため投稿できません",
   },
   migrate: {
     title: "この端末のデータをアカウントに引き継ぎますか？",
@@ -1178,6 +1250,42 @@ const en: Dict = {
     closed: "Closed",
     delete: "Delete",
     deleteConfirm: "Delete this post?",
+  },
+  safety: {
+    menuLabel: "Menu",
+    reportButton: "Report",
+    reportAlready: "Reported",
+    reportModalTitle: "Report this content",
+    reportReasonLabel: "Reason",
+    reportReasons: {
+      inappropriate: "Inappropriate content",
+      harassment: "Harassment or abusive language",
+      spam: "Spam",
+      scam: "Scam or fraudulent trade",
+      personalInfo: "Personal information",
+      other: "Other",
+    },
+    reportDetailsLabel: "Details",
+    reportDetailsOptional: "(optional)",
+    reportDetailsPlaceholder: "Add any details that might help",
+    reportCancel: "Cancel",
+    reportSubmit: "Report",
+    reportSubmitting: "Sending...",
+    reportSuccessTitle: "Report received",
+    reportSuccessDescription: "Thank you for letting us know. We'll review this.",
+    reportError: "Failed to send report. Please try again later",
+    reportSignInDescription: "Sign in to report content.",
+    reportSignInButton: "Sign in to report",
+    blockButton: "Block user",
+    unblockButton: "Unblock",
+    blockError: "Failed to block user. Please try again later",
+    blockedNotice: "You won't see this user's posts",
+    blockedUsersTitle: "Blocked users",
+    blockedUsersDescription: "Posts and comments from blocked users won't appear on the trade board.",
+    blockedUsersEmpty: "You haven't blocked anyone.",
+    contactDescription: "You can report a problematic post or comment using its \"Report\" button.",
+    contactLinkLabel: "Contact us for anything else",
+    filterRejected: "This can't be posted because it contains inappropriate content",
   },
   migrate: {
     title: "Transfer this device's data to your account?",
