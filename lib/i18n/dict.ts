@@ -296,9 +296,26 @@ export interface Dict {
     validationIntro: string;
     issueExactSize: string;
     issueBasicPokemon: string;
-    issueOwnedOnly: string;
     issueEnergySet: string;
     saveAnyway: string;
+    browser: {
+      openButton: string;
+      title: string;
+      searchPlaceholder: string;
+      typeAll: string;
+      rarityAll: string;
+      stageAll: string;
+      seriesAll: string;
+      packAll: string;
+      sortLabel: string;
+      ownedOnly: string;
+      deckCount: (current: string, max: string) => string;
+      ownedBadge: (n: string) => string;
+      missingSummary: (n: string) => string;
+      noResults: string;
+      moreResults: (shown: string, total: string) => string;
+      done: string;
+    };
   };
   mypage: {
     title: string;
@@ -685,9 +702,26 @@ const ja: Dict = {
     validationIntro: "以下の条件を満たしていないためこちらのデッキは使用できない状態です",
     issueExactSize: "デッキ枚数を20枚ちょうどにする",
     issueBasicPokemon: "たねポケモンを1枚以上入れる",
-    issueOwnedOnly: "持っているカードのみで編成する",
     issueEnergySet: "エネルギーを設定している",
     saveAnyway: "OK",
+    browser: {
+      openButton: "カードを選ぶ",
+      title: "カードを選ぶ",
+      searchPlaceholder: "カード名で検索",
+      typeAll: "すべてのタイプ",
+      rarityAll: "すべてのレアリティ",
+      stageAll: "すべてのステージ",
+      seriesAll: "すべてのシリーズ",
+      packAll: "すべてのパック",
+      sortLabel: "並び替え",
+      ownedOnly: "所持カードのみ",
+      deckCount: (current, max) => `${current} / ${max}枚`,
+      ownedBadge: (n) => `所持${n}枚`,
+      missingSummary: (n) => `未所持のカードが${n}枚含まれています`,
+      noResults: "該当するカードが見つかりませんでした",
+      moreResults: (shown, total) => `${shown}件を表示中(全${total}件)。絞り込むとさらに見つかりやすくなります`,
+      done: "完了",
+    },
   },
   mypage: {
     title: "マイページ",
@@ -1078,9 +1112,26 @@ const en: Dict = {
     validationIntro: "This deck can't be used yet because it doesn't meet the following conditions",
     issueExactSize: "Deck must have exactly 20 cards",
     issueBasicPokemon: "Deck must include at least 1 Basic Pokémon",
-    issueOwnedOnly: "Deck must only use cards you own",
     issueEnergySet: "Deck must have energy types set",
     saveAnyway: "OK",
+    browser: {
+      openButton: "Choose Cards",
+      title: "Choose Cards",
+      searchPlaceholder: "Search by card name",
+      typeAll: "All Types",
+      rarityAll: "All Rarities",
+      stageAll: "All Stages",
+      seriesAll: "All Series",
+      packAll: "All Packs",
+      sortLabel: "Sort",
+      ownedOnly: "Owned cards only",
+      deckCount: (current, max) => `${current} / ${max} cards`,
+      ownedBadge: (n) => `Owned ${n}`,
+      missingSummary: (n) => `${n} card(s) you don't own are included`,
+      noResults: "No matching cards found",
+      moreResults: (shown, total) => `Showing ${shown} of ${total}. Narrow your search to find more easily`,
+      done: "Done",
+    },
   },
   mypage: {
     title: "My Page",
