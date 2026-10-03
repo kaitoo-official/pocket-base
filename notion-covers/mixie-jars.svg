@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff8ea"/><stop offset="1" stop-color="#f7efff"/></linearGradient></defs>
+<rect width="1500" height="600" fill="url(#bg)"/>
+<path d="M820 500c140-300 310-320 520-60" fill="none" stroke="#ff5a5f" stroke-width="30" stroke-linecap="round"/><path d="M850 515c130-245 280-260 460-50" fill="none" stroke="#ffd23f" stroke-width="30" stroke-linecap="round"/><path d="M885 528c110-190 240-200 390-40" fill="none" stroke="#3a86ff" stroke-width="30" stroke-linecap="round"/>
+<g transform="translate(865 95)">
+ <g><rect x="0" y="55" width="145" height="240" rx="48" fill="#ef476f"/><rect x="15" y="0" width="115" height="85" rx="26" fill="#d43e62"/><circle cx="48" cy="155" r="12" fill="#1f2530"/><circle cx="97" cy="155" r="12" fill="#1f2530"/><path d="M45 200q28 28 55 0" fill="none" stroke="#1f2530" stroke-width="9" stroke-linecap="round"/></g>
+ <g transform="translate(170 20)"><rect x="0" y="55" width="145" height="240" rx="48" fill="#ffd166"/><rect x="15" y="0" width="115" height="85" rx="26" fill="#e7b94f"/><circle cx="48" cy="155" r="12" fill="#1f2530"/><circle cx="97" cy="155" r="12" fill="#1f2530"/><path d="M45 200q28 28 55 0" fill="none" stroke="#1f2530" stroke-width="9" stroke-linecap="round"/></g>
+ <g transform="translate(340)"><rect x="0" y="55" width="145" height="240" rx="48" fill="#118ab2"/><rect x="15" y="0" width="115" height="85" rx="26" fill="#0f7698"/><circle cx="48" cy="155" r="12" fill="#1f2530"/><circle cx="97" cy="155" r="12" fill="#1f2530"/><path d="M45 200q28 28 55 0" fill="none" stroke="#1f2530" stroke-width="9" stroke-linecap="round"/></g>
+</g>
+<text x="105" y="260" fill="#2d3142" font-family="Arial,sans-serif" font-size="96" font-weight="700">MIXIE JARS</text>
+<text x="110" y="330" fill="#6d6680" font-family="Arial,sans-serif" font-size="29" letter-spacing="5">COLOR FUN FOR LITTLE ONES</text>
+</svg>
