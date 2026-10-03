@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="430" viewBox="0 0 1500 430">
+<defs>
+  <linearGradient id="bg" x1="0" x2="1"><stop stop-color="#080b0f"/><stop offset=".55" stop-color="#0d1117"/><stop offset="1" stop-color="#09120f"/></linearGradient>
+  <linearGradient id="lime" x1="0" x2="1"><stop stop-color="#9DFF00"/><stop offset="1" stop-color="#1DE9B6"/></linearGradient>
+  <filter id="gl"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1500" height="430" rx="28" fill="url(#bg)"/>
+<g opacity=".16" stroke="#9DFF00" stroke-width="1">
+  <path d="M0 85H1500M0 170H1500M0 255H1500M0 340H1500"/>
+  <path d="M250 0V430M500 0V430M750 0V430M1000 0V430M1250 0V430"/>
+</g>
+<rect x="48" y="42" width="280" height="42" rx="21" fill="#102016" stroke="#9DFF00" stroke-width="2"/>
+<circle cx="78" cy="63" r="7" fill="#9DFF00"/><text x="98" y="71" fill="#D8FF9A" font-family="Arial,sans-serif" font-size="19" letter-spacing="3">SYSTEM ONLINE</text>
+<text x="48" y="150" fill="#F4F7F8" font-family="Arial,sans-serif" font-size="60" font-weight="700" letter-spacing="2">KAITOO / OS</text>
+<text x="50" y="194" fill="#87919A" font-family="Arial,sans-serif" font-size="18" letter-spacing="6">COMMAND DASHBOARD · 5 VENTURES</text>
+
+<g transform="translate(48 245)">
+ <rect width="310" height="120" rx="18" fill="#12171c" stroke="#263039"/>
+ <text x="24" y="32" fill="#7D8791" font-family="Arial,sans-serif" font-size="15" letter-spacing="2">VENTURES</text>
+ <text x="24" y="86" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="46" font-weight="700">05</text>
+ <text x="96" y="85" fill="#9DFF00" font-family="Arial,sans-serif" font-size="16">ACTIVE</text>
+</g>
+<g transform="translate(378 245)">
+ <rect width="310" height="120" rx="18" fill="#12171c" stroke="#263039"/>
+ <text x="24" y="32" fill="#7D8791" font-family="Arial,sans-serif" font-size="15" letter-spacing="2">FOCUS TASKS</text>
+ <text x="24" y="86" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="46" font-weight="700">03</text>
+ <text x="96" y="85" fill="#1DE9B6" font-family="Arial,sans-serif" font-size="16">TODAY</text>
+</g>
+<g transform="translate(708 245)">
+ <rect width="310" height="120" rx="18" fill="#12171c" stroke="#263039"/>
+ <text x="24" y="32" fill="#7D8791" font-family="Arial,sans-serif" font-size="15" letter-spacing="2">NEXT REVIEW</text>
+ <text x="24" y="86" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="46" font-weight="700">10/05</text>
+ <text x="183" y="85" fill="#1DE9B6" font-family="Arial,sans-serif" font-size="16">GADGEKUMA</text>
+</g>
+<g transform="translate(1038 245)">
+ <rect width="414" height="120" rx="18" fill="#101c17" stroke="#9DFF00" stroke-opacity=".4"/>
+ <text x="24" y="32" fill="#8AA69A" font-family="Arial,sans-serif" font-size="15" letter-spacing="2">MODE</text>
+ <text x="24" y="75" fill="#FFFFFF" font-family="Arial,sans-serif" font-size="26" font-weight="700">BUILD → SHIP</text>
+ <rect x="24" y="91" width="330" height="8" rx="4" fill="#253029"/>
+ <rect x="24" y="91" width="238" height="8" rx="4" fill="url(#lime)"/>
+</g>
+
+<g transform="translate(1040 54)">
+  <path d="M0 105 C70 10, 140 160, 210 72 S350 115, 400 20" fill="none" stroke="#1DE9B6" stroke-width="3"/>
+  <path d="M0 120 C70 25, 140 175, 210 87 S350 130, 400 35" fill="none" stroke="#9DFF00" stroke-width="9" opacity=".12" filter="url(#gl)"/>
+  <circle cx="210" cy="72" r="6" fill="#9DFF00"/><circle cx="400" cy="20" r="6" fill="#1DE9B6"/>
+</g>
+</svg>
