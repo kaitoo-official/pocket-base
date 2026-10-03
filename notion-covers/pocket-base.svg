@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600">
+<defs><linearGradient id="b" x1="0" x2="1"><stop stop-color="#071426"/><stop offset=".6" stop-color="#0d2c55"/><stop offset="1" stop-color="#06111f"/></linearGradient><filter id="gl"><feGaussianBlur stdDeviation="20"/></filter></defs>
+<rect width="1500" height="600" fill="url(#b)"/>
+<circle cx="1140" cy="250" r="250" fill="#1689ff" opacity=".16" filter="url(#gl)"/>
+<g transform="translate(920 95) rotate(-8 150 200)"><rect width="300" height="410" rx="28" fill="#10284b" stroke="#58a6ff" stroke-width="5"/><rect x="28" y="32" width="244" height="230" rx="18" fill="#153966"/><circle cx="150" cy="145" r="74" fill="none" stroke="#78c8ff" stroke-width="8"/><path d="M77 145h146" stroke="#78c8ff" stroke-width="8"/><circle cx="150" cy="145" r="19" fill="#78c8ff"/><rect x="40" y="292" width="220" height="18" rx="9" fill="#2b5e94"/><rect x="40" y="327" width="165" height="14" rx="7" fill="#234d7b"/></g>
+<g transform="translate(1180 150) rotate(9 120 160)" opacity=".8"><rect width="235" height="320" rx="24" fill="#0d213e" stroke="#2f75bd" stroke-width="4"/></g>
+<text x="105" y="260" fill="#fff" font-family="Arial,sans-serif" font-size="92" font-weight="700">POCKET BASE</text>
+<text x="110" y="330" fill="#7ec8ff" font-family="Arial,sans-serif" font-size="28" letter-spacing="7">CARD SEARCH · COLLECTION · DECKS</text>
+</svg>
