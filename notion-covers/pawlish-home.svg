@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600">
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#21474b"/><stop offset="1" stop-color="#2F5D62"/></linearGradient></defs>
+<rect width="1500" height="600" fill="url(#bg)"/>
+<circle cx="1200" cy="300" r="280" fill="#F4EDE4" opacity=".08"/>
+<g transform="translate(1010 115)" fill="#F4EDE4">
+ <ellipse cx="165" cy="220" rx="112" ry="95"/>
+ <ellipse cx="55" cy="115" rx="48" ry="62"/>
+ <ellipse cx="130" cy="66" rx="46" ry="59"/>
+ <ellipse cx="205" cy="66" rx="46" ry="59"/>
+ <ellipse cx="280" cy="115" rx="48" ry="62"/>
+ <path d="M252 10l18 34 37 6-27 26 7 37-35-18-34 18 6-37-27-26 38-6z" fill="#E8B04A"/>
+</g>
+<text x="105" y="255" fill="#F4EDE4" font-family="Arial,sans-serif" font-size="92" font-weight="700">PAWLISH HOME</text>
+<text x="110" y="326" fill="#E8B04A" font-family="Arial,sans-serif" font-size="29" letter-spacing="6">PET HOME · CLEANER DAYS</text>
+</svg>
