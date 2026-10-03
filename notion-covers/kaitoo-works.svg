@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600">
+<defs><linearGradient id="bg" x1="0" x2="1"><stop stop-color="#071018"/><stop offset="1" stop-color="#102634"/></linearGradient><linearGradient id="cy" x1="0" x2="1"><stop stop-color="#64dfff"/><stop offset="1" stop-color="#6c8cff"/></linearGradient><filter id="gl"><feGaussianBlur stdDeviation="25"/></filter></defs>
+<rect width="1500" height="600" fill="url(#bg)"/>
+<circle cx="1130" cy="300" r="260" fill="#54d8ff" opacity=".14" filter="url(#gl)"/>
+<g stroke="#4a7690" opacity=".28"><path d="M850 70h520v460H850z"/><path d="M850 180h520M850 300h520M850 420h520M980 70v460M1110 70v460M1240 70v460"/></g>
+<g transform="translate(990 150)"><rect x="0" y="0" width="300" height="260" rx="34" fill="#0e1b27" stroke="url(#cy)" stroke-width="5"/><path d="M58 188l68-106 55 70 34-42 42 78z" fill="url(#cy)"/><circle cx="220" cy="78" r="24" fill="#63d6ff"/></g>
+<text x="105" y="260" fill="#f7fbff" font-family="Arial,sans-serif" font-size="88" font-weight="700">KAITOO WORKS</text>
+<text x="110" y="330" fill="#71d8ff" font-family="Arial,sans-serif" font-size="28" letter-spacing="7">AI · WEB · AUTOMATION</text>
+</svg>
