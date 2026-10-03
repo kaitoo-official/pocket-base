@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="600" viewBox="0 0 1500 600">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#050910"/><stop offset=".56" stop-color="#08131e"/><stop offset="1" stop-color="#0b1820"/>
+  </linearGradient>
+  <radialGradient id="glow" cx="70%" cy="50%" r="44%">
+    <stop offset="0" stop-color="#44B8FF" stop-opacity=".18"/><stop offset="1" stop-color="#44B8FF" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="line" x1="0" x2="1"><stop stop-color="#2B66FF"/><stop offset="1" stop-color="#44B8FF"/></linearGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="glow2"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<rect width="1500" height="600" rx="28" fill="url(#bg)"/>
+<rect width="1500" height="600" rx="28" fill="url(#glow)"/>
+<g opacity=".12" stroke="#5a7488" stroke-width="1">
+  <path d="M0 100H1500M0 200H1500M0 300H1500M0 400H1500M0 500H1500"/>
+  <path d="M150 0V600M300 0V600M450 0V600M600 0V600M750 0V600M900 0V600M1050 0V600M1200 0V600M1350 0V600"/>
+</g>
+<g opacity=".24" fill="none" stroke="#44B8FF" stroke-width="1.5">
+  <circle cx="1120" cy="300" r="190"/><circle cx="1120" cy="300" r="140"/><circle cx="1120" cy="300" r="88"/>
+  <path d="M790 470C900 410 945 445 1020 370S1185 195 1380 165"/>
+  <path d="M800 170C910 235 940 165 1045 225S1255 405 1415 390"/>
+  <path d="M928 92L1120 300L1350 115M865 365L1120 300L1310 505"/>
+</g>
+<g fill="#44B8FF" filter="url(#glow2)">
+  <circle cx="928" cy="92" r="7"/><circle cx="865" cy="365" r="7"/><circle cx="1045" cy="225" r="7"/>
+  <circle cx="1310" cy="505" r="7"/><circle cx="1350" cy="115" r="7"/><circle cx="1415" cy="390" r="7"/>
+</g>
+<g fill="none" stroke="url(#line)" stroke-width="3">
+  <path d="M1120 300C1040 210 930 255 865 365"/>
+  <path d="M1120 300C1190 190 1285 205 1350 115"/>
+  <path d="M1120 300C1210 330 1315 340 1415 390"/>
+  <path d="M1120 300C1090 390 1160 450 1310 505"/>
+</g>
+<circle cx="1120" cy="300" r="18" fill="#44B8FF" opacity=".25" filter="url(#soft)"/>
+<circle cx="1120" cy="300" r="9" fill="#44B8FF"/>
+
+<g transform="translate(72 66)">
+  <rect x="0" y="0" width="278" height="44" rx="22" fill="#0c171b" stroke="#44B8FF" stroke-width="2"/>
+  <circle cx="26" cy="22" r="7" fill="#44B8FF"/>
+  <text x="48" y="30" fill="#dfffea" font-family="Arial,Helvetica,sans-serif" font-size="18" letter-spacing="4">SYSTEM ONLINE</text>
+  <text x="0" y="150" fill="#f4f7fa" font-family="Arial,Helvetica,sans-serif" font-size="66" font-weight="700" letter-spacing="1">POCKET BASE</text>
+  <text x="2" y="205" fill="#9aa8b4" font-family="Arial,Helvetica,sans-serif" font-size="22" letter-spacing="7">PRODUCT HQ</text>
+  <line x1="0" y1="245" x2="495" y2="245" stroke="#23313d"/>
+  <text x="0" y="290" fill="#44B8FF" font-family="Arial,Helvetica,sans-serif" font-size="18" letter-spacing="3">01 / SHIPPING</text>
+  <text x="0" y="340" fill="#d9e0e5" font-family="Arial,Helvetica,sans-serif" font-size="19" letter-spacing="1">CARD SEARCH · COLLECTION · DECKS</text>
+  <text x="0" y="410" fill="#62717e" font-family="Arial,Helvetica,sans-serif" font-size="15" letter-spacing="4">KAITOO OS / VENTURE HQ</text>
+</g>
+
+<g transform="translate(1040 220)">
+<rect x="-65" y="-70" width="112" height="154" rx="22" fill="#0d2540" stroke="#44B8FF" stroke-width="3"/>
+<rect x="-25" y="-45" width="112" height="154" rx="22" fill="#102f55" stroke="#2B66FF" stroke-width="3" opacity=".95"/>
+<rect x="18" y="-18" width="112" height="154" rx="22" fill="#123962" stroke="#44B8FF" stroke-width="3"/>
+<path d="M45 44h58M45 66h42M45 88h52" stroke="#8cd7ff" stroke-width="6" stroke-linecap="round"/>
+</g>
+
+<g transform="translate(1285 70)" font-family="Arial,Helvetica,sans-serif">
+  <text x="0" y="0" fill="#597180" font-size="14" letter-spacing="3">HQ 01</text>
+  <text x="0" y="32" fill="#44B8FF" font-size="14" letter-spacing="3">● ACTIVE</text>
+</g>
+<path d="M0 540H1500" stroke="#44B8FF" stroke-opacity=".16"/>
+<rect x="0" y="592" width="1500" height="8" fill="url(#line)" opacity=".55"/>
+</svg>
