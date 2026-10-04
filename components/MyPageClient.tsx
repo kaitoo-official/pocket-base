@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Heart, Layers, LayoutList, ArrowLeftRight, LogOut, MessageCircle } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
+import { DeleteAccountSection } from "@/components/DeleteAccountSection";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { getWishlistEntries } from "@/lib/wishlist";
@@ -187,6 +188,8 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
           {authT.signOut}
         </button>
       )}
+
+      <DeleteAccountSection lang={lang} />
     </AccountShell>
   );
 }
