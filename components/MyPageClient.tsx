@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Heart, Layers, LayoutList, ArrowLeftRight, LogOut, MessageCircle } from "lucide-react";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AccountShell } from "@/components/AccountShell";
-import { DeleteAccountSection } from "@/components/DeleteAccountSection";
+import { AccountDeletedNotice, DeleteAccountSection } from "@/components/DeleteAccountSection";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { signOutOfGoogle } from "@/lib/auth/googleAuth";
 import { getWishlistEntries } from "@/lib/wishlist";
@@ -61,7 +61,7 @@ function PostPreviewCard({ post, cardMap, lang }: { post: TradePost; cardMap: Ma
   );
 }
 
-function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
+function MyPageContent({ cards, lang, onDeleted }: { cards: CardOption[]; lang: Lang; onDeleted: () => void }) {
   const t = getDict(lang).mypage;
   const homeT = getDict(lang).home;
   const authT = getDict(lang).auth;
@@ -189,15 +189,18 @@ function MyPageContent({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
         </button>
       )}
 
-      <DeleteAccountSection lang={lang} />
+      <DeleteAccountSection lang={lang} onDeleted={onDeleted} />
     </AccountShell>
   );
 }
 
 export function MyPageClient({ cards, lang }: { cards: CardOption[]; lang: Lang }) {
+  // 削除完了後はログアウト状態になりRequireAuthが「ログインが必要です」に切り替わるため、完了表示はその外側で出す
+  const [deleted, setDeleted] = useState(false);
+  if (deleted) return <AccountDeletedNotice lang={lang} />;
   return (
     <RequireAuth>
-      <MyPageContent cards={cards} lang={lang} />
+      <MyPageContent cards={cards} lang={lang} onDeleted={() => setDeleted(true)} />
     </RequireAuth>
   );
 }
