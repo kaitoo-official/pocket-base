@@ -8,16 +8,17 @@ import { auth } from "@/lib/firebase";
 
 let authUidPromise: Promise<string> | null = null;
 
-/** 匿名認証のUIDを返す(未サインインなら裏でサインインしてから返す)。サーバー側では空文字を返す */
+/**
+ * 今のログイン中ユーザーのUIDを返す(未サインインなら裏で匿名サインインしてから返す)。サーバー側では空文字を返す。
+ * 結果をモジュール内に使い回さない: ログアウト/アカウント削除→別アカウントでログイン、をページ再読み込み無しで
+ * 行うと古いUIDが残り、コメントの authorUid が request.auth.uid と食い違って送信が拒否されるため。
+ */
 export function ensureAuthUid(): Promise<string> {
   if (typeof window === "undefined") return Promise.resolve("");
+  if (auth.currentUser) return Promise.resolve(auth.currentUser.uid);
 
   if (!authUidPromise) {
-    authUidPromise = new Promise((resolve) => {
-      if (auth.currentUser) {
-        resolve(auth.currentUser.uid);
-        return;
-      }
+    authUidPromise = new Promise<string>((resolve) => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           unsubscribe();
@@ -28,6 +29,8 @@ export function ensureAuthUid(): Promise<string> {
         unsubscribe();
         resolve("");
       });
+    }).finally(() => {
+      authUidPromise = null;
     });
   }
   return authUidPromise;
