@@ -334,6 +334,27 @@ export interface Dict {
     viewAllPosts: string;
     noPosts: string;
   };
+  accountDeletion: {
+    sectionTitle: string;
+    sectionDescription: string;
+    button: string;
+    modalTitle: string;
+    modalIntro: string;
+    deletedItems: string[];
+    retainedHeading: string;
+    retainedItems: string[];
+    irreversible: string;
+    reauthNote: string;
+    cancel: string;
+    confirm: string;
+    working: string;
+    doneTitle: string;
+    doneDescription: string;
+    goHome: string;
+    errorFailed: string;
+    errorMismatch: string;
+    errorNotSignedIn: string;
+  };
   myTrades: {
     title: string;
     empty: string;
@@ -424,7 +445,7 @@ const ja: Dict = {
   },
   privacy: {
     title: "プライバシーポリシー",
-    lastUpdated: "最終更新日: 2026年9月29日",
+    lastUpdated: "最終更新日: 2026年10月4日",
     sections: [
       {
         heading: "はじめに",
@@ -472,7 +493,8 @@ const ja: Dict = {
       {
         heading: "情報の保管・削除",
         paragraphs: [
-          "登録情報の削除(アカウントに紐づくデータの削除、投稿の削除など)をご希望の場合は、下記のお問い合わせ先までご連絡ください。",
+          "アカウントとそれに紐づくデータ(プロフィール、ほしいリスト、マイコレクション、マイデッキ、ブロックリスト、トレード投稿、コメント)は、ログイン後のマイページ下部の「アカウントを削除」からいつでもご自身で削除できます。",
+          "通報の記録は、安全対策のため削除後も運営が保管します(アカウント削除後は、あなたのアカウントとは結びつかなくなります)。「ご意見・ご要望」フォームの送信内容も削除されずに残るため、削除をご希望の場合は下記のお問い合わせ先までご連絡ください。",
         ],
       },
       {
@@ -783,6 +805,36 @@ const ja: Dict = {
     viewAllPosts: "すべての投稿を見る",
     noPosts: "まだ投稿がありません。",
   },
+  accountDeletion: {
+    sectionTitle: "アカウント",
+    sectionDescription: "アカウントと、それに紐づくデータを削除します。",
+    button: "アカウントを削除",
+    modalTitle: "アカウントを削除しますか？",
+    modalIntro: "次のデータがすべて削除されます。",
+    deletedItems: [
+      "プロフィール(名前・メールアドレス・プロフィール画像)",
+      "ほしいリスト・マイコレクション・マイデッキ",
+      "ブロックリスト",
+      "あなたのトレード投稿",
+      "あなたが書いたコメント",
+    ],
+    retainedHeading: "削除されずに残るもの",
+    retainedItems: [
+      "通報の記録(安全対策のために運営が保管します。アカウント削除後は、あなたのアカウントとは結びつかなくなります)",
+      "「ご意見・ご要望」フォームで送信した内容(入力した連絡先を含みます。削除をご希望の場合はフォームからご連絡ください)",
+    ],
+    irreversible: "この操作は取り消せません。",
+    reauthNote: "本人確認のため、削除の前にもう一度ログインする画面が表示されます。",
+    cancel: "キャンセル",
+    confirm: "削除する",
+    working: "削除しています。画面を閉じずにお待ちください…",
+    doneTitle: "アカウントを削除しました",
+    doneDescription: "ご利用ありがとうございました。",
+    goHome: "ホームへ",
+    errorFailed: "削除に失敗しました。通信状況を確認して、もう一度お試しください。(途中まで削除された場合も、再度実行すると残りが削除されます)",
+    errorMismatch: "ログイン中のアカウントとは別のアカウントが選択されました。同じアカウントでもう一度お試しください。",
+    errorNotSignedIn: "ログイン状態を確認できませんでした。いちど画面を開き直してください。",
+  },
   myTrades: {
     title: "トレード投稿",
     empty: "まだ投稿がありません。",
@@ -874,7 +926,7 @@ const en: Dict = {
   },
   privacy: {
     title: "Privacy Policy",
-    lastUpdated: "Last updated: September 29, 2026",
+    lastUpdated: "Last updated: October 4, 2026",
     sections: [
       {
         heading: "Introduction",
@@ -922,7 +974,8 @@ const en: Dict = {
       {
         heading: "Data retention and deletion",
         paragraphs: [
-          "If you would like data linked to your account (or a post) deleted, please contact us using the details below.",
+          "You can delete your account and the data linked to it (profile, wishlist, collection, saved decks, block list, trade posts and comments) yourself at any time, using \"Delete account\" at the bottom of My Page after signing in.",
+          "Report records are kept by the operator after deletion for safety reasons (they are no longer linked to your account once it is deleted). Messages sent through the \"Send Feedback\" form are also not deleted; if you want them removed, please contact us using the details below.",
         ],
       },
       {
@@ -1235,6 +1288,36 @@ const en: Dict = {
     myPosts: "My Posts",
     viewAllPosts: "View all posts",
     noPosts: "You haven't posted anything yet.",
+  },
+  accountDeletion: {
+    sectionTitle: "Account",
+    sectionDescription: "Delete your account and the data linked to it.",
+    button: "Delete account",
+    modalTitle: "Delete your account?",
+    modalIntro: "The following data will be deleted.",
+    deletedItems: [
+      "Your profile (name, email address, profile picture)",
+      "Your wishlist, collection and saved decks",
+      "Your block list",
+      "Your trade posts",
+      "Comments you wrote",
+    ],
+    retainedHeading: "What is not deleted",
+    retainedItems: [
+      "Report records (kept by the operator for safety; after deletion they are no longer linked to your account)",
+      "Messages sent through the \"Send Feedback\" form (including any contact details you entered; contact us through the form if you want them removed)",
+    ],
+    irreversible: "This cannot be undone.",
+    reauthNote: "To confirm it's you, you will be asked to sign in again before deletion.",
+    cancel: "Cancel",
+    confirm: "Delete",
+    working: "Deleting. Please keep this screen open…",
+    doneTitle: "Your account has been deleted",
+    doneDescription: "Thank you for using Pocket Base.",
+    goHome: "Go to home",
+    errorFailed: "Deletion failed. Please check your connection and try again. (If it stopped partway, running it again deletes the rest.)",
+    errorMismatch: "A different account from the one you are signed in with was selected. Please try again with the same account.",
+    errorNotSignedIn: "Could not confirm your sign-in status. Please reopen this screen.",
   },
   myTrades: {
     title: "My Trade Posts",

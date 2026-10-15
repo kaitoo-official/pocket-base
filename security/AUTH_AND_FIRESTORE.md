@@ -43,7 +43,7 @@ function isVerifiedSignIn() {
 
 | コレクション | 読み取り | 書き込み | 備考 |
 |---|---|---|---|
-| `users/{userId}` | 本人のみ | `isVerifiedSignIn()`かつ本人 | プロフィール。`provider`は`google`/`apple`のみ許可 |
+| `users/{userId}` | 本人のみ | `isVerifiedSignIn()`かつ本人。**削除も本人のみ可**(アカウント削除機能用、2026-10-04追加) | プロフィール。`provider`は`google`/`apple`のみ許可。削除ルールを変えるときは`lib/auth/deleteAccount.ts`も確認すること |
 | `users/{userId}/wishlist/{cardId}` | 本人のみ | `isVerifiedSignIn()`かつ本人 | ほしいリスト。匿名は不可 |
 | `users/{userId}/collection/{cardId}` | 本人のみ | `isVerifiedSignIn()`かつ本人 | 所持枚数は1〜3（3=3枚以上扱い）。0枚に戻す時はドキュメント削除 |
 | `users/{userId}/decks/{deckId}` | 本人のみ | `isVerifiedSignIn()`かつ本人 | `deckId`は`slot-0`/`slot-1`/`slot-2`のみ許可（＝無料枠3デッキ制限をルール側でも強制） |

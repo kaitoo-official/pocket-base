@@ -36,7 +36,8 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys()
             .hasOnly(['displayName', 'email', 'photoURL', 'updatedAt'])
         && request.resource.data.updatedAt == request.time;
-      allow delete: if false;
+      // アカウント削除機能(Apple Guideline 5.1.1(v))のため、本人のみ自分のプロフィールを削除できる。
+      allow delete: if isVerifiedSignIn() && request.auth.uid == userId;
 
       // Wishlist(ほしいリスト)。ログイン必須の機能のため、匿名認証は弾く。
       match /wishlist/{cardId} {
