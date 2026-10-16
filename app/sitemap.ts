@@ -46,6 +46,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "hourly",
       priority: 0.7,
     },
+    {
+      url: `${SITE_URL}/support`,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
     ...cardUrls,
     ...packUrls,
   ];

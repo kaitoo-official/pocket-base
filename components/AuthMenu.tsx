@@ -94,7 +94,7 @@ export function AuthMenu() {
           </span>
         )}
         <span className="hidden max-w-24 truncate text-sm font-medium text-foreground sm:inline">
-          {user?.displayName}
+          {user?.displayName || t.defaultUserName}
         </span>
         <ChevronDown className={`h-4 w-4 text-muted transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
@@ -102,7 +102,7 @@ export function AuthMenu() {
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
           <div className="border-b border-line px-4 py-3">
-            <p className="truncate text-sm font-semibold text-foreground">{user?.displayName}</p>
+            <p className="truncate text-sm font-semibold text-foreground">{user?.displayName || t.defaultUserName}</p>
             <p className="truncate text-xs text-muted">{user?.email}</p>
           </div>
           {menuLinks.map(({ href, label, Icon }) => (

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { Container } from "@/components/Container";
 import { FeedbackLink } from "@/components/FeedbackLink";
+import { FooterLink } from "@/components/FooterLink";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -46,12 +46,8 @@ export async function SiteFooter() {
             </a>
           </p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <Link
-              href="/privacy"
-              className="text-xs text-muted underline decoration-line underline-offset-2 transition-colors hover:text-accent"
-            >
-              {t.privacyLink}
-            </Link>
+            <FooterLink href="/privacy">{t.privacyLink}</FooterLink>
+            <FooterLink href="/support">{t.supportLink}</FooterLink>
             <FeedbackLink />
           </div>
         </div>

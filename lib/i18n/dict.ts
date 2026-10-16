@@ -22,6 +22,7 @@ export interface Dict {
     appleButton: string;
     googleButton: string;
     cancel: string;
+    defaultUserName: string;
   };
   footer: {
     disclaimer: string;
@@ -30,6 +31,13 @@ export interface Dict {
     tagline: string;
     feedbackLink: string;
     privacyLink: string;
+    supportLink: string;
+  };
+  support: {
+    title: string;
+    intro: string;
+    feedbackLead: string;
+    sections: Array<{ heading: string; paragraphs: string[] }>;
   };
   privacy: {
     title: string;
@@ -434,6 +442,7 @@ const ja: Dict = {
     appleButton: "Appleでサインイン",
     googleButton: "Googleでログイン",
     cancel: "キャンセル",
+    defaultUserName: "ユーザー",
   },
   footer: {
     disclaimer: "本サイトは非公式のファンサイトです。Pokémon、Pokémon Trading Card Game Pocketの公式サービスではありません。",
@@ -442,6 +451,32 @@ const ja: Dict = {
     tagline: "CARD DATABASE PLATFORM",
     feedbackLink: "ご意見・ご要望はこちら",
     privacyLink: "プライバシーポリシー",
+    supportLink: "サポート",
+  },
+  support: {
+    title: "サポート",
+    intro:
+      "Pocket Base(非公式のポケポケ カードデータベース)のサポートページです。不具合・ご意見・ご質問は、下のフォームからお送りください。",
+    feedbackLead:
+      "お問い合わせ・不具合のご報告・ご意見はこちらから送信できます。返信が必要な場合は、フォーム内の「連絡先」にメールアドレス等をご記入ください。",
+    sections: [
+      {
+        heading: "よくあるご質問",
+        paragraphs: [
+          "Q. ログインしなくても使えますか? — カード検索・カード詳細・パック一覧・トレード掲示板の閲覧は、ログインなしでご利用いただけます。ほしいリスト・マイコレクション・マイデッキの保存、トレード募集やコメントの投稿にはログイン(Appleでサインイン / Googleでログイン)が必要です。",
+          "Q. アカウントを削除するには? — ログイン後、「マイページ」の一番下にある「アカウントを削除」から行えます(本人確認のため、もう一度ログインが必要です)。削除すると、プロフィール、ほしいリスト・マイコレクション・マイデッキ、ブロックリスト、あなたのトレード投稿・コメントがすべて削除され、元に戻せません。",
+          "Q. 不適切な投稿を見つけたら? — 各トレード投稿・コメントの「⋮」メニューから「通報する」を選んでください。同じメニューの「ユーザーをブロック」で、そのユーザーの投稿・コメントを非表示にできます(ブロックの解除は、マイページ → トレード投稿 から行えます)。通報は運営が確認し、必要に応じて対応します。",
+          "Q. カード情報が間違っている・足りない場合は? — データは公開されているオープンソースのデータをもとにしているため、誤りや更新の遅れがあることがあります。お気づきの点は、下のフォームからお知らせください。",
+        ],
+      },
+      {
+        heading: "本サービスについて",
+        paragraphs: [
+          "Pocket Base は、Pokémon Trading Card Game Pocket のファンが作った非公式のアプリ・サイトです。The Pokémon Company、任天堂、クリーチャーズ、ゲームフリークとは一切関係がなく、公認・提携を受けたものでもありません。カード名・画像・ゲーム内の文章などの権利は、それぞれの権利者に帰属します。権利者の方からの掲載内容に関するご連絡も、下のフォームから承ります。",
+          "プライバシーの取り扱いについては、プライバシーポリシーをご確認ください。",
+        ],
+      },
+    ],
   },
   privacy: {
     title: "プライバシーポリシー",
@@ -914,6 +949,7 @@ const en: Dict = {
     appleButton: "Sign in with Apple",
     googleButton: "Sign in with Google",
     cancel: "Cancel",
+    defaultUserName: "User",
   },
   footer: {
     disclaimer:
@@ -923,6 +959,32 @@ const en: Dict = {
     tagline: "CARD DATABASE PLATFORM",
     feedbackLink: "Send Feedback",
     privacyLink: "Privacy Policy",
+    supportLink: "Support",
+  },
+  support: {
+    title: "Support",
+    intro:
+      "This is the support page for Pocket Base, an unofficial card database for Pokémon TCG Pocket. Send bugs, feedback, and questions through the form below.",
+    feedbackLead:
+      "Use this form for questions, bug reports, and feedback. If you would like a reply, add an email address or other contact detail in the Contact field.",
+    sections: [
+      {
+        heading: "FAQ",
+        paragraphs: [
+          "Q. Do I need to sign in? — Card search, card details, pack lists, and viewing the trade board work without signing in. Saving a wishlist, collection, or decks, and posting trade requests or comments require signing in (Sign in with Apple / Google).",
+          "Q. How do I delete my account? — After signing in, go to My Page and scroll to the bottom to find Delete account (you will be asked to sign in again to confirm). Deleting removes your profile, wishlist, collection, decks, block list, trade posts, and comments, and cannot be undone.",
+          "Q. How do I report inappropriate content? — Open the ⋮ menu on a trade post or comment and choose Report. The same menu has Block user, which hides that user's posts and comments (you can unblock in My Page > My Trade Posts). Reports are reviewed by the operator, who takes action when needed.",
+          "Q. Card information is wrong or missing. — Our data comes from a publicly available open-source dataset, so errors or delays can occur. Please let us know through the form below.",
+        ],
+      },
+      {
+        heading: "About this service",
+        paragraphs: [
+          "Pocket Base is an unofficial app and site made by a fan of Pokémon Trading Card Game Pocket. It is not affiliated with, endorsed by, or sponsored by The Pokémon Company, Nintendo, Creatures Inc., or Game Freak. Card names, images, and in-game text belong to their respective owners. Rights holders can also contact us about our content through the form below.",
+          "For how we handle your data, please read the Privacy Policy.",
+        ],
+      },
+    ],
   },
   privacy: {
     title: "Privacy Policy",
