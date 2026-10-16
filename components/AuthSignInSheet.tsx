@@ -69,21 +69,27 @@ export function AuthSignInSheet({
           </button>
         </div>
 
-        {/* Apple公式ロゴ(AppleSignInLogo)を左端に置いた黒ボタン。高さ44px・ロゴの形/色は変えない */}
+        {/* Apple公式ロゴ(AppleSignInLogo)+文字を中央に並べた黒ボタン。ロゴの形/色は変えない */}
         <button
           type="button"
           onClick={() => onChoose("apple")}
-          className="relative flex h-11 items-center justify-center rounded-full bg-black pl-12 pr-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-black px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
-          <AppleSignInLogo className="absolute left-3 top-0" />
+          <AppleSignInLogo />
           {t.appleButton}
         </button>
 
+        {/*
+          Google公式ガイドライン(developers.google.com/identity/branding-guidelines)のライトテーマ:
+          白地・1px #747775の枠・文字 #1F1F1F・公式の「G」ロゴ(Googleの配布素材 g-logo.png、色・比率は変えない)
+        */}
         <button
           type="button"
           onClick={() => onChoose("google")}
-          className="flex items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-surface-hover"
+          className="flex h-11 cursor-pointer items-center justify-center gap-2.5 rounded-full border border-[#747775] bg-white px-6 text-sm font-medium text-[#1F1F1F] transition-colors hover:bg-[#f3f3f3]"
         >
+          {/* eslint-disable-next-line @next/next/no-img-element -- 公式素材をそのまま表示するため */}
+          <img src="/brand/google-g.png" alt="" width={20} height={20.4} className="h-5 w-auto" />
           {t.googleButton}
         </button>
       </div>

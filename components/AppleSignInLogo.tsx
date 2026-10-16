@@ -3,14 +3,15 @@
  * Apple Design Resources の "Logo-Sign-in-with-Apple" (https://developer.apple.com/design/resources/)
  * に含まれる "Left White Logo Large.svg" のパスをそのまま使っている。形・比率・色を変えないこと
  * (審査ガイドライン4: ロゴはApple Design Resourcesの素材を使う必要がある)。
- * 黒いボタン(高さ44px)の左端に置いて使う。
+ * 余白(アートワーク内の透明部分)だけをviewBoxで切り落とし、ロゴ自体は等倍(1:1)のまま使う。
+ * 黒いボタン(高さ44px)の中で、文字といっしょに中央に並べる。
  */
 export function AppleSignInLogo({ className }: { className?: string }) {
   return (
     <svg
-      width="39"
-      height="44"
-      viewBox="0 0 39 44"
+      width="19.7"
+      height="24.2"
+      viewBox="9.7 7.5 19.7 24.2"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       focusable="false"
