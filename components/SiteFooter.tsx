@@ -52,6 +52,12 @@ export async function SiteFooter() {
             >
               {t.privacyLink}
             </Link>
+            <Link
+              href="/support"
+              className="text-xs text-muted underline decoration-line underline-offset-2 transition-colors hover:text-accent"
+            >
+              {t.supportLink}
+            </Link>
             <FeedbackLink />
           </div>
         </div>

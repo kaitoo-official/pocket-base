@@ -123,7 +123,7 @@ function MyPageContent({ cards, lang, onDeleted }: { cards: CardOption[]; lang: 
             />
           )}
           <div className="min-w-0">
-            <h1 className="truncate text-xl font-bold text-foreground">{user?.displayName}</h1>
+            <h1 className="truncate text-xl font-bold text-foreground">{user?.displayName || authT.defaultUserName}</h1>
             <p className="truncate text-sm text-muted">{user?.email}</p>
           </div>
         </div>
