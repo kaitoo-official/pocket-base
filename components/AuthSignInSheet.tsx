@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { Apple, X } from "lucide-react";
+import { X } from "lucide-react";
+import { AppleSignInLogo } from "@/components/AppleSignInLogo";
 import { useLang } from "@/lib/i18n/LanguageProvider";
 import { getDict } from "@/lib/i18n/dict";
 
@@ -68,12 +69,13 @@ export function AuthSignInSheet({
           </button>
         </div>
 
+        {/* Apple公式ロゴ(AppleSignInLogo)を左端に置いた黒ボタン。高さ44px・ロゴの形/色は変えない */}
         <button
           type="button"
           onClick={() => onChoose("apple")}
-          className="flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+          className="relative flex h-11 items-center justify-center rounded-full bg-black pl-12 pr-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
         >
-          <Apple className="h-4 w-4" />
+          <AppleSignInLogo className="absolute left-3 top-0" />
           {t.appleButton}
         </button>
 
