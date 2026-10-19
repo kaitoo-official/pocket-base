@@ -16,9 +16,9 @@ export interface AuthState {
   /** 起動直後、まだセッション復元が終わっていない間はtrue */
   loading: boolean;
   /**
-   * ログインを開始する共通の窓口。Androidアプリ版はそのままGoogleログインを行い、
-   * iOSアプリ版とWeb版は「Appleでサインイン/Googleでログイン」を選ぶボトムシートを表示する
-   * (Apple IDでのログインを提供できないAndroidだけ例外的にシートを出さない)。
+   * ログインを開始する共通の窓口。すべての環境で、利用規約への同意つきのボトムシートを表示する
+   * (iOSアプリ版とWeb版は「Appleでサインイン/Googleでログイン」、Apple IDでのログインを
+   * 提供できないAndroidアプリ版はGoogleのみ)。
    */
   signIn: () => Promise<SignInResult>;
 }
@@ -38,6 +38,8 @@ const AuthContext = createContext<AuthState>({
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<Omit<AuthState, "signIn">>({ user: null, isSignedIn: false, loading: true });
   const [sheetOpen, setSheetOpen] = useState(false);
+  // Apple IDでのログインはAndroidアプリでは提供できないため、Appleボタンを出さない
+  const showApple = Capacitor.getPlatform() !== "android";
   const resolveSignInRef = useRef<((result: SignInResult) => void) | null>(null);
 
   useEffect(() => {
@@ -56,10 +58,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = useCallback((): Promise<SignInResult> => {
-    // Androidアプリ版はApple IDでのログインを提供できないため、選択肢を出さず直接Googleへ。
-    if (Capacitor.getPlatform() === "android") {
-      return signInWithGoogle();
-    }
     return new Promise<SignInResult>((resolve) => {
       resolveSignInRef.current = resolve;
       setSheetOpen(true);
@@ -82,7 +80,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ ...state, signIn }}>
       {children}
-      <AuthSignInSheet open={sheetOpen} onChoose={handleChoose} onDismiss={handleDismiss} />
+      <AuthSignInSheet open={sheetOpen} showApple={showApple} onChoose={handleChoose} onDismiss={handleDismiss} />
     </AuthContext.Provider>
   );
 }

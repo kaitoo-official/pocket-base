@@ -48,6 +48,7 @@ export async function SiteFooter() {
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <FooterLink href="/privacy">{t.privacyLink}</FooterLink>
             <FooterLink href="/support">{t.supportLink}</FooterLink>
+            <FooterLink href="/terms">{t.termsLink}</FooterLink>
             <FeedbackLink />
           </div>
         </div>

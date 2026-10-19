@@ -23,6 +23,10 @@ export interface Dict {
     googleButton: string;
     cancel: string;
     defaultUserName: string;
+    termsNotice: string;
+    termsAgree: string;
+    termsLink: string;
+    termsRequired: string;
   };
   footer: {
     disclaimer: string;
@@ -32,6 +36,13 @@ export interface Dict {
     feedbackLink: string;
     privacyLink: string;
     supportLink: string;
+    termsLink: string;
+  };
+  terms: {
+    title: string;
+    lastUpdated: string;
+    intro: string;
+    sections: Array<{ heading: string; paragraphs: string[] }>;
   };
   support: {
     title: string;
@@ -443,6 +454,11 @@ const ja: Dict = {
     googleButton: "Googleでログイン",
     cancel: "キャンセル",
     defaultUserName: "ユーザー",
+    termsNotice:
+      "不適切な投稿・嫌がらせ・暴言などの迷惑行為は一切容認しません。違反した投稿は削除し、ユーザーを利用停止にすることがあります。",
+    termsAgree: "利用規約に同意します",
+    termsLink: "利用規約を読む",
+    termsRequired: "ログインするには、利用規約への同意が必要です",
   },
   footer: {
     disclaimer: "本サイトは非公式のファンサイトです。Pokémon、Pokémon Trading Card Game Pocketの公式サービスではありません。",
@@ -452,6 +468,73 @@ const ja: Dict = {
     feedbackLink: "ご意見・ご要望はこちら",
     privacyLink: "プライバシーポリシー",
     supportLink: "サポート",
+    termsLink: "利用規約",
+  },
+  terms: {
+    title: "利用規約",
+    lastUpdated: "最終更新日: 2026年10月19日",
+    intro:
+      "この利用規約(以下「本規約」)は、非公式のカード検索・データベースサービス「Pocket Base」(Webサイトおよびスマートフォンアプリ。以下「本サービス」)の利用条件を定めるものです。ログインして本サービスを利用する場合は、本規約に同意したものとします。",
+    sections: [
+      {
+        heading: "1. 適用範囲",
+        paragraphs: [
+          "本規約は、本サービスを利用するすべての方に適用されます。iOSアプリでは、Appleの標準使用許諾契約(Standard EULA)もあわせて適用されます。",
+        ],
+      },
+      {
+        heading: "2. 不適切なコンテンツ・迷惑行為は一切容認しません",
+        paragraphs: [
+          "本サービスでは、不適切(不快・攻撃的・違法など)なコンテンツや、他のユーザーへの迷惑行為・嫌がらせを、一切容認しません(ゼロトレランス)。",
+          "運営は、通報や確認によって違反を把握した場合、予告なく該当の投稿・コメントを削除し、違反したユーザーの利用を制限または停止します。悪質な場合は、関係機関への連絡を行うことがあります。",
+        ],
+      },
+      {
+        heading: "3. 禁止事項",
+        paragraphs: [
+          "次の行為・投稿を禁止します。(1)他のユーザーへの嫌がらせ、誹謗中傷、脅迫、差別的な発言。(2)わいせつ、暴力的、またはその他の不快なコンテンツ。(3)違法行為や犯罪に関わる内容。(4)他人の個人情報の公開、なりすまし。(5)詐欺・不正な取引・アカウントの売買などの勧誘。(6)スパム、宣伝、外部サイトへの誘導(URLの投稿)。(7)第三者の権利を侵害する行為。(8)本サービスの運営を妨げる行為、不正アクセス。",
+        ],
+      },
+      {
+        heading: "4. 通報とブロック",
+        paragraphs: [
+          "各トレード投稿・コメントの「⋮」メニューから「通報する」を選ぶと、運営に報告できます。同じメニューの「ユーザーをブロック」で、そのユーザーの投稿・コメントを自分の画面に表示しないようにできます(解除は、マイページ → トレード投稿 から行えます)。",
+          "通報は運営が確認し、必要に応じて、投稿の削除やユーザーの利用停止などの対応を行います。",
+        ],
+      },
+      {
+        heading: "5. 投稿内容と取引について",
+        paragraphs: [
+          "トレード募集やコメントなどの投稿内容は、投稿した本人が責任を負います。カードの実際のやり取りは、ゲーム内で、ユーザー同士の責任で行ってください。運営は、ユーザー間のやり取りや取引に関与せず、その結果について責任を負いません。",
+        ],
+      },
+      {
+        heading: "6. アカウントの削除・利用停止",
+        paragraphs: [
+          "ユーザーは、マイページの一番下にある「アカウントを削除」から、いつでもアカウントとデータを削除できます。運営は、本規約に違反したユーザーのアカウントを、予告なく利用停止にすることがあります。",
+        ],
+      },
+      {
+        heading: "7. 非公式サービスであること・権利について",
+        paragraphs: [
+          "本サービスは、Pokémon Trading Card Game Pocket のファンが作った非公式のサービスです。The Pokémon Company、任天堂、クリーチャーズ、ゲームフリークとは関係がなく、公認・提携を受けたものでもありません。カード名・画像・ゲーム内の文章などの権利は、それぞれの権利者に帰属します。権利者の方からの掲載内容に関するご連絡は、お問い合わせフォームから承ります。",
+        ],
+      },
+      {
+        heading: "8. 免責事項",
+        paragraphs: [
+          "本サービスの情報の正確性・完全性は保証しません。データは公開されているオープンソースのデータをもとにしており、誤りや更新の遅れがあることがあります。運営は、予告なく本サービスの内容を変更し、または提供を中断・終了することがあります。本サービスの利用によって生じた損害について、運営は(運営に故意または重大な過失がある場合を除き)責任を負いません。",
+        ],
+      },
+      {
+        heading: "9. 規約の変更",
+        paragraphs: ["運営は、必要に応じて本規約を変更することがあります。変更後の規約は、本ページに掲載した時点で効力を生じます。"],
+      },
+      {
+        heading: "10. お問い合わせ",
+        paragraphs: ["本規約や本サービスに関するお問い合わせは、フッターの「ご意見・ご要望」フォーム、またはサポートページからご連絡ください。"],
+      },
+    ],
   },
   support: {
     title: "サポート",
@@ -950,6 +1033,11 @@ const en: Dict = {
     googleButton: "Sign in with Google",
     cancel: "Cancel",
     defaultUserName: "User",
+    termsNotice:
+      "Objectionable content, harassment, and abusive behavior are not tolerated. Violating posts will be removed and users may be suspended.",
+    termsAgree: "I agree to the Terms of Use",
+    termsLink: "Read the Terms of Use",
+    termsRequired: "You must agree to the Terms of Use to sign in",
   },
   footer: {
     disclaimer:
@@ -960,6 +1048,73 @@ const en: Dict = {
     feedbackLink: "Send Feedback",
     privacyLink: "Privacy Policy",
     supportLink: "Support",
+    termsLink: "Terms of Use",
+  },
+  terms: {
+    title: "Terms of Use",
+    lastUpdated: "Last updated: October 19, 2026",
+    intro:
+      "These Terms of Use (the \"Terms\") set out the conditions for using Pocket Base, an unofficial card search and database service (the website and mobile apps, the \"Service\"). By signing in to use the Service, you agree to these Terms.",
+    sections: [
+      {
+        heading: "1. Scope",
+        paragraphs: [
+          "These Terms apply to everyone who uses the Service. In the iOS app, Apple's Standard End User License Agreement (EULA) also applies.",
+        ],
+      },
+      {
+        heading: "2. No tolerance for objectionable content or abusive users",
+        paragraphs: [
+          "We do not tolerate objectionable content (offensive, abusive, illegal, or otherwise inappropriate) or abusive behavior toward other users (zero tolerance).",
+          "When we become aware of a violation through reports or our own review, we remove the post or comment without notice and restrict or suspend the user. In serious cases we may notify the relevant authorities.",
+        ],
+      },
+      {
+        heading: "3. Prohibited conduct",
+        paragraphs: [
+          "The following are prohibited: (1) harassment, defamation, threats, or discriminatory remarks toward other users; (2) obscene, violent, or otherwise offensive content; (3) content related to illegal acts or crime; (4) publishing other people's personal information, or impersonation; (5) solicitation of fraud, unfair trades, or account sales; (6) spam, advertising, or links to external sites (posting URLs); (7) infringing the rights of third parties; (8) interfering with the operation of the Service, or unauthorized access.",
+        ],
+      },
+      {
+        heading: "4. Reporting and blocking",
+        paragraphs: [
+          "Open the ⋮ menu on any trade post or comment and choose Report to notify the operator. The same menu has Block user, which hides that user's posts and comments on your screen (you can unblock in My Page > My Trade Posts).",
+          "Reports are reviewed by the operator, who removes content or suspends users when needed.",
+        ],
+      },
+      {
+        heading: "5. Posted content and trades",
+        paragraphs: [
+          "You are responsible for what you post, such as trade requests and comments. Actual card exchanges take place in the game, at the users' own responsibility. The operator is not involved in exchanges between users and is not responsible for their outcome.",
+        ],
+      },
+      {
+        heading: "6. Account deletion and suspension",
+        paragraphs: [
+          "You can delete your account and data at any time from Delete account at the bottom of My Page. The operator may suspend the account of any user who violates these Terms without notice.",
+        ],
+      },
+      {
+        heading: "7. Unofficial service and rights",
+        paragraphs: [
+          "The Service is an unofficial fan-made service for Pokémon Trading Card Game Pocket. It is not affiliated with, endorsed by, or sponsored by The Pokémon Company, Nintendo, Creatures Inc., or Game Freak. Card names, images, and in-game text belong to their respective owners. Rights holders can contact us about our content through the contact form.",
+        ],
+      },
+      {
+        heading: "8. Disclaimer",
+        paragraphs: [
+          "We do not guarantee the accuracy or completeness of the information in the Service. The data comes from a publicly available open-source dataset, so errors or delays can occur. We may change, suspend, or end the Service without notice. Except in cases of willful misconduct or gross negligence, the operator is not liable for damages arising from the use of the Service.",
+        ],
+      },
+      {
+        heading: "9. Changes to these Terms",
+        paragraphs: ["We may change these Terms when necessary. Changes take effect when posted on this page."],
+      },
+      {
+        heading: "10. Contact",
+        paragraphs: ["For questions about these Terms or the Service, please use the Send Feedback form in the footer or the Support page."],
+      },
+    ],
   },
   support: {
     title: "Support",

@@ -40,9 +40,12 @@ export default async function SupportPage() {
         ))}
       </div>
 
-      <p className="mt-8 text-sm">
+      <p className="mt-8 flex gap-4 text-sm">
         <Link href="/privacy" className="text-muted underline decoration-line underline-offset-2 hover:text-accent">
           {footerT.privacyLink}
+        </Link>
+        <Link href="/terms" className="text-muted underline decoration-line underline-offset-2 hover:text-accent">
+          {footerT.termsLink}
         </Link>
       </p>
     </Container>
