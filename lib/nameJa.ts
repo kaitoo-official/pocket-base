@@ -46,6 +46,9 @@ const PACK_SOURCE_LABELS: Record<string, string> = {
   Missions: "ミッション",
   "Premium Missions": "プレミアムミッション",
   "Wonder Pick": "ゲットチャレンジ",
+  // 特別な拡張パック(日本語版の正式名称。ハイクラスパック MEGA は2026-09-30配信、各報道で確認)
+  "Deluxe Pack: ex": "ハイクラスパックex",
+  "Deluxe Pack: Mega": "ハイクラスパック MEGA",
 };
 
 /**
