@@ -19,23 +19,23 @@ export function DeckCardBrowserTile({
   card,
   lang = "ja",
   count,
-  maxPerCard,
+  isMaxed,
   ownedQuantity,
   onAdd,
   onRemove,
 }: {
   card: DeckBrowserCard;
   lang?: Lang;
-  /** このカードが現在デッキに何枚入っているか(0〜maxPerCard) */
+  /** このプリント(ID)が現在デッキに何枚入っているか。バッジ表示用 */
   count: number;
-  maxPerCard: number;
+  /** 同名カードの上限に達していて追加できない(絵違い・レアリティ違いを合算して判定) */
+  isMaxed: boolean;
   /** ログイン中の所持数。未ログインの場合はnull(表示しない) */
   ownedQuantity: number | null;
   onAdd: () => void;
   onRemove: () => void;
 }) {
   const t = getDict(lang).decks.browser;
-  const isMaxed = count >= maxPerCard;
 
   return (
     <div

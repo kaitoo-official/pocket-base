@@ -17,6 +17,7 @@ import {
   addCardToDeck,
   removeCardFromDeck,
   countCardInDeck,
+  isSameNameMaxed,
   DECK_ENERGY_TYPES,
   type DeckValidationFlags,
 } from "@/lib/deckValidation";
@@ -172,9 +173,9 @@ function SelectedDeckCards({
             card={card}
             lang={lang}
             count={countCardInDeck(cardIds, id)}
-            maxPerCard={MAX_PER_CARD}
+            isMaxed={isSameNameMaxed(cardIds, id, MAX_PER_CARD, cardMap)}
             ownedQuantity={ownedQuantities ? (ownedQuantities[id] ?? 0) : null}
-            onAdd={() => onChange(addCardToDeck(cardIds, id, MAX_DECK_CARDS, MAX_PER_CARD))}
+            onAdd={() => onChange(addCardToDeck(cardIds, id, MAX_DECK_CARDS, MAX_PER_CARD, cardMap))}
             onRemove={() => onChange(removeCardFromDeck(cardIds, id))}
           />
         );
