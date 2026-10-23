@@ -11,7 +11,7 @@ import {
 } from "@/lib/deckBrowserCards";
 import { getSortOptions, getDefaultDirection, type SortCriterion, type SortDirection } from "@/lib/sort";
 import type { Option } from "@/lib/filterOptions";
-import { countCardInDeck, addCardToDeck, removeCardFromDeck } from "@/lib/deckValidation";
+import { countCardInDeck, addCardToDeck, removeCardFromDeck, isSameNameMaxed } from "@/lib/deckValidation";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useCollection } from "@/lib/collection";
 import { DeckCardBrowserTile } from "@/components/DeckCardBrowserTile";
@@ -58,7 +58,7 @@ export function DeckCardBrowser({
   onChange: (ids: string[]) => void;
   /** デッキ全体の最大枚数(20) */
   max: number;
-  /** 同一カードの最大枚数(2) */
+  /** 同名カードの最大枚数(2)。レアリティ違い・絵違いも合算する */
   maxPerCard: number;
   typeOptions: Option[];
   rarityOptions: Option[];
@@ -71,6 +71,7 @@ export function DeckCardBrowser({
   const { isSignedIn } = useAuth();
   const { quantities } = useCollection();
   const sortOptions = useMemo(() => getSortOptions(lang), [lang]);
+  const cardMap = useMemo(() => new Map(cards.map((card) => [card.id, card])), [cards]);
 
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
@@ -117,7 +118,7 @@ export function DeckCardBrowser({
   }
 
   function addOne(id: string) {
-    onChange(addCardToDeck(value, id, max, maxPerCard));
+    onChange(addCardToDeck(value, id, max, maxPerCard, cardMap));
   }
 
   function removeOne(id: string) {
@@ -290,7 +291,7 @@ export function DeckCardBrowser({
                   card={card}
                   lang={lang}
                   count={countOf(card.id)}
-                  maxPerCard={maxPerCard}
+                  isMaxed={isSameNameMaxed(value, card.id, maxPerCard, cardMap)}
                   ownedQuantity={isSignedIn ? (quantities[card.id] ?? 0) : null}
                   onAdd={() => addOne(card.id)}
                   onRemove={() => removeOne(card.id)}

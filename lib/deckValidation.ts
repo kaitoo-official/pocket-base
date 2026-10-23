@@ -62,10 +62,35 @@ export function countCardInDeck(cardIds: string[], id: string): number {
   return cardIds.filter((v) => v === id).length;
 }
 
-/** デッキにカードを1枚追加する。全体の上限(max)・同一カードの上限(maxPerCard)に達している場合は何もしない */
-export function addCardToDeck(cardIds: string[], id: string, max: number, maxPerCard: number): string[] {
+/** 同名カード判定に必要な最小限の情報(DeckBrowserCardもこの形に当てはまる) */
+export type DeckCardNameLookup = Map<string, { name: string }>;
+
+/**
+ * デッキ内に、指定したカードと同じ名前のカードが何枚入っているか。
+ * 本家のデッキ制限は「同名カードは、レアリティ違い・絵違いを合算して最大2枚」のため、
+ * カードID(=1プリント)ではなく名前で数える。
+ */
+export function countSameNameInDeck(cardIds: string[], id: string, cardMap: DeckCardNameLookup): number {
+  const nameOf = (cardId: string) => cardMap.get(cardId)?.name ?? cardId;
+  const target = nameOf(id);
+  return cardIds.filter((v) => nameOf(v) === target).length;
+}
+
+/** 同名カードの上限に達していて、これ以上このカードを追加できないか */
+export function isSameNameMaxed(cardIds: string[], id: string, maxPerCard: number, cardMap: DeckCardNameLookup): boolean {
+  return countSameNameInDeck(cardIds, id, cardMap) >= maxPerCard;
+}
+
+/** デッキにカードを1枚追加する。全体の上限(max)・同名カードの上限(maxPerCard)に達している場合は何もしない */
+export function addCardToDeck(
+  cardIds: string[],
+  id: string,
+  max: number,
+  maxPerCard: number,
+  cardMap: DeckCardNameLookup
+): string[] {
   if (cardIds.length >= max) return cardIds;
-  if (countCardInDeck(cardIds, id) >= maxPerCard) return cardIds;
+  if (isSameNameMaxed(cardIds, id, maxPerCard, cardMap)) return cardIds;
   return [...cardIds, id];
 }
 
