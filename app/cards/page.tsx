@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getAllCards } from "@/lib/data";
 import { searchCards } from "@/lib/search";
 import { filterCards, parseFilterState } from "@/lib/filter";
@@ -14,6 +15,9 @@ import { getDict } from "@/lib/i18n/dict";
 
 // 1ページに表示するカード枚数。3,879枚を一度に全部出すと重いため、ページ分けする。
 const PAGE_SIZE = 60;
+
+// 絞り込み(?type=…)・並び替え・ページ番号付きのURLは、代表を /cards にまとめる
+export const metadata: Metadata = { alternates: { canonical: "/cards" } };
 
 export default async function CardsPage({
   searchParams,

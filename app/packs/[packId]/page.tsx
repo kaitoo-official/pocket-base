@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getPackById, getCardsForPack } from "@/lib/data";
 import { getPackImageUrl } from "@/lib/getCardImage";
@@ -12,6 +13,12 @@ import { getDict } from "@/lib/i18n/dict";
 import { buildReturnPath } from "@/lib/returnPath";
 
 const PAGE_SIZE = 60;
+
+// 正規URLはクエリ無しの /packs/{packId}(絞り込みや並び替え・戻り先のクエリ違いは重複ページ扱いにする)
+export async function generateMetadata({ params }: { params: Promise<{ packId: string }> }): Promise<Metadata> {
+  const { packId } = await params;
+  return { alternates: { canonical: `/packs/${packId}` } };
+}
 
 export default async function PackDetailPage({
   params,
