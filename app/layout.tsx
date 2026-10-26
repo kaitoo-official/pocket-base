@@ -33,6 +33,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // canonical(正規URL)を絶対URLにする基準。sitemap.tsと同じ環境変数を使い、無ければ本番のURLにする
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://pocket-base-delta.vercel.app"),
   title: "Pocket Base",
   description: "Pokémon Trading Card Game Pocketの非公式カード検索・データベースサイト",
   verification: {

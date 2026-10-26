@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getAllExpansions, getCardsForPack } from "@/lib/data";
 import { PackTile } from "@/components/PackTile";
 import { Container } from "@/components/Container";
@@ -5,6 +6,8 @@ import { PackSortSelect, type PackSortDirection } from "@/components/PackSortSel
 import { getJapaneseSeriesName } from "@/lib/nameJa";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
+
+export const metadata: Metadata = { alternates: { canonical: "/packs" } };
 
 export default async function PacksPage({
   searchParams,

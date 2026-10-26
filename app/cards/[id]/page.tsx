@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCardById, getExpansionById } from "@/lib/data";
@@ -25,6 +26,15 @@ import { BackLink } from "@/components/BackLink";
 import { getLang } from "@/lib/i18n/lang";
 import { getDict } from "@/lib/i18n/dict";
 import { sanitizeReturnPath } from "@/lib/returnPath";
+
+/**
+ * 正規URLは常に /cards/{id}。戻り先を表す ?from=... が付いたURLは同じ内容の重複ページなので、
+ * Googleに「代表はクエリ無しのURL」と伝える(Search Consoleの「重複しています」対策)。
+ */
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  return { alternates: { canonical: `/cards/${id}` } };
+}
 
 export default async function CardDetailPage({
   params,
