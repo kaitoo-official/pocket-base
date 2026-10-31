@@ -61,31 +61,31 @@ export const INFLUENCER_CHANNELS: InfluencerChannelEntry[] = [
       "https://yt3.googleusercontent.com/xvZbdOIEBT-jIbfl24otS79RkwIF0PVB1LXR2WSgr1Z9RWz_32PixalKJ30ITsJtpHE0QmBRiQ=s160-c-k-c0x00ffffff-no-rj",
     videos: [
       {
-        id: "sig-butterfree-jukain",
-        youtubeId: "MUNbAFPyaVY",
+        id: "sig-mega-mewtwo-x-tournament",
+        youtubeId: "kJjsZxfv95g",
         titleJa:
-          "『ポケポケ』超高勝率を出している誰でも使える超簡単最強デッキ 大会予選全勝したバタフリージュカインを解説&紹介します",
+          "【ポケポケ】”作成者が大会準優勝してデッキの強さ証明してきた”大会映像でメガミュウツーXデッキ紹介します　Pokémon Trading Card Game Pocket",
         titleEn:
-          "[Pokémon TCG Pocket] An easy, top-tier deck with an insanely high win rate — undefeated in tournament qualifiers with Butterfree & Sceptile",
-        publishedAt: "2026-09-03T03:00:34-07:00",
+          "[Pokémon TCG Pocket] \"The creator placed runner-up in a tournament, proving the deck's strength\" Introducing a Mega Mewtwo X deck with tournament footage",
+        publishedAt: "2026-10-31T09:00:37+00:00",
       },
       {
-        id: "sig-mega-charizard",
-        youtubeId: "MXbbtN2xpkM",
+        id: "sig-origin-giratina",
+        youtubeId: "ceVWQyFjrTU",
         titleJa:
-          "【ロケット団の野望】\"爆速マスター到達\"勝率83%で無双した1ターンキル多数最強メガリザードンデッキを紹介します　Pokémon Trading Card Game Pocket",
+          "【ポケポケ】”新環境最強Tierかもしれません。”世界1位が組んだオリジンギラティナデッキ紹介します　Pokémon Trading Card Game Pocket",
         titleEn:
-          "[Team Rocket's Ambition] Reached Master rank in record time with an 83% win rate — the strongest Mega Charizard deck with tons of one-turn kills",
-        publishedAt: "2026-09-15T01:11:07-07:00",
+          "[Pokémon TCG Pocket] \"This might be the strongest tier in the new environment\" Introducing an Origin Forme Giratina deck built by the world #1 player",
+        publishedAt: "2026-10-31T03:00:24+00:00",
       },
       {
-        id: "sig-tier1-decks",
-        youtubeId: "dpM87nJrJEY",
+        id: "sig-mega-dragonite",
+        youtubeId: "VTpVNTwNm3I",
         titleJa:
-          "【ポケポケ】\"Tier1確定。この動画の最強デッキを作るだけで良い\"新環境でも生き残りTier1が確定しているデッキを4個紹介します　Pokémon Trading Card Game Pocket",
+          "【ポケポケ】” 過去最強のカイリューデッキ”メガシンカに落ちれば即勝ち。それ以外でも2発撃って勝ち。メガカイリューデッキを紹介します　Pokémon Trading Card Game Pocket",
         titleEn:
-          "[Pokémon TCG Pocket] \"Tier 1 confirmed — just build the deck in this video\" Introducing 4 decks confirmed Tier 1 even in the new environment",
-        publishedAt: "2026-09-02T05:05:58-07:00",
+          "[Pokémon TCG Pocket] \"The strongest Dragonite deck ever\" An instant win if you reach Mega Evolution, and a win with two attacks even if you don't — introducing a Mega Dragonite deck",
+        publishedAt: "2026-10-30T09:01:27+00:00",
       },
     ],
   },
