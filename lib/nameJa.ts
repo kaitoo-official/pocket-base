@@ -49,6 +49,8 @@ const PACK_SOURCE_LABELS: Record<string, string> = {
   // 特別な拡張パック(日本語版の正式名称。ハイクラスパック MEGA は2026-09-30配信、各報道で確認)
   "Deluxe Pack: ex": "ハイクラスパックex",
   "Deluxe Pack: Mega": "ハイクラスパック MEGA",
+  // デュアルフュージョン(c1)の2つのパック。日本語の攻略サイトの表記(「メガミュウツーXパック」)に合わせる
+  "Mega Mewtwo X": "メガミュウツーX",
 };
 
 /**
